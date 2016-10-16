@@ -1,0 +1,4 @@
+86d85
+<    tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
+151d149
+<    tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3

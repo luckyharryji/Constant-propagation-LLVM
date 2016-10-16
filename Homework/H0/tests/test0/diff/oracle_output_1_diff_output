@@ -1,0 +1,8 @@
+3c3
+< ; Function Attrs: nounwind ssp uwtable
+---
+> ; Function Attrs: nounwind uwtable
+9c9
+<   store i32 0, i32* %retval, align 4
+---
+>   store i32 0, i32* %retval

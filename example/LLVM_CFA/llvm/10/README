@@ -1,0 +1,4 @@
+A pass in this directory replaces invocations to "sqrt" with approximate code.
+Specifically, it removes calls to "sqrt" and it injects new code to compute an approximation of the square root function.
+
+This version contains the same bug of 9, but it adds annotations for debugging purpose.

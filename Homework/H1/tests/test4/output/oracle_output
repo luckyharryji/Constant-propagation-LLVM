@@ -1,0 +1,5 @@
+H1: "CAT_execution1": CAT_binary_add: 1
+H1: "CAT_execution1": CAT_create_signed_value: 3
+H1: "CAT_execution1": CAT_get_signed_value: 1
+H1: "CAT_execution2": CAT_create_signed_value: 1
+H1: "CAT_execution2": CAT_get_signed_value: 1

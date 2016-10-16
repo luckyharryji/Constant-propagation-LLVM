@@ -1,0 +1,19 @@
+This is the template to use for assignments of the Code Analysis and Transformation class at Northwestern
+
+To build:
+  1) Choose the compiler to use. The default one is "clang-3.8"
+     Notice that if "clang-3.8" isn't in your PATH, then you need to 
+      A) define where clang-3.8 is in the environment variable CC (e.g., export CC=/usr/local/bin/clang-3.8) or
+      B) add clang-3.8 in your PATH (e.g., export PATH=/usr/local/bin:$PATH)
+
+  2) Compile and install your code by invoking ./run_me.sh
+     The script run_me.sh compiles and installs an LLVM-based compiler that includes your CAT in the directory ~/CAT
+
+To run:
+  1) Add your compiler clang-c on your PATH (i.e., export PATH=~/CAT/bin:$PATH)
+
+  2) Invoke your compiler to compile a C program. For example
+    $ cat-c program_to_analyse.c -o mybinary
+    $ cat-c -O3 program_to_analyse.c -o mybinary
+    $ cat-c -O0 program_to_analyse.ll -o mybinary
+    $ cat-c -O3 -emit-llvm program_to_analyse.c

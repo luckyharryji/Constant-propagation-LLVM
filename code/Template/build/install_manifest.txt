@@ -1,0 +1,2 @@
+/Users/xiangyu/CAT/bin/cat-c
+/Users/xiangyu/CAT/lib/CAT.dylib

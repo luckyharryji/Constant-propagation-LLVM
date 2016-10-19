@@ -1,0 +1,1 @@
+/usr/local/bin/clang++-3.8   -fPIC -fvisibility-inlines-hidden -Werror=date-time -std=c++11 -bundle -Wl,-headerpad_max_install_names  -Wl,-dead_strip  -Wl,-flat_namespace -Wl,-undefined -Wl,suppress -o ../CAT.dylib CMakeFiles/CAT.dir/CatPass.cpp.o  -L/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/lib 

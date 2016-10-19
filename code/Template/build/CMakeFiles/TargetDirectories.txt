@@ -1,0 +1,13 @@
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/edit_cache.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/rebuild_cache.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/list_install_components.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/install.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/install/strip.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/install/local.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/edit_cache.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/rebuild_cache.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/list_install_components.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/install.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/install/strip.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/install/local.dir
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/catpass/CMakeFiles/CAT.dir

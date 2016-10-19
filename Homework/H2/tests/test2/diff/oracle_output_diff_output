@@ -1,12 +1,21 @@
-86d85
-<    tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
-151d149
-<    tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3
-180d177
-<    tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call6) #3
-209d205
-<    tail call void @CAT_binary_add(i8* %call8, i8* %call6, i8* %call7) #3
-251d246
-<    tail call void @CAT_binary_add(i8* %call9, i8* %call, i8* %call) #3
-267d261
-<    tail call void @CAT_binary_add(i8* %call10, i8* %call, i8* %call) #3
+1,3d0
+< Transfer Function:  br i1 %cmp, label %if.then, label %if.end
+< Transfer Function:  br label %if.end
+< Transfer Function:  ret void
+306d302
+< Transfer Function:  ret i32 0
+332d327
+< Transfer Function:  ret i8* %call
+430d424
+< Transfer Function:  ret i64 %0
+480,485d473
+< Transfer Function:  br i1 %cmp, label %if.then, label %if.end
+< Transfer Function:  unreachable
+< Transfer Function:  br i1 %cmp2, label %lor.lhs.false, label %if.then6
+< Transfer Function:  br i1 %cmp5, label %if.end8, label %if.then6
+< Transfer Function:  unreachable
+< Transfer Function:  ret %struct.internal_data_t* %2
+715d702
+< Transfer Function:  ret void
+849d835
+< Transfer Function:  ret void

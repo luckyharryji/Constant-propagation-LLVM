@@ -50,8 +50,18 @@ namespace {
       map<Instruction *, set<Instruction *>> variable_used;
       map<Instruction *, set<Instruction *>> in_set_map;
       map<Instruction *, set<Instruction *>> out_set_map;
+      vector<Instruction *> instruction_list;
+      map<Instruction *, int> instruction_index;
+      map<Instruction *, set<Instruction *>> predecessor;
       for (auto &B : F) {
         for (auto &I : B) {
+
+          instruction_index[&I] = instruction_list.size();
+          instruction_list.push_back(&I);
+          predecessor[&I] = set<Instruction *>();
+          in_set_map[&I] = set<Instruction *>();
+          out_set_map[&I] = set<Instruction *>();
+
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled;
             function_callled = call_inst->getCalledFunction();
@@ -75,9 +85,14 @@ namespace {
       }
 
       for (auto &B : F) {
+        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
+        {
+          predecessor[&(B.front())].insert((*it)->getTerminator());
+        }
         for (auto &I : B) {
           gen_set_map[&I] = set<Instruction *>();
           kill_set_map[&I] = set<Instruction *>();
+
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled;
             function_callled = call_inst->getCalledFunction();
@@ -117,26 +132,86 @@ namespace {
         }
       }
 
+      for (auto &B : F) {
+        // predecessor of the first instruction of a basic block is the
+        // last instruction of the block predecessor
+        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
+        {
+          predecessor[&(B.front())].insert((*it)->getTerminator());
+        }
+        // not doing first instruction of block, since it is dealt with
+        for (auto iter = ++B.begin(); iter != B.end(); ++iter) {
+          // predecessor of the instruction inside the basic block which is not
+          // the first instruction is the previous instruction
+          predecessor[&(*iter)].insert(
+            instruction_list[instruction_index[&(*iter)] - 1]
+          );
+        }
+      }
+
+      bool changed = true;
+      while (changed) {
+        changed = false;
+        for (auto &B : F) {
+          for (auto &I : B) {
+            set<Instruction *> new_in;
+            if (!predecessor[&I].empty()) {
+              for (
+                auto inst = predecessor[&I].begin();
+                inst != predecessor[&I].end();
+                ++inst
+              ) {
+                new_in.insert(out_set_map[*inst].begin(), out_set_map[*inst].end());
+              }
+            }
+            set<Instruction *> new_out;
+            set<Instruction *> temp_in;
+            temp_in.insert(new_in.begin(), new_in.end());
+            // IN - KILL
+            if (!kill_set_map[&I].empty()) {
+              for (
+                auto inst = kill_set_map[&I].begin();
+                inst != kill_set_map[&I].end();
+                ++inst
+              ) {
+                if (temp_in.find(*inst) != temp_in.end()) {
+                  temp_in.erase(*inst);
+                }
+              }
+            }
+            new_out.insert(temp_in.begin(), temp_in.end());
+            if (!gen_set_map[&I].empty()) {
+              new_out.insert(gen_set_map[&I].begin(), gen_set_map[&I].end());
+            }
+            in_set_map[&I] = new_in;
+            if (out_set_map[&I] != new_out) {
+              changed = true;
+              out_set_map[&I] = new_out;
+            }
+          }
+        }
+      }
+
       errs() << "START FUNCTION: " << F.getName() << '\n';
       for (auto &B : F) {
         for (auto &I : B) {
           errs() << "INSTRUCTION: " << I << '\n';
-          errs() << "***************** GEN\n" << "{\n";
-          if (!gen_set_map[&I].empty()) {
+          errs() << "***************** IN\n" << "{\n";
+          if (!in_set_map[&I].empty()) {
             for (
-              auto inst = gen_set_map[&I].begin();
-              inst != gen_set_map[&I].end();
+              auto inst = in_set_map[&I].begin();
+              inst != in_set_map[&I].end();
               ++inst
             ) {
               errs() << ' ' << **inst << '\n';
             }
           }
           errs() << "}\n" << "**************************************\n";
-          errs() << "***************** KILL\n" << "{\n";
-          if (!kill_set_map[&I].empty()) {
+          errs() << "***************** OUT\n" << "{\n";
+          if (!out_set_map[&I].empty()) {
             for (
-              auto inst = kill_set_map[&I].begin();
-              inst != kill_set_map[&I].end();
+              auto inst = out_set_map[&I].begin();
+              inst != out_set_map[&I].end();
               ++inst
             ) {
               errs() << ' ' << **inst << '\n';
@@ -146,6 +221,7 @@ namespace {
                  << "\n\n\n";
         }
       }
+
       return false;
     }
 

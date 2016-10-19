@@ -1,11 +1,31 @@
-START FUNCTION: CAT_execution
+Print for test
+Function "CAT_execution"
+
+; Function Attrs: nounwind ssp uwtable
+define void @CAT_execution(i32 %userInput) #0 {
+entry:
+  %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+  %call1 = tail call i64 @CAT_get_signed_value(i8* %call) #3
+  %call2 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 %call1)
+  %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+  %cmp = icmp sgt i32 %userInput, 10
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %call4 = tail call i64 @CAT_get_signed_value(i8* %call3) #3
+  %call5 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str.1, i64 0, i64 0), i64 %call4)
+  %call6 = tail call i8* @CAT_create_signed_value(i64 0) #3
+  tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3
+  %call7 = tail call i64 @CAT_get_signed_value(i8* %call6) #3
+  %call8 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([20 x i8], [20 x i8]* @.str.2, i64 0, i64 0), i64 %call7)
+  ret void
+}
 INSTRUCTION:   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
 ***************** GEN
-{
-   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -15,10 +35,7 @@ INSTRUCTION:   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
 INSTRUCTION:   %call1 = tail call i64 @CAT_get_signed_value(i8* %call) #3
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
 }
 **************************************
 
@@ -27,10 +44,7 @@ INSTRUCTION:   %call1 = tail call i64 @CAT_get_signed_value(i8* %call) #3
 INSTRUCTION:   %call2 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 %call1)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call1 = tail call i64 @CAT_get_signed_value(i8* %call) #3
 }
 **************************************
 
@@ -39,12 +53,7 @@ INSTRUCTION:   %call2 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbou
 INSTRUCTION:   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
 ***************** GEN
 {
-   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
-}
-**************************************
-***************** KILL
-{
-   tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
+   %call2 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 %call1)
 }
 **************************************
 
@@ -53,10 +62,7 @@ INSTRUCTION:   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
 INSTRUCTION:   %cmp = icmp sgt i32 %userInput, 10
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
 }
 **************************************
 
@@ -65,10 +71,7 @@ INSTRUCTION:   %cmp = icmp sgt i32 %userInput, 10
 INSTRUCTION:   br i1 %cmp, label %if.then, label %if.end
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %cmp = icmp sgt i32 %userInput, 10
 }
 **************************************
 
@@ -77,12 +80,7 @@ INSTRUCTION:   br i1 %cmp, label %if.then, label %if.end
 INSTRUCTION:   tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
 ***************** GEN
 {
-   tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
-}
-**************************************
-***************** KILL
-{
-   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   br i1 %cmp, label %if.then, label %if.end
 }
 **************************************
 
@@ -91,10 +89,7 @@ INSTRUCTION:   tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3
 INSTRUCTION:   br label %if.end
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @CAT_binary_add(i8* %call3, i8* %call3, i8* %call3) #3
 }
 **************************************
 
@@ -103,10 +98,8 @@ INSTRUCTION:   br label %if.end
 INSTRUCTION:   %call4 = tail call i64 @CAT_get_signed_value(i8* %call3) #3
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   br i1 %cmp, label %if.then, label %if.end
+   br label %if.end
 }
 **************************************
 
@@ -115,10 +108,7 @@ INSTRUCTION:   %call4 = tail call i64 @CAT_get_signed_value(i8* %call3) #3
 INSTRUCTION:   %call5 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str.1, i64 0, i64 0), i64 %call4)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call4 = tail call i64 @CAT_get_signed_value(i8* %call3) #3
 }
 **************************************
 
@@ -127,12 +117,7 @@ INSTRUCTION:   %call5 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementp
 INSTRUCTION:   %call6 = tail call i8* @CAT_create_signed_value(i64 0) #3
 ***************** GEN
 {
-   %call6 = tail call i8* @CAT_create_signed_value(i64 0) #3
-}
-**************************************
-***************** KILL
-{
-   tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3
+   %call5 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str.1, i64 0, i64 0), i64 %call4)
 }
 **************************************
 
@@ -140,11 +125,6 @@ INSTRUCTION:   %call6 = tail call i8* @CAT_create_signed_value(i64 0) #3
 
 INSTRUCTION:   tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3
 ***************** GEN
-{
-   tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3
-}
-**************************************
-***************** KILL
 {
    %call6 = tail call i8* @CAT_create_signed_value(i64 0) #3
 }
@@ -155,10 +135,7 @@ INSTRUCTION:   tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3)
 INSTRUCTION:   %call7 = tail call i64 @CAT_get_signed_value(i8* %call6) #3
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @CAT_binary_add(i8* %call6, i8* %call, i8* %call3) #3
 }
 **************************************
 
@@ -167,10 +144,7 @@ INSTRUCTION:   %call7 = tail call i64 @CAT_get_signed_value(i8* %call6) #3
 INSTRUCTION:   %call8 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([20 x i8], [20 x i8]* @.str.2, i64 0, i64 0), i64 %call7)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call7 = tail call i64 @CAT_get_signed_value(i8* %call6) #3
 }
 **************************************
 
@@ -179,22 +153,23 @@ INSTRUCTION:   %call8 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementp
 INSTRUCTION:   ret void
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call8 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([20 x i8], [20 x i8]* @.str.2, i64 0, i64 0), i64 %call7)
 }
 **************************************
 
 
 
-START FUNCTION: main
+Print for test
+Function "main"
+
+; Function Attrs: nounwind ssp uwtable
+define i32 @main(i32 %argc, i8** nocapture readnone %argv) #0 {
+entry:
+  tail call void @CAT_execution(i32 %argc)
+  ret i32 0
+}
 INSTRUCTION:   tail call void @CAT_execution(i32 %argc)
 ***************** GEN
-{
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -204,22 +179,29 @@ INSTRUCTION:   tail call void @CAT_execution(i32 %argc)
 INSTRUCTION:   ret i32 0
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @CAT_execution(i32 %argc)
 }
 **************************************
 
 
 
-START FUNCTION: CAT_create_signed_value
+Print for test
+Function "CAT_create_signed_value"
+
+; Function Attrs: nounwind ssp uwtable
+define noalias i8* @CAT_create_signed_value(i64 %value) #0 {
+entry:
+  %call = tail call i8* @malloc(i64 56)
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %call, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
+  %end_validation_string = getelementptr inbounds i8, i8* %call, i64 32
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %end_validation_string, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
+  %value4 = getelementptr inbounds i8, i8* %call, i64 24
+  %0 = bitcast i8* %value4 to i64*
+  store i64 %value, i64* %0, align 8, !tbaa !2
+  ret i8* %call
+}
 INSTRUCTION:   %call = tail call i8* @malloc(i64 56)
 ***************** GEN
-{
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -229,10 +211,7 @@ INSTRUCTION:   %call = tail call i8* @malloc(i64 56)
 INSTRUCTION:   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %call, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call = tail call i8* @malloc(i64 56)
 }
 **************************************
 
@@ -241,10 +220,7 @@ INSTRUCTION:   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %call, i8* geteleme
 INSTRUCTION:   %end_validation_string = getelementptr inbounds i8, i8* %call, i64 32
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %call, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
 }
 **************************************
 
@@ -253,10 +229,7 @@ INSTRUCTION:   %end_validation_string = getelementptr inbounds i8, i8* %call, i6
 INSTRUCTION:   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %end_validation_string, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %end_validation_string = getelementptr inbounds i8, i8* %call, i64 32
 }
 **************************************
 
@@ -265,10 +238,7 @@ INSTRUCTION:   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %end_validation_str
 INSTRUCTION:   %value4 = getelementptr inbounds i8, i8* %call, i64 24
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %end_validation_string, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
 }
 **************************************
 
@@ -277,10 +247,7 @@ INSTRUCTION:   %value4 = getelementptr inbounds i8, i8* %call, i64 24
 INSTRUCTION:   %0 = bitcast i8* %value4 to i64*
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value4 = getelementptr inbounds i8, i8* %call, i64 24
 }
 **************************************
 
@@ -289,10 +256,7 @@ INSTRUCTION:   %0 = bitcast i8* %value4 to i64*
 INSTRUCTION:   store i64 %value, i64* %0, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %0 = bitcast i8* %value4 to i64*
 }
 **************************************
 
@@ -301,22 +265,25 @@ INSTRUCTION:   store i64 %value, i64* %0, align 8, !tbaa !2
 INSTRUCTION:   ret i8* %call
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   store i64 %value, i64* %0, align 8, !tbaa !2
 }
 **************************************
 
 
 
-START FUNCTION: CAT_get_signed_value
+Print for test
+Function "CAT_get_signed_value"
+
+; Function Attrs: nounwind ssp uwtable
+define i64 @CAT_get_signed_value(i8* readonly %v) #0 {
+entry:
+  %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v)
+  %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
+  %0 = load i64, i64* %value, align 8, !tbaa !2
+  ret i64 %0
+}
 INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v)
 ***************** GEN
-{
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -326,10 +293,7 @@ INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check
 INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v)
 }
 **************************************
 
@@ -338,10 +302,7 @@ INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.
 INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
 }
 **************************************
 
@@ -350,22 +311,50 @@ INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
 INSTRUCTION:   ret i64 %0
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %0 = load i64, i64* %value, align 8, !tbaa !2
 }
 **************************************
 
 
 
-START FUNCTION: internal_check_data
+Print for test
+Function "internal_check_data"
+
+; Function Attrs: nounwind ssp uwtable
+define internal fastcc %struct.internal_data_t* @internal_check_data(i8* readonly %v) unnamed_addr #0 {
+entry:
+  %cmp = icmp eq i8* %v, null
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %0 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !7
+  %1 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([31 x i8], [31 x i8]* @.str.1, i64 0, i64 0), i64 30, i64 1, %struct.__sFILE* %0)
+  tail call void @abort() #6
+  unreachable
+
+if.end:                                           ; preds = %entry
+  %2 = bitcast i8* %v to %struct.internal_data_t*
+  %call1 = tail call i32 @strncmp(i8* nonnull %v, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
+  %cmp2 = icmp eq i32 %call1, 0
+  br i1 %cmp2, label %lor.lhs.false, label %if.then6
+
+lor.lhs.false:                                    ; preds = %if.end
+  %end_validation_string = getelementptr inbounds i8, i8* %v, i64 32
+  %call4 = tail call i32 @strncmp(i8* %end_validation_string, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
+  %cmp5 = icmp eq i32 %call4, 0
+  br i1 %cmp5, label %if.end8, label %if.then6
+
+if.then6:                                         ; preds = %lor.lhs.false, %if.end
+  %3 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !7
+  %4 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([41 x i8], [41 x i8]* @.str.2, i64 0, i64 0), i64 40, i64 1, %struct.__sFILE* %3)
+  tail call void @abort() #6
+  unreachable
+
+if.end8:                                          ; preds = %lor.lhs.false
+  ret %struct.internal_data_t* %2
+}
 INSTRUCTION:   %cmp = icmp eq i8* %v, null
 ***************** GEN
-{
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -375,10 +364,7 @@ INSTRUCTION:   %cmp = icmp eq i8* %v, null
 INSTRUCTION:   br i1 %cmp, label %if.then, label %if.end
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %cmp = icmp eq i8* %v, null
 }
 **************************************
 
@@ -387,10 +373,7 @@ INSTRUCTION:   br i1 %cmp, label %if.then, label %if.end
 INSTRUCTION:   %0 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   br i1 %cmp, label %if.then, label %if.end
 }
 **************************************
 
@@ -399,10 +382,7 @@ INSTRUCTION:   %0 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8
 INSTRUCTION:   %1 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([31 x i8], [31 x i8]* @.str.1, i64 0, i64 0), i64 30, i64 1, %struct.__sFILE* %0)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %0 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !2
 }
 **************************************
 
@@ -411,10 +391,7 @@ INSTRUCTION:   %1 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([3
 INSTRUCTION:   tail call void @abort() #6
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %1 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([31 x i8], [31 x i8]* @.str.1, i64 0, i64 0), i64 30, i64 1, %struct.__sFILE* %0)
 }
 **************************************
 
@@ -423,10 +400,7 @@ INSTRUCTION:   tail call void @abort() #6
 INSTRUCTION:   unreachable
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @abort() #6
 }
 **************************************
 
@@ -435,10 +409,7 @@ INSTRUCTION:   unreachable
 INSTRUCTION:   %2 = bitcast i8* %v to %struct.internal_data_t*
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   br i1 %cmp, label %if.then, label %if.end
 }
 **************************************
 
@@ -447,10 +418,7 @@ INSTRUCTION:   %2 = bitcast i8* %v to %struct.internal_data_t*
 INSTRUCTION:   %call1 = tail call i32 @strncmp(i8* nonnull %v, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %2 = bitcast i8* %v to %struct.internal_data_t*
 }
 **************************************
 
@@ -459,10 +427,7 @@ INSTRUCTION:   %call1 = tail call i32 @strncmp(i8* nonnull %v, i8* nonnull getel
 INSTRUCTION:   %cmp2 = icmp eq i32 %call1, 0
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call1 = tail call i32 @strncmp(i8* nonnull %v, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
 }
 **************************************
 
@@ -471,10 +436,7 @@ INSTRUCTION:   %cmp2 = icmp eq i32 %call1, 0
 INSTRUCTION:   br i1 %cmp2, label %lor.lhs.false, label %if.then6
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %cmp2 = icmp eq i32 %call1, 0
 }
 **************************************
 
@@ -483,10 +445,7 @@ INSTRUCTION:   br i1 %cmp2, label %lor.lhs.false, label %if.then6
 INSTRUCTION:   %end_validation_string = getelementptr inbounds i8, i8* %v, i64 32
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   br i1 %cmp2, label %lor.lhs.false, label %if.then6
 }
 **************************************
 
@@ -495,10 +454,7 @@ INSTRUCTION:   %end_validation_string = getelementptr inbounds i8, i8* %v, i64 3
 INSTRUCTION:   %call4 = tail call i32 @strncmp(i8* %end_validation_string, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %end_validation_string = getelementptr inbounds i8, i8* %v, i64 32
 }
 **************************************
 
@@ -507,10 +463,7 @@ INSTRUCTION:   %call4 = tail call i32 @strncmp(i8* %end_validation_string, i8* n
 INSTRUCTION:   %cmp5 = icmp eq i32 %call4, 0
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call4 = tail call i32 @strncmp(i8* %end_validation_string, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
 }
 **************************************
 
@@ -519,10 +472,7 @@ INSTRUCTION:   %cmp5 = icmp eq i32 %call4, 0
 INSTRUCTION:   br i1 %cmp5, label %if.end8, label %if.then6
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %cmp5 = icmp eq i32 %call4, 0
 }
 **************************************
 
@@ -531,10 +481,8 @@ INSTRUCTION:   br i1 %cmp5, label %if.end8, label %if.then6
 INSTRUCTION:   %3 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   br i1 %cmp2, label %lor.lhs.false, label %if.then6
+   br i1 %cmp5, label %if.end8, label %if.then6
 }
 **************************************
 
@@ -543,10 +491,7 @@ INSTRUCTION:   %3 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8
 INSTRUCTION:   %4 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([41 x i8], [41 x i8]* @.str.2, i64 0, i64 0), i64 40, i64 1, %struct.__sFILE* %3)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %3 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !2
 }
 **************************************
 
@@ -555,10 +500,7 @@ INSTRUCTION:   %4 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([4
 INSTRUCTION:   tail call void @abort() #6
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %4 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([41 x i8], [41 x i8]* @.str.2, i64 0, i64 0), i64 40, i64 1, %struct.__sFILE* %3)
 }
 **************************************
 
@@ -567,10 +509,7 @@ INSTRUCTION:   tail call void @abort() #6
 INSTRUCTION:   unreachable
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   tail call void @abort() #6
 }
 **************************************
 
@@ -579,22 +518,32 @@ INSTRUCTION:   unreachable
 INSTRUCTION:   ret %struct.internal_data_t* %2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   br i1 %cmp5, label %if.end8, label %if.then6
 }
 **************************************
 
 
 
-START FUNCTION: CAT_binary_sub
+Print for test
+Function "CAT_binary_sub"
+
+; Function Attrs: nounwind ssp uwtable
+define void @CAT_binary_sub(i8* %result, i8* readonly %v1, i8* readonly %v2) #0 {
+entry:
+  %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
+  %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
+  %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
+  %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
+  %0 = load i64, i64* %value, align 8, !tbaa !2
+  %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
+  %1 = load i64, i64* %value3, align 8, !tbaa !2
+  %sub = sub nsw i64 %0, %1
+  %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
+  store i64 %sub, i64* %value4, align 8, !tbaa !2
+  ret void
+}
 INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
 ***************** GEN
-{
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -604,10 +553,7 @@ INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check
 INSTRUCTION:   %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
 }
 **************************************
 
@@ -616,10 +562,7 @@ INSTRUCTION:   %call1 = tail call fastcc %struct.internal_data_t* @internal_chec
 INSTRUCTION:   %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
 }
 **************************************
 
@@ -628,10 +571,7 @@ INSTRUCTION:   %call2 = tail call fastcc %struct.internal_data_t* @internal_chec
 INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
 }
 **************************************
 
@@ -640,10 +580,7 @@ INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.
 INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
 }
 **************************************
 
@@ -652,10 +589,7 @@ INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
 INSTRUCTION:   %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %0 = load i64, i64* %value, align 8, !tbaa !2
 }
 **************************************
 
@@ -664,10 +598,7 @@ INSTRUCTION:   %value3 = getelementptr inbounds %struct.internal_data_t, %struct
 INSTRUCTION:   %1 = load i64, i64* %value3, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
 }
 **************************************
 
@@ -676,10 +607,7 @@ INSTRUCTION:   %1 = load i64, i64* %value3, align 8, !tbaa !2
 INSTRUCTION:   %sub = sub nsw i64 %0, %1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %1 = load i64, i64* %value3, align 8, !tbaa !2
 }
 **************************************
 
@@ -688,10 +616,7 @@ INSTRUCTION:   %sub = sub nsw i64 %0, %1
 INSTRUCTION:   %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %sub = sub nsw i64 %0, %1
 }
 **************************************
 
@@ -700,10 +625,7 @@ INSTRUCTION:   %value4 = getelementptr inbounds %struct.internal_data_t, %struct
 INSTRUCTION:   store i64 %sub, i64* %value4, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
 }
 **************************************
 
@@ -712,22 +634,32 @@ INSTRUCTION:   store i64 %sub, i64* %value4, align 8, !tbaa !2
 INSTRUCTION:   ret void
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   store i64 %sub, i64* %value4, align 8, !tbaa !2
 }
 **************************************
 
 
 
-START FUNCTION: CAT_binary_add
+Print for test
+Function "CAT_binary_add"
+
+; Function Attrs: nounwind ssp uwtable
+define void @CAT_binary_add(i8* %result, i8* readonly %v1, i8* readonly %v2) #0 {
+entry:
+  %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
+  %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
+  %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
+  %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
+  %0 = load i64, i64* %value, align 8, !tbaa !2
+  %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
+  %1 = load i64, i64* %value3, align 8, !tbaa !2
+  %add = add nsw i64 %1, %0
+  %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
+  store i64 %add, i64* %value4, align 8, !tbaa !2
+  ret void
+}
 INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
 ***************** GEN
-{
-}
-**************************************
-***************** KILL
 {
 }
 **************************************
@@ -737,10 +669,7 @@ INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check
 INSTRUCTION:   %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
 }
 **************************************
 
@@ -749,10 +678,7 @@ INSTRUCTION:   %call1 = tail call fastcc %struct.internal_data_t* @internal_chec
 INSTRUCTION:   %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
 }
 **************************************
 
@@ -761,10 +687,7 @@ INSTRUCTION:   %call2 = tail call fastcc %struct.internal_data_t* @internal_chec
 INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
 }
 **************************************
 
@@ -773,10 +696,7 @@ INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.
 INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
 }
 **************************************
 
@@ -785,10 +705,7 @@ INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
 INSTRUCTION:   %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %0 = load i64, i64* %value, align 8, !tbaa !2
 }
 **************************************
 
@@ -797,10 +714,7 @@ INSTRUCTION:   %value3 = getelementptr inbounds %struct.internal_data_t, %struct
 INSTRUCTION:   %1 = load i64, i64* %value3, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
 }
 **************************************
 
@@ -809,10 +723,7 @@ INSTRUCTION:   %1 = load i64, i64* %value3, align 8, !tbaa !2
 INSTRUCTION:   %add = add nsw i64 %1, %0
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %1 = load i64, i64* %value3, align 8, !tbaa !2
 }
 **************************************
 
@@ -821,10 +732,7 @@ INSTRUCTION:   %add = add nsw i64 %1, %0
 INSTRUCTION:   %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %add = add nsw i64 %1, %0
 }
 **************************************
 
@@ -833,10 +741,7 @@ INSTRUCTION:   %value4 = getelementptr inbounds %struct.internal_data_t, %struct
 INSTRUCTION:   store i64 %add, i64* %value4, align 8, !tbaa !2
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
 }
 **************************************
 
@@ -845,10 +750,7 @@ INSTRUCTION:   store i64 %add, i64* %value4, align 8, !tbaa !2
 INSTRUCTION:   ret void
 ***************** GEN
 {
-}
-**************************************
-***************** KILL
-{
+   store i64 %add, i64* %value4, align 8, !tbaa !2
 }
 **************************************
 

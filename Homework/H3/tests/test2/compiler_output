@@ -1,0 +1,1429 @@
+START FUNCTION: CAT_execution
+INSTRUCTION:   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call1 = tail call i64 @CAT_get_signed_value(i8* %call) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call2 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 %call1)
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %cmp35 = icmp sgt i32 %userInput, 0
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %cmp35, label %for.body.lr.ph, label %for.cond.cleanup
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %cmp4 = icmp sgt i32 %userInput, 10
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %cmp8 = icmp sgt i32 %userInput, 20
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %cmp4, label %for.body.us.preheader, label %for.body.preheader
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br label %for.body
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br label %for.body.us
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %i.036.us = phi i32 [ %inc.us, %if.end10.us ], [ 0, %for.body.us.preheader ]
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call3.us = tail call i8* @CAT_create_signed_value(i64 8) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3.us = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3.us = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call5.us = tail call i64 @CAT_get_signed_value(i8* %call3.us) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call6.us = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str.1, i64 0, i64 0), i64 %call5.us)
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call7.us = tail call i8* @CAT_create_signed_value(i64 0) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   %call7.us = tail call i8* @CAT_create_signed_value(i64 0) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call3.us) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   %call7.us = tail call i8* @CAT_create_signed_value(i64 0) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call3.us) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call7.us) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call3.us) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call7.us) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call7.us) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %cmp8, label %if.then9.us, label %if.end10.us
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br label %if.end10.us
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call11.us = tail call i64 @CAT_get_signed_value(i8* %call7.us) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call12.us = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([20 x i8], [20 x i8]* @.str.2, i64 0, i64 0), i64 %call11.us)
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %inc.us = add nuw nsw i32 %i.036.us, 1
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %exitcond = icmp eq i32 %inc.us, %userInput
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %exitcond, label %for.cond.cleanup.loopexit, label %for.body.us
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br label %for.cond.cleanup
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br label %for.cond.cleanup
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   ret void
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   tail call void @CAT_binary_add(i8* %call3.us, i8* %call3.us, i8* %call3.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call7.us, i8* %call7.us) #3
+   tail call void @CAT_binary_add(i8* %call7.us, i8* %call, i8* %call) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %i.036 = phi i32 [ %inc, %for.body ], [ 0, %for.body.preheader ]
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call5 = tail call i64 @CAT_get_signed_value(i8* %call3) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call6 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str.1, i64 0, i64 0), i64 %call5)
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call7 = tail call i8* @CAT_create_signed_value(i64 0) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   %call7 = tail call i8* @CAT_create_signed_value(i64 0) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call3) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   %call7 = tail call i8* @CAT_create_signed_value(i64 0) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call3) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call7) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call3) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call11 = tail call i64 @CAT_get_signed_value(i8* %call7) #3
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %call12 = tail call i32 (i8*, ...) @printf(i8* nonnull getelementptr inbounds ([20 x i8], [20 x i8]* @.str.2, i64 0, i64 0), i64 %call11)
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %inc = add nuw nsw i32 %i.036, 1
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   %exitcond54 = icmp eq i32 %inc, %userInput
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %exitcond54, label %for.cond.cleanup.loopexit57, label %for.body
+***************** IN
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+***************** OUT
+{
+   %call = tail call i8* @CAT_create_signed_value(i64 5) #3
+   %call3 = tail call i8* @CAT_create_signed_value(i64 8) #3
+   tail call void @CAT_binary_add(i8* %call7, i8* %call7, i8* %call7) #3
+}
+**************************************
+
+
+
+START FUNCTION: main
+INSTRUCTION:   tail call void @CAT_execution(i32 %argc)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   ret i32 0
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+START FUNCTION: CAT_create_signed_value
+INSTRUCTION:   %call = tail call i8* @malloc(i64 56)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %call, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %end_validation_string = getelementptr inbounds i8, i8* %call, i64 32
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* %end_validation_string, i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20, i32 1, i1 false)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value4 = getelementptr inbounds i8, i8* %call, i64 24
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %0 = bitcast i8* %value4 to i64*
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   store i64 %value, i64* %0, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   ret i8* %call
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+START FUNCTION: CAT_get_signed_value
+INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   ret i64 %0
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+START FUNCTION: internal_check_data
+INSTRUCTION:   %cmp = icmp eq i8* %v, null
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %cmp, label %if.then, label %if.end
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %0 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %1 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([31 x i8], [31 x i8]* @.str.1, i64 0, i64 0), i64 30, i64 1, %struct.__sFILE* %0)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @abort() #6
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   unreachable
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %2 = bitcast i8* %v to %struct.internal_data_t*
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %call1 = tail call i32 @strncmp(i8* nonnull %v, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %cmp2 = icmp eq i32 %call1, 0
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %cmp2, label %lor.lhs.false, label %if.then6
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %end_validation_string = getelementptr inbounds i8, i8* %v, i64 32
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %call4 = tail call i32 @strncmp(i8* %end_validation_string, i8* nonnull getelementptr inbounds ([21 x i8], [21 x i8]* @.str, i64 0, i64 0), i64 20)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %cmp5 = icmp eq i32 %call4, 0
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   br i1 %cmp5, label %if.end8, label %if.then6
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %3 = load %struct.__sFILE*, %struct.__sFILE** @__stderrp, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %4 = tail call i64 @fwrite(i8* nonnull getelementptr inbounds ([41 x i8], [41 x i8]* @.str.2, i64 0, i64 0), i64 40, i64 1, %struct.__sFILE* %3)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   tail call void @abort() #6
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   unreachable
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   ret %struct.internal_data_t* %2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+START FUNCTION: CAT_binary_sub
+INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %1 = load i64, i64* %value3, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %sub = sub nsw i64 %0, %1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   store i64 %sub, i64* %value4, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   ret void
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+START FUNCTION: CAT_binary_add
+INSTRUCTION:   %call = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v1)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %call1 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %v2)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %call2 = tail call fastcc %struct.internal_data_t* @internal_check_data(i8* %result)
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %0 = load i64, i64* %value, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value3 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call1, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %1 = load i64, i64* %value3, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %add = add nsw i64 %1, %0
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   %value4 = getelementptr inbounds %struct.internal_data_t, %struct.internal_data_t* %call2, i64 0, i32 1
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   store i64 %add, i64* %value4, align 8, !tbaa !2
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+
+INSTRUCTION:   ret void
+***************** IN
+{
+}
+**************************************
+***************** OUT
+{
+}
+**************************************
+
+
+

@@ -85,10 +85,6 @@ namespace {
       }
 
       for (auto &B : F) {
-        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
-        {
-          predecessor[&(B.front())].insert((*it)->getTerminator());
-        }
         for (auto &I : B) {
           gen_set_map[&I] = set<Instruction *>();
           kill_set_map[&I] = set<Instruction *>();

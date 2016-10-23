@@ -11,6 +11,7 @@
 #include "llvm/ADT/SmallBitVector.h"
 #include "llvm/ADT/BitVector.h"
 #include "llvm/ADT/SparseBitVector.h"
+#include "llvm/IR/Constants.h"
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -184,6 +185,9 @@ namespace {
               changed = true;
               out_set_map[&I] = new_out;
             }
+            new_in.clear();
+            new_out.clear();
+            temp_in.clear();
           }
         }
       }
@@ -217,6 +221,15 @@ namespace {
                  << "\n\n\n";
         }
       }
+
+      gen_set_map.clear();
+      kill_set_map.clear();
+      variable_used.clear();
+      in_set_map.clear();
+      out_set_map.clear();
+      instruction_list.clear();
+      instruction_index.clear();
+      predecessor.clear();
 
       return false;
     }

@@ -44,6 +44,7 @@ catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llv
 catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/CallingConv.h
 catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/Comdat.h
 catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/Constant.h
+catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/Constants.h
 catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/DataLayout.h
 catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/DebugLoc.h
 catpass/CMakeFiles/CAT.dir/CatPass.cpp.o: /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/DerivedTypes.h

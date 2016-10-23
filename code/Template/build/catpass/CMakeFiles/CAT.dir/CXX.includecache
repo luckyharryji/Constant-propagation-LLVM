@@ -33,6 +33,8 @@ llvm/ADT/BitVector.h
 /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/catpass/llvm/ADT/BitVector.h
 llvm/ADT/SparseBitVector.h
 /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/catpass/llvm/ADT/SparseBitVector.h
+llvm/IR/Constants.h
+/Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/catpass/llvm/IR/Constants.h
 iostream
 -
 fstream
@@ -487,6 +489,20 @@ llvm/Support/Compiler.h
 /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/Constant.h
 llvm/IR/User.h
 /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/IR/User.h
+
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/Constants.h
+llvm/ADT/APFloat.h
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/ADT/APFloat.h
+llvm/ADT/APInt.h
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/ADT/APInt.h
+llvm/ADT/ArrayRef.h
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/ADT/ArrayRef.h
+llvm/IR/Constant.h
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/IR/Constant.h
+llvm/IR/DerivedTypes.h
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/IR/DerivedTypes.h
+llvm/IR/OperandTraits.h
+/usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/llvm/IR/OperandTraits.h
 
 /usr/local/Cellar/llvm38/3.8.0/lib/llvm-3.8/include/llvm/IR/DataLayout.h
 llvm/ADT/DenseMap.h

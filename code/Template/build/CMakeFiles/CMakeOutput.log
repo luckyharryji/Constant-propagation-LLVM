@@ -28,30 +28,30 @@ The CXX compiler identification is Clang, found in "/Users/xiangyu/Documents/git
 Determining if the C compiler works passed with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_17932/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_17932.dir/build.make CMakeFiles/cmTC_17932.dir/build
-Building C object CMakeFiles/cmTC_17932.dir/testCCompiler.c.o
-/usr/local/bin/clang-3.8     -o CMakeFiles/cmTC_17932.dir/testCCompiler.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_17932
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_17932.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_17932.dir/testCCompiler.c.o  -o cmTC_17932 
+Run Build Command:"/usr/bin/make" "cmTC_32343/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_32343.dir/build.make CMakeFiles/cmTC_32343.dir/build
+Building C object CMakeFiles/cmTC_32343.dir/testCCompiler.c.o
+/usr/local/bin/clang-3.8     -o CMakeFiles/cmTC_32343.dir/testCCompiler.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_32343
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32343.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_32343.dir/testCCompiler.c.o  -o cmTC_32343 
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_28100/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_28100.dir/build.make CMakeFiles/cmTC_28100.dir/build
-Building C object CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o
-/usr/local/bin/clang-3.8     -o CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o   -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_28100
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28100.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o  -o cmTC_28100  
+Run Build Command:"/usr/bin/make" "cmTC_fb69f/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_fb69f.dir/build.make CMakeFiles/cmTC_fb69f.dir/build
+Building C object CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o
+/usr/local/bin/clang-3.8     -o CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o   -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_fb69f
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fb69f.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o  -o cmTC_fb69f  
 clang version 3.8.0 (tags/RELEASE_380/final)
 Target: x86_64-apple-darwin15.6.0
 Thread model: posix
 InstalledDir: /usr/local/bin
- "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_28100 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o -lSystem
+ "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_fb69f -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o -lSystem
 @(#)PROGRAM:ld  PROJECT:ld64-264.3.102
 configured to support archs: armv6 armv7 armv7s arm64 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em (tvOS)
 Library search paths:
@@ -66,18 +66,18 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_28100/fast"]
-  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_28100.dir/build.make CMakeFiles/cmTC_28100.dir/build]
-  ignore line: [Building C object CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/local/bin/clang-3.8     -o CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o   -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_28100]
-  ignore line: [/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28100.dir/link.txt --verbose=1]
-  ignore line: [/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o  -o cmTC_28100  ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_fb69f/fast"]
+  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_fb69f.dir/build.make CMakeFiles/cmTC_fb69f.dir/build]
+  ignore line: [Building C object CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/local/bin/clang-3.8     -o CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o   -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_fb69f]
+  ignore line: [/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fb69f.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o  -o cmTC_fb69f  ]
   ignore line: [clang version 3.8.0 (tags/RELEASE_380/final)]
   ignore line: [Target: x86_64-apple-darwin15.6.0]
   ignore line: [Thread model: posix]
   ignore line: [InstalledDir: /usr/local/bin]
-  link line: [ "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_28100 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o -lSystem]
+  link line: [ "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_fb69f -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o -lSystem]
     arg [/usr/bin/ld] ==> ignore
     arg [-demangle] ==> ignore
     arg [-dynamic] ==> ignore
@@ -86,11 +86,11 @@ Parsed C implicit link information from above output:
     arg [-macosx_version_min] ==> ignore
     arg [10.11.0] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_28100] ==> ignore
+    arg [cmTC_fb69f] ==> ignore
     arg [-search_paths_first] ==> ignore
     arg [-headerpad_max_install_names] ==> ignore
     arg [-v] ==> ignore
-    arg [CMakeFiles/cmTC_28100.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_fb69f.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lSystem] ==> lib [System]
   Library search paths: [;/usr/lib;/usr/local/lib]
   Framework search paths: [;/Library/Frameworks/;/System/Library/Frameworks/]
@@ -109,13 +109,13 @@ Parsed C implicit link information from above output:
 Detecting C [-std=c11] compiler features compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_28b5d/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_28b5d.dir/build.make CMakeFiles/cmTC_28b5d.dir/build
-Building C object CMakeFiles/cmTC_28b5d.dir/feature_tests.c.o
-/usr/local/bin/clang-3.8    -std=c11 -o CMakeFiles/cmTC_28b5d.dir/feature_tests.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_28b5d
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28b5d.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_28b5d.dir/feature_tests.c.o  -o cmTC_28b5d 
+Run Build Command:"/usr/bin/make" "cmTC_7af1d/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_7af1d.dir/build.make CMakeFiles/cmTC_7af1d.dir/build
+Building C object CMakeFiles/cmTC_7af1d.dir/feature_tests.c.o
+/usr/local/bin/clang-3.8    -std=c11 -o CMakeFiles/cmTC_7af1d.dir/feature_tests.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_7af1d
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7af1d.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_7af1d.dir/feature_tests.c.o  -o cmTC_7af1d 
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -127,13 +127,13 @@ Linking C executable cmTC_28b5d
 Detecting C [-std=c99] compiler features compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_3f9ea/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_3f9ea.dir/build.make CMakeFiles/cmTC_3f9ea.dir/build
-Building C object CMakeFiles/cmTC_3f9ea.dir/feature_tests.c.o
-/usr/local/bin/clang-3.8    -std=c99 -o CMakeFiles/cmTC_3f9ea.dir/feature_tests.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_3f9ea
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3f9ea.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_3f9ea.dir/feature_tests.c.o  -o cmTC_3f9ea 
+Run Build Command:"/usr/bin/make" "cmTC_a55a0/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_a55a0.dir/build.make CMakeFiles/cmTC_a55a0.dir/build
+Building C object CMakeFiles/cmTC_a55a0.dir/feature_tests.c.o
+/usr/local/bin/clang-3.8    -std=c99 -o CMakeFiles/cmTC_a55a0.dir/feature_tests.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_a55a0
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a55a0.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_a55a0.dir/feature_tests.c.o  -o cmTC_a55a0 
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -145,13 +145,13 @@ Linking C executable cmTC_3f9ea
 Detecting C [-std=c90] compiler features compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_81dbf/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_81dbf.dir/build.make CMakeFiles/cmTC_81dbf.dir/build
-Building C object CMakeFiles/cmTC_81dbf.dir/feature_tests.c.o
-/usr/local/bin/clang-3.8    -std=c90 -o CMakeFiles/cmTC_81dbf.dir/feature_tests.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_81dbf
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_81dbf.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_81dbf.dir/feature_tests.c.o  -o cmTC_81dbf 
+Run Build Command:"/usr/bin/make" "cmTC_19942/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_19942.dir/build.make CMakeFiles/cmTC_19942.dir/build
+Building C object CMakeFiles/cmTC_19942.dir/feature_tests.c.o
+/usr/local/bin/clang-3.8    -std=c90 -o CMakeFiles/cmTC_19942.dir/feature_tests.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_19942
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_19942.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_19942.dir/feature_tests.c.o  -o cmTC_19942 
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -161,30 +161,30 @@ Linking C executable cmTC_81dbf
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6e629/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_6e629.dir/build.make CMakeFiles/cmTC_6e629.dir/build
-Building CXX object CMakeFiles/cmTC_6e629.dir/testCXXCompiler.cxx.o
-/usr/local/bin/clang++-3.8      -o CMakeFiles/cmTC_6e629.dir/testCXXCompiler.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_6e629
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6e629.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_6e629.dir/testCXXCompiler.cxx.o  -o cmTC_6e629 
+Run Build Command:"/usr/bin/make" "cmTC_85c91/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_85c91.dir/build.make CMakeFiles/cmTC_85c91.dir/build
+Building CXX object CMakeFiles/cmTC_85c91.dir/testCXXCompiler.cxx.o
+/usr/local/bin/clang++-3.8      -o CMakeFiles/cmTC_85c91.dir/testCXXCompiler.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_85c91
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85c91.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_85c91.dir/testCXXCompiler.cxx.o  -o cmTC_85c91 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_83f6e/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_83f6e.dir/build.make CMakeFiles/cmTC_83f6e.dir/build
-Building CXX object CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o
-/usr/local/bin/clang++-3.8      -o CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_83f6e
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_83f6e.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_83f6e  
+Run Build Command:"/usr/bin/make" "cmTC_26cba/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_26cba.dir/build.make CMakeFiles/cmTC_26cba.dir/build
+Building CXX object CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o
+/usr/local/bin/clang++-3.8      -o CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_26cba
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_26cba.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_26cba  
 clang version 3.8.0 (tags/RELEASE_380/final)
 Target: x86_64-apple-darwin15.6.0
 Thread model: posix
 InstalledDir: /usr/local/bin
- "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_83f6e -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem
+ "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_26cba -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem
 @(#)PROGRAM:ld  PROJECT:ld64-264.3.102
 configured to support archs: armv6 armv7 armv7s arm64 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em (tvOS)
 Library search paths:
@@ -199,18 +199,18 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_83f6e/fast"]
-  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_83f6e.dir/build.make CMakeFiles/cmTC_83f6e.dir/build]
-  ignore line: [Building CXX object CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/local/bin/clang++-3.8      -o CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_83f6e]
-  ignore line: [/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_83f6e.dir/link.txt --verbose=1]
-  ignore line: [/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_83f6e  ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_26cba/fast"]
+  ignore line: [/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_26cba.dir/build.make CMakeFiles/cmTC_26cba.dir/build]
+  ignore line: [Building CXX object CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/local/bin/clang++-3.8      -o CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_26cba]
+  ignore line: [/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_26cba.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_26cba  ]
   ignore line: [clang version 3.8.0 (tags/RELEASE_380/final)]
   ignore line: [Target: x86_64-apple-darwin15.6.0]
   ignore line: [Thread model: posix]
   ignore line: [InstalledDir: /usr/local/bin]
-  link line: [ "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_83f6e -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem]
+  link line: [ "/usr/bin/ld" -demangle -dynamic -arch x86_64 -macosx_version_min 10.11.0 -o cmTC_26cba -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem]
     arg [/usr/bin/ld] ==> ignore
     arg [-demangle] ==> ignore
     arg [-dynamic] ==> ignore
@@ -219,11 +219,11 @@ Parsed CXX implicit link information from above output:
     arg [-macosx_version_min] ==> ignore
     arg [10.11.0] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_83f6e] ==> ignore
+    arg [cmTC_26cba] ==> ignore
     arg [-search_paths_first] ==> ignore
     arg [-headerpad_max_install_names] ==> ignore
     arg [-v] ==> ignore
-    arg [CMakeFiles/cmTC_83f6e.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_26cba.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lc++] ==> lib [c++]
     arg [-lSystem] ==> lib [System]
   Library search paths: [;/usr/lib;/usr/local/lib]
@@ -243,13 +243,13 @@ Parsed CXX implicit link information from above output:
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_92526/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_92526.dir/build.make CMakeFiles/cmTC_92526.dir/build
-Building CXX object CMakeFiles/cmTC_92526.dir/feature_tests.cxx.o
-/usr/local/bin/clang++-3.8     -std=c++14 -o CMakeFiles/cmTC_92526.dir/feature_tests.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_92526
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_92526.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_92526.dir/feature_tests.cxx.o  -o cmTC_92526 
+Run Build Command:"/usr/bin/make" "cmTC_18c73/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_18c73.dir/build.make CMakeFiles/cmTC_18c73.dir/build
+Building CXX object CMakeFiles/cmTC_18c73.dir/feature_tests.cxx.o
+/usr/local/bin/clang++-3.8     -std=c++14 -o CMakeFiles/cmTC_18c73.dir/feature_tests.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_18c73
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_18c73.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_18c73.dir/feature_tests.cxx.o  -o cmTC_18c73 
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -314,13 +314,13 @@ Linking CXX executable cmTC_92526
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_35a34/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_35a34.dir/build.make CMakeFiles/cmTC_35a34.dir/build
-Building CXX object CMakeFiles/cmTC_35a34.dir/feature_tests.cxx.o
-/usr/local/bin/clang++-3.8     -std=c++11 -o CMakeFiles/cmTC_35a34.dir/feature_tests.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_35a34
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_35a34.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_35a34.dir/feature_tests.cxx.o  -o cmTC_35a34 
+Run Build Command:"/usr/bin/make" "cmTC_202b6/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_202b6.dir/build.make CMakeFiles/cmTC_202b6.dir/build
+Building CXX object CMakeFiles/cmTC_202b6.dir/feature_tests.cxx.o
+/usr/local/bin/clang++-3.8     -std=c++11 -o CMakeFiles/cmTC_202b6.dir/feature_tests.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_202b6
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_202b6.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_202b6.dir/feature_tests.cxx.o  -o cmTC_202b6 
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -385,13 +385,13 @@ Linking CXX executable cmTC_35a34
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_b4ca3/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_b4ca3.dir/build.make CMakeFiles/cmTC_b4ca3.dir/build
-Building CXX object CMakeFiles/cmTC_b4ca3.dir/feature_tests.cxx.o
-/usr/local/bin/clang++-3.8     -std=c++98 -o CMakeFiles/cmTC_b4ca3.dir/feature_tests.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_b4ca3
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b4ca3.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_b4ca3.dir/feature_tests.cxx.o  -o cmTC_b4ca3 
+Run Build Command:"/usr/bin/make" "cmTC_0a539/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_0a539.dir/build.make CMakeFiles/cmTC_0a539.dir/build
+Building CXX object CMakeFiles/cmTC_0a539.dir/feature_tests.cxx.o
+/usr/local/bin/clang++-3.8     -std=c++98 -o CMakeFiles/cmTC_0a539.dir/feature_tests.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_0a539
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0a539.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8     -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_0a539.dir/feature_tests.cxx.o  -o cmTC_0a539 
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -454,13 +454,13 @@ Linking CXX executable cmTC_b4ca3
 Performing C++ SOURCE FILE Test LLVM_NO_OLD_LIBSTDCXX succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_efcfe/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_efcfe.dir/build.make CMakeFiles/cmTC_efcfe.dir/build
-Building CXX object CMakeFiles/cmTC_efcfe.dir/src.cxx.o
-/usr/local/bin/clang++-3.8     -DLLVM_NO_OLD_LIBSTDCXX -std=c++0x   -o CMakeFiles/cmTC_efcfe.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_efcfe
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_efcfe.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8    -DLLVM_NO_OLD_LIBSTDCXX -std=c++0x -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_efcfe.dir/src.cxx.o  -o cmTC_efcfe 
+Run Build Command:"/usr/bin/make" "cmTC_9a7f3/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_9a7f3.dir/build.make CMakeFiles/cmTC_9a7f3.dir/build
+Building CXX object CMakeFiles/cmTC_9a7f3.dir/src.cxx.o
+/usr/local/bin/clang++-3.8     -DLLVM_NO_OLD_LIBSTDCXX -std=c++0x   -o CMakeFiles/cmTC_9a7f3.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_9a7f3
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9a7f3.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8    -DLLVM_NO_OLD_LIBSTDCXX -std=c++0x -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_9a7f3.dir/src.cxx.o  -o cmTC_9a7f3 
 
 Source file was:
 
@@ -470,78 +470,78 @@ int main() { return (float)x; }
 Performing C SOURCE FILE Test C_SUPPORTS_FPIC succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_01585/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_01585.dir/build.make CMakeFiles/cmTC_01585.dir/build
-Building C object CMakeFiles/cmTC_01585.dir/src.c.o
-/usr/local/bin/clang-3.8    -DC_SUPPORTS_FPIC   -Werror -fPIC -o CMakeFiles/cmTC_01585.dir/src.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_01585
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_01585.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8   -DC_SUPPORTS_FPIC -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_01585.dir/src.c.o  -o cmTC_01585 
+Run Build Command:"/usr/bin/make" "cmTC_97a87/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_97a87.dir/build.make CMakeFiles/cmTC_97a87.dir/build
+Building C object CMakeFiles/cmTC_97a87.dir/src.c.o
+/usr/local/bin/clang-3.8    -DC_SUPPORTS_FPIC   -Werror -fPIC -o CMakeFiles/cmTC_97a87.dir/src.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_97a87
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_97a87.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8   -DC_SUPPORTS_FPIC -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_97a87.dir/src.c.o  -o cmTC_97a87 
 
 Source file was:
 int main(void) { return 0; }
 Performing C++ SOURCE FILE Test CXX_SUPPORTS_FPIC succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_719c0/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_719c0.dir/build.make CMakeFiles/cmTC_719c0.dir/build
-Building CXX object CMakeFiles/cmTC_719c0.dir/src.cxx.o
-/usr/local/bin/clang++-3.8     -DCXX_SUPPORTS_FPIC   -Werror -fPIC -o CMakeFiles/cmTC_719c0.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_719c0
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_719c0.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8    -DCXX_SUPPORTS_FPIC -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_719c0.dir/src.cxx.o  -o cmTC_719c0 
+Run Build Command:"/usr/bin/make" "cmTC_5120a/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_5120a.dir/build.make CMakeFiles/cmTC_5120a.dir/build
+Building CXX object CMakeFiles/cmTC_5120a.dir/src.cxx.o
+/usr/local/bin/clang++-3.8     -DCXX_SUPPORTS_FPIC   -Werror -fPIC -o CMakeFiles/cmTC_5120a.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_5120a
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5120a.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8    -DCXX_SUPPORTS_FPIC -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_5120a.dir/src.cxx.o  -o cmTC_5120a 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test SUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_ca3ab/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_ca3ab.dir/build.make CMakeFiles/cmTC_ca3ab.dir/build
-Building CXX object CMakeFiles/cmTC_ca3ab.dir/src.cxx.o
-/usr/local/bin/clang++-3.8     -fPIC -DSUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG   -fvisibility-inlines-hidden -o CMakeFiles/cmTC_ca3ab.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_ca3ab
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca3ab.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8    -fPIC -DSUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_ca3ab.dir/src.cxx.o  -o cmTC_ca3ab 
+Run Build Command:"/usr/bin/make" "cmTC_6f1b7/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_6f1b7.dir/build.make CMakeFiles/cmTC_6f1b7.dir/build
+Building CXX object CMakeFiles/cmTC_6f1b7.dir/src.cxx.o
+/usr/local/bin/clang++-3.8     -fPIC -DSUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG   -fvisibility-inlines-hidden -o CMakeFiles/cmTC_6f1b7.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_6f1b7
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6f1b7.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8    -fPIC -DSUPPORTS_FVISIBILITY_INLINES_HIDDEN_FLAG -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_6f1b7.dir/src.cxx.o  -o cmTC_6f1b7 
 
 Source file was:
 int main() { return 0; }
 Performing C SOURCE FILE Test C_SUPPORTS_WERROR_DATE_TIME succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_b43c8/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_b43c8.dir/build.make CMakeFiles/cmTC_b43c8.dir/build
-Building C object CMakeFiles/cmTC_b43c8.dir/src.c.o
-/usr/local/bin/clang-3.8    -fPIC -DC_SUPPORTS_WERROR_DATE_TIME   -Werror -Werror=date-time -o CMakeFiles/cmTC_b43c8.dir/src.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_b43c8
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b43c8.dir/link.txt --verbose=1
-/usr/local/bin/clang-3.8   -fPIC -DC_SUPPORTS_WERROR_DATE_TIME -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_b43c8.dir/src.c.o  -o cmTC_b43c8 
+Run Build Command:"/usr/bin/make" "cmTC_e7355/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_e7355.dir/build.make CMakeFiles/cmTC_e7355.dir/build
+Building C object CMakeFiles/cmTC_e7355.dir/src.c.o
+/usr/local/bin/clang-3.8    -fPIC -DC_SUPPORTS_WERROR_DATE_TIME   -Werror -Werror=date-time -o CMakeFiles/cmTC_e7355.dir/src.c.o   -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_e7355
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e7355.dir/link.txt --verbose=1
+/usr/local/bin/clang-3.8   -fPIC -DC_SUPPORTS_WERROR_DATE_TIME -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_e7355.dir/src.c.o  -o cmTC_e7355 
 
 Source file was:
 int main(void) { return 0; }
 Performing C++ SOURCE FILE Test CXX_SUPPORTS_WERROR_DATE_TIME succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_cf704/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_cf704.dir/build.make CMakeFiles/cmTC_cf704.dir/build
-Building CXX object CMakeFiles/cmTC_cf704.dir/src.cxx.o
-/usr/local/bin/clang++-3.8     -fPIC -fvisibility-inlines-hidden -DCXX_SUPPORTS_WERROR_DATE_TIME   -Werror -Werror=date-time -o CMakeFiles/cmTC_cf704.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_cf704
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cf704.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8    -fPIC -fvisibility-inlines-hidden -DCXX_SUPPORTS_WERROR_DATE_TIME -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_cf704.dir/src.cxx.o  -o cmTC_cf704 
+Run Build Command:"/usr/bin/make" "cmTC_cc347/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_cc347.dir/build.make CMakeFiles/cmTC_cc347.dir/build
+Building CXX object CMakeFiles/cmTC_cc347.dir/src.cxx.o
+/usr/local/bin/clang++-3.8     -fPIC -fvisibility-inlines-hidden -DCXX_SUPPORTS_WERROR_DATE_TIME   -Werror -Werror=date-time -o CMakeFiles/cmTC_cc347.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_cc347
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc347.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8    -fPIC -fvisibility-inlines-hidden -DCXX_SUPPORTS_WERROR_DATE_TIME -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_cc347.dir/src.cxx.o  -o cmTC_cc347 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test CXX_SUPPORTS_CXX11 succeeded with the following output:
 Change Dir: /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c4763/fast"
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_c4763.dir/build.make CMakeFiles/cmTC_c4763.dir/build
-Building CXX object CMakeFiles/cmTC_c4763.dir/src.cxx.o
-/usr/local/bin/clang++-3.8     -fPIC -fvisibility-inlines-hidden -Werror=date-time -DCXX_SUPPORTS_CXX11   -std=c++11 -o CMakeFiles/cmTC_c4763.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_c4763
-/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c4763.dir/link.txt --verbose=1
-/usr/local/bin/clang++-3.8    -fPIC -fvisibility-inlines-hidden -Werror=date-time -DCXX_SUPPORTS_CXX11 -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_c4763.dir/src.cxx.o  -o cmTC_c4763 
+Run Build Command:"/usr/bin/make" "cmTC_2cbd0/fast"
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -f CMakeFiles/cmTC_2cbd0.dir/build.make CMakeFiles/cmTC_2cbd0.dir/build
+Building CXX object CMakeFiles/cmTC_2cbd0.dir/src.cxx.o
+/usr/local/bin/clang++-3.8     -fPIC -fvisibility-inlines-hidden -Werror=date-time -DCXX_SUPPORTS_CXX11   -std=c++11 -o CMakeFiles/cmTC_2cbd0.dir/src.cxx.o -c /Users/xiangyu/Documents/git/LLVM-compiler-practice/code/Template/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_2cbd0
+/usr/local/Cellar/cmake/3.5.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2cbd0.dir/link.txt --verbose=1
+/usr/local/bin/clang++-3.8    -fPIC -fvisibility-inlines-hidden -Werror=date-time -DCXX_SUPPORTS_CXX11 -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/cmTC_2cbd0.dir/src.cxx.o  -o cmTC_2cbd0 
 
 Source file was:
 int main() { return 0; }

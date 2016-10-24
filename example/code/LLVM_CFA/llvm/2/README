@@ -1,0 +1,3 @@
+A pass in this directory replaces all uses of a value returned by a call instruction with a constant value.
+
+This pass relies on low level APIs.

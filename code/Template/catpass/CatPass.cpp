@@ -74,10 +74,7 @@ namespace {
                 variable_used[&I] = set<Instruction *>();
                 variable_used[&I].insert(&I);
               }
-              else if (
-                currentModule->getFunction("CAT_binary_add") == function_callled
-                || currentModule->getFunction("CAT_binary_sub") == function_callled
-              ) {
+              else if (isVariableChanged(function_callled)) {
                 variable_used[dyn_cast<Instruction>(call_inst->getArgOperand(0))].insert(&I);
               }
             }
@@ -108,10 +105,7 @@ namespace {
                 }
               }
             }
-            else if (
-              currentModule->getFunction("CAT_binary_add") == function_callled
-              || currentModule->getFunction("CAT_binary_sub") == function_callled
-            ) {
+            else if (isVariableChanged(function_callled)) {
               gen_set_map[&I].insert(&I);
               Instruction * killed_instruction =
                 dyn_cast<Instruction>(call_inst->getArgOperand(0));
@@ -192,6 +186,26 @@ namespace {
         }
       }
 
+      for (auto &B : F) {
+        for (auto &I : B) {
+          if (!in_set_map[&I].empty()) {
+            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+              Function *function_callled;
+              function_callled = call_inst->getCalledFunction();
+              if (
+                currentModule
+                  ->getFunction("CAT_get_signed_value") == function_callled
+              ) {
+              } else if (
+                isVariableChanged(function_callled)
+              ) {
+
+              }
+            }
+          }
+        }
+      }
+
       errs() << "START FUNCTION: " << F.getName() << '\n';
       for (auto &B : F) {
         for (auto &I : B) {
@@ -239,6 +253,17 @@ namespace {
     void getAnalysisUsage(AnalysisUsage &AU) const override {
       // errs() << "Hello LLVM World at \"getAnalysisUsage\"\n" ;
       AU.setPreservesAll();
+    }
+
+  private:
+    bool isVariableChanged(Function* function) {
+      if (
+        currentModule->getFunction("CAT_binary_add") == function
+        || currentModule->getFunction("CAT_binary_sub") == function
+      ) {
+        return true;
+      }
+      return false;
     }
   };
 }

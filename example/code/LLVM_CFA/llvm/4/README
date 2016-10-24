@@ -1,0 +1,3 @@
+A pass in this directory multiplies the value returned by a call instruction by a constant.
+
+This pass contains a bug in the algorithm. Can you find it?

@@ -6,10 +6,10 @@ if test -z "$CC" ; then
   export CXX=clang++-3.8
 fi
 
-rm -rf build/ ; 
-mkdir build ; 
-cd build ; 
+rm -rf build/ ;
+mkdir build ;
+cd build ;
 cmake -DCMAKE_INSTALL_PREFIX="~/CAT" ../ ; 
 make ;
 make install ;
-cd ../ 
+cd ../

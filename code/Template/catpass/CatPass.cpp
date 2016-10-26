@@ -185,6 +185,7 @@ namespace {
         }
       }
 
+      map<Instruction*, ConstantInt*> replace_pair;
       for (auto &B : F) {
         for (auto &I : B) {
           if (!in_set_map[&I].empty()) {
@@ -195,18 +196,17 @@ namespace {
                 currentModule
                   ->getFunction("CAT_get_signed_value") == function_callled
               ) {
-                // Value *var = callinst->getArgOperand(0);
                 Instruction* def_instruction =
                   dyn_cast<Instruction>(call_inst->getArgOperand(0));
                 Instruction *reachingDef = NULL;
+
                 for (
                   auto inst = in_set_map[&I].begin();
                   inst != in_set_map[&I].end();
                   ++inst
                 ) {
                   if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
-                    Function *inset_function;
-                    inset_function = inside_call_inst->getCalledFunction();
+                    Function *inset_function = inside_call_inst->getCalledFunction();
                     if (
                       currentModule->getFunction("CAT_create_signed_value") == inset_function
                     ) {
@@ -226,6 +226,7 @@ namespace {
                   Value *v = v_to_c->getArgOperand(0);
                   if (isa<ConstantInt>(v)) {
                     ConstantInt *const_int = dyn_cast<ConstantInt>(v);
+                    replace_pair[&I] = dyn_cast<ConstantInt>(v);
                     //c = cnst->getSExtValue();
                     // errs() << I << '\n';
                     // // errs() << "Function is : " << F << "\n";
@@ -234,20 +235,21 @@ namespace {
                     // errs() << F << '\n';
                     // replace all use of var with constant
                     Instruction* replace_instruction = &I;
-                    BasicBlock::iterator ii(replace_instruction);
+                    BasicBlock::iterator ii(&I);
                     BasicBlock* test_block = &B;
                     //Value *const_val(cnst->getType(), c);
                     // ReplaceInstWithValue((*bb->getInstList(), ii, cnst);
-                    ReplaceInstWithValue(test_block->getInstList(), ii, const_int);
+                    // ReplaceInstWithValue(test_block->getInstList(), ii, const_int);
 
                     // Instruction &I_replace = *ii;
-                    // errs() << "Replace Instruction" << I_replace << '\n';
+                    // // errs() << "Replace Instruction" << I_replace << '\n';
                     // // Replaces all of the uses of the instruction with uses of the value
                     // I.replaceAllUsesWith(const_int);
                     // std::string OldName = I.getName();
-                    // errs() << OldName << '\n';
+                    // // errs() << OldName << '\n';
                     // // // Delete the unnecessary instruction now...
-                    // ii = test_block->getInstList().erase(ii);
+                    // // ii = test_block->getInstList().erase(ii);
+                    // // I.eraseFromParent();
                     // // errs() << test_block->getInstList() << '\n';
                     // for (auto instruction_test = test_block->getInstList().begin(); instruction_test != test_block->getInstList().end(); instruction_test++) {
                     //   Instruction* print_instruction= dyn_cast<Instruction>(instruction_test);
@@ -269,6 +271,15 @@ namespace {
         }
       }
 
+      for (auto& instruction_constant  : replace_pair) {
+        Instruction* replace_instruction = instruction_constant.first;
+        BasicBlock::iterator ii(replace_instruction);
+        // BasicBlock* test_block = &B;
+        //Value *const_val(cnst->getType(), c);
+        // ReplaceInstWithValue((*bb->getInstList(), ii, cnst);
+        ReplaceInstWithValue(replace_instruction->getParent()->getInstList(), ii, instruction_constant.second);
+        // ReplaceInstWithValue(test_block->getInstList(), ii, const_int);
+      }
       // errs() << "START FUNCTION: " << F.getName() << '\n';
       // for (auto &B : F) {
       //   for (auto &I : B) {

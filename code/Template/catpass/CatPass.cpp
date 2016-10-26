@@ -104,8 +104,7 @@ namespace {
                   kill_set_map[&I].insert(*inst);
                 }
               }
-            }
-            else if (isVariableChanged(function_callled)) {
+            } else if (isVariableChanged(function_callled)) {
               gen_set_map[&I].insert(&I);
               Instruction * killed_instruction =
                 dyn_cast<Instruction>(call_inst->getArgOperand(0));
@@ -196,6 +195,70 @@ namespace {
                 currentModule
                   ->getFunction("CAT_get_signed_value") == function_callled
               ) {
+                // Value *var = callinst->getArgOperand(0);
+                Instruction* def_instruction =
+                  dyn_cast<Instruction>(call_inst->getArgOperand(0));
+                Instruction *reachingDef = NULL;
+                for (
+                  auto inst = in_set_map[&I].begin();
+                  inst != in_set_map[&I].end();
+                  ++inst
+                ) {
+                  if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
+                    Function *inset_function;
+                    inset_function = inside_call_inst->getCalledFunction();
+                    if (
+                      currentModule->getFunction("CAT_create_signed_value") == inset_function
+                    ) {
+                      if (def_instruction == *inst) {
+                        reachingDef = *inst;
+                      }
+                    } else if (isVariableChanged(inset_function)) {
+                      if (call_inst->getArgOperand(0) == inside_call_inst->getArgOperand(0)) {
+                        reachingDef = NULL;
+                        break;
+                      }
+                    }
+                  }
+                }
+                if (reachingDef != NULL) {
+                  CallInst *v_to_c = dyn_cast<CallInst>(reachingDef);
+                  Value *v = v_to_c->getArgOperand(0);
+                  if (isa<ConstantInt>(v)) {
+                    ConstantInt *const_int = dyn_cast<ConstantInt>(v);
+                    //c = cnst->getSExtValue();
+                    // errs() << I << '\n';
+                    // // errs() << "Function is : " << F << "\n";
+                    // errs() << *const_int << '\n';
+                    // errs() << "whole function" << '\n';
+                    // errs() << F << '\n';
+                    // replace all use of var with constant
+                    Instruction* replace_instruction = &I;
+                    BasicBlock::iterator ii(replace_instruction);
+                    BasicBlock* test_block = &B;
+                    //Value *const_val(cnst->getType(), c);
+                    // ReplaceInstWithValue((*bb->getInstList(), ii, cnst);
+                    ReplaceInstWithValue(test_block->getInstList(), ii, const_int);
+
+                    // Instruction &I_replace = *ii;
+                    // errs() << "Replace Instruction" << I_replace << '\n';
+                    // // Replaces all of the uses of the instruction with uses of the value
+                    // I.replaceAllUsesWith(const_int);
+                    // std::string OldName = I.getName();
+                    // errs() << OldName << '\n';
+                    // // // Delete the unnecessary instruction now...
+                    // ii = test_block->getInstList().erase(ii);
+                    // // errs() << test_block->getInstList() << '\n';
+                    // for (auto instruction_test = test_block->getInstList().begin(); instruction_test != test_block->getInstList().end(); instruction_test++) {
+                    //   Instruction* print_instruction= dyn_cast<Instruction>(instruction_test);
+                    //   errs() << *print_instruction << '\n';
+                    // }
+                    // // ii = test_block->getInstList().erase(ii)
+                    // // // Make sure to propagate a name if there is one already.
+                    // if (!OldName.empty() && !const_int->hasName())
+                    //   const_int->setName(OldName);
+                  }
+                }
               } else if (
                 isVariableChanged(function_callled)
               ) {
@@ -206,35 +269,35 @@ namespace {
         }
       }
 
-      errs() << "START FUNCTION: " << F.getName() << '\n';
-      for (auto &B : F) {
-        for (auto &I : B) {
-          errs() << "INSTRUCTION: " << I << '\n';
-          errs() << "***************** IN\n" << "{\n";
-          if (!in_set_map[&I].empty()) {
-            for (
-              auto inst = in_set_map[&I].begin();
-              inst != in_set_map[&I].end();
-              ++inst
-            ) {
-              errs() << ' ' << **inst << '\n';
-            }
-          }
-          errs() << "}\n" << "**************************************\n";
-          errs() << "***************** OUT\n" << "{\n";
-          if (!out_set_map[&I].empty()) {
-            for (
-              auto inst = out_set_map[&I].begin();
-              inst != out_set_map[&I].end();
-              ++inst
-            ) {
-              errs() << ' ' << **inst << '\n';
-            }
-          }
-          errs() << "}\n" << "**************************************\n"
-                 << "\n\n\n";
-        }
-      }
+      // errs() << "START FUNCTION: " << F.getName() << '\n';
+      // for (auto &B : F) {
+      //   for (auto &I : B) {
+      //     errs() << "INSTRUCTION: " << I << '\n';
+      //     errs() << "***************** IN\n" << "{\n";
+      //     if (!in_set_map[&I].empty()) {
+      //       for (
+      //         auto inst = in_set_map[&I].begin();
+      //         inst != in_set_map[&I].end();
+      //         ++inst
+      //       ) {
+      //         errs() << ' ' << **inst << '\n';
+      //       }
+      //     }
+      //     errs() << "}\n" << "**************************************\n";
+      //     errs() << "***************** OUT\n" << "{\n";
+      //     if (!out_set_map[&I].empty()) {
+      //       for (
+      //         auto inst = out_set_map[&I].begin();
+      //         inst != out_set_map[&I].end();
+      //         ++inst
+      //       ) {
+      //         errs() << ' ' << **inst << '\n';
+      //       }
+      //     }
+      //     errs() << "}\n" << "**************************************\n"
+      //            << "\n\n\n";
+      //   }
+      // }
 
       gen_set_map.clear();
       kill_set_map.clear();

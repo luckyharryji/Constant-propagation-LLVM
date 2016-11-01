@@ -54,6 +54,32 @@ namespace {
       vector<Instruction *> instruction_list;
       map<Instruction *, int> instruction_index;
       map<Instruction *, set<Instruction *>> predecessor;
+      map<Instruction *, Value *> add_instruction_to_argument;
+      map<Value *, Instruction *> argument_to_add_instruction;
+      Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
+      // errs() << *zeroConst << '\n';
+      Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
+      errs() << *insert_point << '\n';
+      errs() << "Origin function" << F << '\n';
+      for (auto iter = F.arg_begin(); iter != F.arg_end(); iter++) {
+        // Instruction *newInst = BinaryOperator::Create(Instruction::Add, zeroConst, zeroConst, "", inst)
+        // used to mark a create instruction for every argument value for the
+        // function
+        Instruction *add_inst = BinaryOperator::Create(Instruction::Add, zeroConst,
+                                                      zeroConst, "", insert_point);
+        // errs() << "Iterator" << iter << '\n';
+        argument_to_add_instruction[dyn_cast<Value>(iter)] = add_inst;
+        add_instruction_to_argument[add_inst] = dyn_cast<Value>(iter);
+        // fake_insts_to_arg[newInst] = iter;
+        // arg_to_fake_insts[iter] = newInst;
+      }
+
+      for (auto& add_pair : argument_to_add_instruction) {
+        errs() << "argument" << *(add_pair.first) << '\n';
+        errs() << "Instruction" << *(add_pair.second) << '\n';
+      }
+
+      errs() << "after insertion function: " << F << '\n';
       for (auto &B : F) {
         for (auto &I : B) {
 
@@ -75,7 +101,13 @@ namespace {
                 variable_used[&I].insert(&I);
               }
               else if (isVariableChanged(function_callled)) {
-                variable_used[dyn_cast<Instruction>(call_inst->getArgOperand(0))].insert(&I);
+                Value* first_argument = call_inst->getArgOperand(0);
+                variable_used[dyn_cast<Instruction>(first_argument)].insert(&I);
+                if (isa<Argument>(first_argument)) {
+                  variable_used[dyn_cast<Instruction>(first_argument)].insert(
+                    argument_to_add_instruction[first_argument]
+                  );
+                }
               }
             }
           }
@@ -87,7 +119,12 @@ namespace {
           gen_set_map[&I] = set<Instruction *>();
           kill_set_map[&I] = set<Instruction *>();
 
-          if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+          if (
+            add_instruction_to_argument.find(&I)
+            != add_instruction_to_argument.end()
+          ) {
+            gen_set_map[&I].insert(&I);
+          } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled;
             function_callled = call_inst->getCalledFunction();
             if (
@@ -200,6 +237,7 @@ namespace {
               ) {
                 Instruction* def_instruction =
                   dyn_cast<Instruction>(call_inst->getArgOperand(0));
+                Value* argument = call_inst->getArgOperand(0);
                 Instruction *potentialCreateInstruction = NULL;
 
                 for (
@@ -207,7 +245,12 @@ namespace {
                   inst != in_set_map[&I].end();
                   ++inst
                 ) {
-                  if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
+                  if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
+                    if (add_instruction_to_argument[*inst] == argument) {
+                      potentialCreateInstruction = NULL;
+                      break;
+                    }
+                  } else if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
                     Function *inset_function = inside_call_inst->getCalledFunction();
                     if (
                       isVariableCreated(inset_function)
@@ -245,6 +288,10 @@ namespace {
           ii,
           instruction_constant.second
         );
+      }
+
+      for (auto& add_instruction_pair : add_instruction_to_argument) {
+        (add_instruction_pair.first)->eraseFromParent();
       }
 
       replace_pair.clear();

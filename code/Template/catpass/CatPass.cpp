@@ -70,7 +70,6 @@ namespace {
         argument_to_add_instruction[dyn_cast<Value>(iter)] = add_inst;
         add_instruction_to_argument[add_inst] = dyn_cast<Value>(iter);
       }
-      errs() << "whole function" << F << '\n';
       for (auto &B : F) {
         for (auto &I : B) {
 
@@ -83,14 +82,10 @@ namespace {
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled = call_inst->getCalledFunction();
             if (CAT_functions.find(function_callled) != CAT_functions.end()) {
-              if (
-                currentModule
-                  ->getFunction("CAT_create_signed_value") == function_callled
-              ) {
+              if (isVariableCreated(function_callled)) {
                 variable_used[&I] = set<Instruction *>();
                 variable_used[&I].insert(&I);
-              }
-              else if (isVariableChanged(function_callled)) {
+              } else if (isVariableChanged(function_callled)) {
                 Value* first_argument = call_inst->getArgOperand(0);
                 variable_used[dyn_cast<Instruction>(first_argument)].insert(&I);
                 if (isa<Argument>(first_argument)) {
@@ -146,10 +141,7 @@ namespace {
             }
           } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled = call_inst->getCalledFunction();
-            if (
-              currentModule
-                ->getFunction("CAT_create_signed_value") == function_callled
-            ) {
+            if (isVariableCreated(function_callled)) {
               gen_set_map[&I].insert(&I);
               for (
                 auto inst = variable_used[&I].begin();
@@ -173,12 +165,14 @@ namespace {
                   kill_set_map[&I].insert(*inst);
                 }
               }
-            } else {
+            } else if (CAT_functions.find(function_callled) == CAT_functions.end()){
               int num_operand = call_inst->getNumArgOperands();
               for (int i = 0; i < num_operand; i++) {
                 Value* argument = call_inst->getArgOperand(i);
                 if (auto* arg_create_inst = dyn_cast<Instruction>(call_inst->getArgOperand(i))) {
                   if (isInstructionModifyVariable(arg_create_inst)) {
+                    errs() << "Instruction:" << I << '\n';
+                    errs() << arg_create_inst << '\n';
                     kill_set_map[&I].insert(arg_create_inst);
                   }
                 }

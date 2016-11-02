@@ -57,29 +57,20 @@ namespace {
       map<Instruction *, Value *> add_instruction_to_argument;
       map<Value *, Instruction *> argument_to_add_instruction;
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
-      // errs() << *zeroConst << '\n';
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
-      errs() << *insert_point << '\n';
-      errs() << "Origin function" << F << '\n';
+
       for (auto iter = F.arg_begin(); iter != F.arg_end(); iter++) {
-        // Instruction *newInst = BinaryOperator::Create(Instruction::Add, zeroConst, zeroConst, "", inst)
         // used to mark a create instruction for every argument value for the
         // function
+        // So each CAT data pass to the function parameter which is
+        // outside of the scope will have a add instruction marked to be used
+        // as the create function for the CAT data, then applied to gen set
         Instruction *add_inst = BinaryOperator::Create(Instruction::Add, zeroConst,
                                                       zeroConst, "", insert_point);
-        // errs() << "Iterator" << iter << '\n';
         argument_to_add_instruction[dyn_cast<Value>(iter)] = add_inst;
         add_instruction_to_argument[add_inst] = dyn_cast<Value>(iter);
-        // fake_insts_to_arg[newInst] = iter;
-        // arg_to_fake_insts[iter] = newInst;
       }
-
-      for (auto& add_pair : argument_to_add_instruction) {
-        errs() << "argument" << *(add_pair.first) << '\n';
-        errs() << "Instruction" << *(add_pair.second) << '\n';
-      }
-
-      errs() << "after insertion function: " << F << '\n';
+      errs() << "whole function" << F << '\n';
       for (auto &B : F) {
         for (auto &I : B) {
 
@@ -90,8 +81,7 @@ namespace {
           out_set_map[&I] = set<Instruction *>();
 
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            Function *function_callled;
-            function_callled = call_inst->getCalledFunction();
+            Function *function_callled = call_inst->getCalledFunction();
             if (CAT_functions.find(function_callled) != CAT_functions.end()) {
               if (
                 currentModule
@@ -110,6 +100,30 @@ namespace {
                 }
               }
             }
+            // else {
+            //   int num_operand = call_inst->getNumArgOperands();
+            //   for (int i = 0; i < num_operand; i++) {
+            //     Value* argument = call_inst->getArgOperand(i);
+            //     if (auto* arg_create_inst = dyn_cast<Instruction>(call_inst->getArgOperand(i))) {
+            //       if (isInstructionModifyVariable(arg_create_inst)) {
+            //         variable_used[arg_create_inst].insert(&I);
+            //         errs() << "Instruction for argu" << *arg_create_inst << '\n';
+            //       }
+            //     }
+            //     // errs() << "argument" << *argument << '\n';
+            //   }
+            //   // for (
+            //   //   auto iter_caller_arg = function_callled->arg_begin();
+            //   //   iter_caller_arg != function_callled->arg_end();
+            //   //   iter_caller_arg++
+            //   // ) {
+            //   //   // errs() << "argument" << *iter_caller_arg << '\n';
+            //   //   // if (auto* arg_create_inst = dyn_cast<Instruction>(iter_caller_arg)) {
+            //   //   //   variable_used[arg_create_inst].insert(&I);
+            //   //   //   errs() << "Instruction for argu" << *arg_create_inst << '\n';
+            //   //   // }
+            //   // }
+            // }
           }
         }
       }
@@ -131,8 +145,7 @@ namespace {
               kill_set_map[&I].insert(dyn_cast<Instruction>(stored_value));
             }
           } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            Function *function_callled;
-            function_callled = call_inst->getCalledFunction();
+            Function *function_callled = call_inst->getCalledFunction();
             if (
               currentModule
                 ->getFunction("CAT_create_signed_value") == function_callled
@@ -160,6 +173,28 @@ namespace {
                   kill_set_map[&I].insert(*inst);
                 }
               }
+            } else {
+              int num_operand = call_inst->getNumArgOperands();
+              for (int i = 0; i < num_operand; i++) {
+                Value* argument = call_inst->getArgOperand(i);
+                if (auto* arg_create_inst = dyn_cast<Instruction>(call_inst->getArgOperand(i))) {
+                  if (isInstructionModifyVariable(arg_create_inst)) {
+                    kill_set_map[&I].insert(arg_create_inst);
+                  }
+                }
+                // errs() << "argument" << *argument << '\n';
+              }
+              // for (
+              //   auto iter_caller_arg = function_callled->arg_begin();
+              //   iter_caller_arg != function_callled->arg_end();
+              //   iter_caller_arg++
+              // ) {
+              //   // errs() << "argument" << *iter_caller_arg << '\n';
+              //   // if (auto* arg_create_inst = dyn_cast<Instruction>(iter_caller_arg)) {
+              //   //   variable_used[arg_create_inst].insert(&I);
+              //   //   errs() << "Instruction for argu" << *arg_create_inst << '\n';
+              //   // }
+              // }
             }
           }
         }
@@ -354,6 +389,20 @@ namespace {
         || currentModule->getFunction("CAT_binary_sub") == function
       ) {
         return true;
+      }
+      return false;
+    }
+
+    bool isInstructionModifyVariable(Instruction* I) {
+      if (auto* call_inst = dyn_cast<CallInst>(I)) {
+        Function *function_callled = call_inst->getCalledFunction();
+        if (CAT_functions.find(function_callled) != CAT_functions.end()) {
+          if (
+            isVariableCreated(function_callled) || isVariableChanged(function_callled)
+          ) {
+            return true;
+          }
+        }
       }
       return false;
     }

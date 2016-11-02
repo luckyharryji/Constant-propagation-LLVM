@@ -125,6 +125,11 @@ namespace {
             || isa<PHINode>(&I)
           ) {
             gen_set_map[&I].insert(&I);
+          } else if(auto* store_inst = dyn_cast<StoreInst>(&I)) {
+            Value* stored_value = store_inst->getValueOperand();
+            if (!isa<Argument>(stored_value)) {
+              kill_set_map[&I].insert(dyn_cast<Instruction>(stored_value));
+            }
           } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled;
             function_callled = call_inst->getCalledFunction();

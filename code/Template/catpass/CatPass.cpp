@@ -166,6 +166,16 @@ namespace {
                 }
               }
             } else if (CAT_functions.find(function_callled) == CAT_functions.end()){
+              // This is used to handle the function which call the function
+              // that use CAT DATA as argument, such as:
+              /*
+                ...
+                d1 = CAT_create_signed_value(1);
+                foo(d1);
+                printf(CAT_get_signed_value(d1));
+              */
+              // for conservative, all of these cases do not propagate the constant
+              // of the value
               int num_operand = call_inst->getNumArgOperands();
               for (int i = 0; i < num_operand; i++) {
                 Value* argument = call_inst->getArgOperand(i);
@@ -176,19 +186,7 @@ namespace {
                     kill_set_map[&I].insert(arg_create_inst);
                   }
                 }
-                // errs() << "argument" << *argument << '\n';
               }
-              // for (
-              //   auto iter_caller_arg = function_callled->arg_begin();
-              //   iter_caller_arg != function_callled->arg_end();
-              //   iter_caller_arg++
-              // ) {
-              //   // errs() << "argument" << *iter_caller_arg << '\n';
-              //   // if (auto* arg_create_inst = dyn_cast<Instruction>(iter_caller_arg)) {
-              //   //   variable_used[arg_create_inst].insert(&I);
-              //   //   errs() << "Instruction for argu" << *arg_create_inst << '\n';
-              //   // }
-              // }
             }
           }
         }
@@ -287,25 +285,53 @@ namespace {
                     }
                   } else if (isa<PHINode>(*inst)) {
                     auto phi_node = dyn_cast<PHINode>(*inst);
-                    auto left_income = phi_node->getIncomingValue(0);
-                    auto right_income = phi_node->getIncomingValue(1);
-                    // auto left_inst = dyn_cast<Instruction>(left_income);
-                    // auto right_inst = dyn_cast<Instruction>(right_income);
-                    // if (left_inst && right_inst) {
-                      // errs() << "okay to here";
-                      if (auto* left_calll_inst = dyn_cast<CallInst>(left_income)) {
-                        // errs() << "okay to here";
-                        if (auto *right_call_inst = dyn_cast<CallInst>(right_income)) {
-                          Function *left_called_function = left_calll_inst->getCalledFunction(),
-                                   *right_called_function = right_call_inst->getCalledFunction();
-                          if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
-                            if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
-                              potentialCreateInstruction = dyn_cast<Instruction>(left_income);
-                              break;
+                    int num_phi_node = phi_node->getNumIncomingValues();
+                    Value* temp_upstream_value = NULL;
+                    bool valid = true;
+                    for (int i = 0; i < num_phi_node; i++) {
+                      if (temp_upstream_value == NULL) {
+                        temp_upstream_value = phi_node->getIncomingValue(i);
+                      } else {
+                        bool check = false;
+                        auto new_upstream_value = phi_node->getIncomingValue(i);
+                        if (auto* left_calll_inst = dyn_cast<CallInst>(temp_upstream_value)) {
+                          // errs() << "okay to here";
+                          if (auto *right_call_inst = dyn_cast<CallInst>(new_upstream_value)) {
+                            Function *left_called_function = left_calll_inst->getCalledFunction(),
+                                     *right_called_function = right_call_inst->getCalledFunction();
+                            if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
+                              if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
+                                // potentialCreateInstruction = dyn_cast<Instruction>(left_income);
+                                check = true;
+                              }
                             }
                           }
                         }
+                        valid = valid && check;
                       }
+                    }
+                    if (valid == true) {
+                      potentialCreateInstruction = dyn_cast<Instruction>(temp_upstream_value);
+                    }
+                    // auto left_income = phi_node->getIncomingValue(0);
+                    // auto right_income = phi_node->getIncomingValue(1);
+                    // // auto left_inst = dyn_cast<Instruction>(left_income);
+                    // // auto right_inst = dyn_cast<Instruction>(right_income);
+                    // // if (left_inst && right_inst) {
+                    //   // errs() << "okay to here";
+                    //   if (auto* left_calll_inst = dyn_cast<CallInst>(left_income)) {
+                    //     // errs() << "okay to here";
+                    //     if (auto *right_call_inst = dyn_cast<CallInst>(right_income)) {
+                    //       Function *left_called_function = left_calll_inst->getCalledFunction(),
+                    //                *right_called_function = right_call_inst->getCalledFunction();
+                    //       if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
+                    //         if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
+                    //           potentialCreateInstruction = dyn_cast<Instruction>(left_income);
+                    //           break;
+                    //         }
+                    //       }
+                    //     }
+                    //   }
                     // }
                   } else if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
                     Function *inset_function = inside_call_inst->getCalledFunction();

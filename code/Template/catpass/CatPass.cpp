@@ -95,30 +95,6 @@ namespace {
                 }
               }
             }
-            // else {
-            //   int num_operand = call_inst->getNumArgOperands();
-            //   for (int i = 0; i < num_operand; i++) {
-            //     Value* argument = call_inst->getArgOperand(i);
-            //     if (auto* arg_create_inst = dyn_cast<Instruction>(call_inst->getArgOperand(i))) {
-            //       if (isInstructionModifyVariable(arg_create_inst)) {
-            //         variable_used[arg_create_inst].insert(&I);
-            //         errs() << "Instruction for argu" << *arg_create_inst << '\n';
-            //       }
-            //     }
-            //     // errs() << "argument" << *argument << '\n';
-            //   }
-            //   // for (
-            //   //   auto iter_caller_arg = function_callled->arg_begin();
-            //   //   iter_caller_arg != function_callled->arg_end();
-            //   //   iter_caller_arg++
-            //   // ) {
-            //   //   // errs() << "argument" << *iter_caller_arg << '\n';
-            //   //   // if (auto* arg_create_inst = dyn_cast<Instruction>(iter_caller_arg)) {
-            //   //   //   variable_used[arg_create_inst].insert(&I);
-            //   //   //   errs() << "Instruction for argu" << *arg_create_inst << '\n';
-            //   //   // }
-            //   // }
-            // }
           }
         }
       }
@@ -181,8 +157,6 @@ namespace {
                 Value* argument = call_inst->getArgOperand(i);
                 if (auto* arg_create_inst = dyn_cast<Instruction>(call_inst->getArgOperand(i))) {
                   if (isInstructionModifyVariable(arg_create_inst)) {
-                    errs() << "Instruction:" << I << '\n';
-                    errs() << arg_create_inst << '\n';
                     kill_set_map[&I].insert(arg_create_inst);
                   }
                 }
@@ -301,7 +275,6 @@ namespace {
                                      *right_called_function = right_call_inst->getCalledFunction();
                             if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
                               if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
-                                // potentialCreateInstruction = dyn_cast<Instruction>(left_income);
                                 check = true;
                               }
                             }
@@ -313,26 +286,6 @@ namespace {
                     if (valid == true) {
                       potentialCreateInstruction = dyn_cast<Instruction>(temp_upstream_value);
                     }
-                    // auto left_income = phi_node->getIncomingValue(0);
-                    // auto right_income = phi_node->getIncomingValue(1);
-                    // // auto left_inst = dyn_cast<Instruction>(left_income);
-                    // // auto right_inst = dyn_cast<Instruction>(right_income);
-                    // // if (left_inst && right_inst) {
-                    //   // errs() << "okay to here";
-                    //   if (auto* left_calll_inst = dyn_cast<CallInst>(left_income)) {
-                    //     // errs() << "okay to here";
-                    //     if (auto *right_call_inst = dyn_cast<CallInst>(right_income)) {
-                    //       Function *left_called_function = left_calll_inst->getCalledFunction(),
-                    //                *right_called_function = right_call_inst->getCalledFunction();
-                    //       if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
-                    //         if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
-                    //           potentialCreateInstruction = dyn_cast<Instruction>(left_income);
-                    //           break;
-                    //         }
-                    //       }
-                    //     }
-                    //   }
-                    // }
                   } else if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
                     Function *inset_function = inside_call_inst->getCalledFunction();
                     if (
@@ -386,6 +339,8 @@ namespace {
       instruction_list.clear();
       instruction_index.clear();
       predecessor.clear();
+      add_instruction_to_argument.clear();
+      argument_to_add_instruction.clear();
 
       return false;
     }

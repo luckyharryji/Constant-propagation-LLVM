@@ -121,7 +121,8 @@ namespace {
 
           if (
             add_instruction_to_argument.find(&I)
-            != add_instruction_to_argument.end()
+              != add_instruction_to_argument.end()
+            || isa<PHINode>(&I)
           ) {
             gen_set_map[&I].insert(&I);
           } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
@@ -250,6 +251,28 @@ namespace {
                       potentialCreateInstruction = NULL;
                       break;
                     }
+                  } else if (isa<PHINode>(*inst)) {
+                    auto phi_node = dyn_cast<PHINode>(*inst);
+                    auto left_income = phi_node->getIncomingValue(0);
+                    auto right_income = phi_node->getIncomingValue(1);
+                    // auto left_inst = dyn_cast<Instruction>(left_income);
+                    // auto right_inst = dyn_cast<Instruction>(right_income);
+                    // if (left_inst && right_inst) {
+                      // errs() << "okay to here";
+                      if (auto* left_calll_inst = dyn_cast<CallInst>(left_income)) {
+                        // errs() << "okay to here";
+                        if (auto *right_call_inst = dyn_cast<CallInst>(right_income)) {
+                          Function *left_called_function = left_calll_inst->getCalledFunction(),
+                                   *right_called_function = right_call_inst->getCalledFunction();
+                          if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
+                            if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
+                              potentialCreateInstruction = dyn_cast<Instruction>(left_income);
+                              break;
+                            }
+                          }
+                        }
+                      }
+                    // }
                   } else if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
                     Function *inset_function = inside_call_inst->getCalledFunction();
                     if (

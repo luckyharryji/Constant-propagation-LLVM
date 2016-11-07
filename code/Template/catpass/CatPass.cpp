@@ -17,6 +17,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include "llvm/Analysis/DependenceAnalysis.h"
 
 using namespace llvm;
 using namespace std;
@@ -46,6 +47,7 @@ namespace {
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
     bool runOnFunction (Function &F) override {
+      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;
       map<Instruction *, set<Instruction *>> variable_used;
@@ -56,6 +58,7 @@ namespace {
       map<Instruction *, set<Instruction *>> predecessor;
       map<Instruction *, Value *> add_instruction_to_argument;
       map<Value *, Instruction *> argument_to_add_instruction;
+      set<Instruction*> candidate_list;
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
 
@@ -113,7 +116,8 @@ namespace {
           } else if(auto* store_inst = dyn_cast<StoreInst>(&I)) {
             Value* stored_value = store_inst->getValueOperand();
             if (!isa<Argument>(stored_value)) {
-              kill_set_map[&I].insert(dyn_cast<Instruction>(stored_value));
+              // kill_set_map[&I].insert(dyn_cast<Instruction>(stored_value));
+              candidate_list.insert(dyn_cast<Instruction>(stored_value));
             }
           } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled = call_inst->getCalledFunction();
@@ -295,9 +299,18 @@ namespace {
                         potentialCreateInstruction = *inst;
                       }
                     } else if (isVariableChanged(inset_function)) {
-                      if (call_inst->getArgOperand(0) == inside_call_inst->getArgOperand(0)) {
+                      Value *inset_function_variable = inside_call_inst->getArgOperand(0);
+                      if (argument == inset_function_variable) {
                         potentialCreateInstruction = NULL;
                         break;
+                      } else if (auto *in_set_variable_create = dyn_cast<Instruction>(inset_function_variable)) {
+                        if (candidate_list.find(def_instruction) != candidate_list.end()) {
+                          // errs() << "can compile to herer" << "\n";
+                          if (deps.depends(def_instruction, in_set_variable_create, false) != NULL) {
+                            potentialCreateInstruction = NULL;
+                            break;
+                          }
+                        }
                       }
                     }
                   }
@@ -350,6 +363,7 @@ namespace {
     void getAnalysisUsage(AnalysisUsage &AU) const override {
       // errs() << "Hello LLVM World at \"getAnalysisUsage\"\n" ;
       AU.setPreservesAll();
+      AU.addRequiredTransitive<DependenceAnalysis>();
     }
 
   private:

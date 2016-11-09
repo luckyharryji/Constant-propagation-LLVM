@@ -39,6 +39,7 @@ namespace {
     bool doInitialization (Module &M) override {
       currentModule = &M;
       for (auto& function_name : CAT_function_list) {
+        // Initialize the list of function shown in the input module
         CAT_functions.insert(M.getFunction(function_name));
       }
       return false;
@@ -59,15 +60,17 @@ namespace {
       map<Instruction *, Value *> add_instruction_to_argument;
       map<Value *, Instruction *> argument_to_add_instruction;
       set<Instruction*> candidate_list;
+
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
 
       for (auto iter = F.arg_begin(); iter != F.arg_end(); iter++) {
-        // used to mark a create instruction for every argument value for the
-        // function
-        // So each CAT data pass to the function parameter which is
-        // outside of the scope will have a add instruction marked to be used
-        // as the create function for the CAT data, then applied to gen set
+        // used as a 'create' instruction for every argument value for the
+        // function,
+        // So each CAT variable in the function parameter which is
+        // outside of the scope will have an fake add instruction treated as
+        // the create function for the CAT variable, then applied the same
+        // method as previously to gen / kill set for analysis
         Instruction *add_inst = BinaryOperator::Create(Instruction::Add, zeroConst,
                                                       zeroConst, "", insert_point);
         argument_to_add_instruction[dyn_cast<Value>(iter)] = add_inst;
@@ -82,6 +85,9 @@ namespace {
           in_set_map[&I] = set<Instruction *>();
           out_set_map[&I] = set<Instruction *>();
 
+          // record the defination instruction of the CAT variable
+          // including the cat_add/sub/create and the fake add instruction
+          // to handle the variable pass to function as argument
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled = call_inst->getCalledFunction();
             if (CAT_functions.find(function_callled) != CAT_functions.end()) {
@@ -117,6 +123,11 @@ namespace {
             Value* stored_value = store_inst->getValueOperand();
             if (!isa<Argument>(stored_value)) {
               // kill_set_map[&I].insert(dyn_cast<Instruction>(stored_value));
+              // This case is used to handle the store instruction / pointer read
+              // Instead of the conservative way to claim can not propagate and add to kill set,
+              // every time loop to a store instruction, add all instruction to
+              // a list(set) and then use LLVM depends API to decide whether
+              // to propagate the constant in the later in set iteration
               candidate_list.insert(dyn_cast<Instruction>(stored_value));
             }
           } else if (auto* call_inst = dyn_cast<CallInst>(&I)) {
@@ -146,8 +157,8 @@ namespace {
                 }
               }
             } else if (CAT_functions.find(function_callled) == CAT_functions.end()){
-              // This is used to handle the function which call the function
-              // that use CAT DATA as argument, such as:
+              // This case is used to handle the function that use CAT variable
+              // as argument but not a CAT function, such as:
               /*
                 ...
                 d1 = CAT_create_signed_value(1);
@@ -155,7 +166,8 @@ namespace {
                 printf(CAT_get_signed_value(d1));
               */
               // for conservative, all of these cases do not propagate the constant
-              // of the value
+              // of the value,
+              // which means will add the CAT variables to the kill set here.
               int num_operand = call_inst->getNumArgOperands();
               for (int i = 0; i < num_operand; i++) {
                 Value* argument = call_inst->getArgOperand(i);
@@ -305,7 +317,7 @@ namespace {
                         break;
                       } else if (auto *in_set_variable_create = dyn_cast<Instruction>(inset_function_variable)) {
                         if (candidate_list.find(def_instruction) != candidate_list.end()) {
-                          // errs() << "can compile to herer" << "\n";
+                          // errs() << "can compile to here" << "\n";
                           if (deps.depends(def_instruction, in_set_variable_create, false) != NULL) {
                             potentialCreateInstruction = NULL;
                             break;
@@ -320,6 +332,8 @@ namespace {
                     dyn_cast<CallInst>(potentialCreateInstruction);
                   Value* const_value = create_inst->getArgOperand(0);
                   if (isa<ConstantInt>(const_value)) {
+                    // add all the constant value inside CAT_get function call
+                    // replace the Instruction later at once
                     replace_pair[&I] = dyn_cast<ConstantInt>(const_value);
                   }
                 }
@@ -330,6 +344,7 @@ namespace {
       }
 
       for (auto& instruction_constant : replace_pair) {
+        // replace instruction with constant value at once, constant propagation
         Instruction* replace_instruction = instruction_constant.first;
         BasicBlock::iterator ii(replace_instruction);
         ReplaceInstWithValue(
@@ -339,6 +354,7 @@ namespace {
         );
       }
 
+      // delete the fake add instruction added to the function at the beginning
       for (auto& add_instruction_pair : add_instruction_to_argument) {
         (add_instruction_pair.first)->eraseFromParent();
       }
@@ -382,6 +398,11 @@ namespace {
       return false;
     }
 
+    /*
+      Input: Instruction
+      Output: if instruction modify the variable relates to CAT function,
+              either create / add / sub
+    */
     bool isInstructionModifyVariable(Instruction* I) {
       if (auto* call_inst = dyn_cast<CallInst>(I)) {
         Function *function_callled = call_inst->getCalledFunction();

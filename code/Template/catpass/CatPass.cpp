@@ -362,7 +362,7 @@ namespace {
     // The LLVM IR of functions isn't ready at this point
     void getAnalysisUsage(AnalysisUsage &AU) const override {
       // errs() << "Hello LLVM World at \"getAnalysisUsage\"\n" ;
-      AU.setPreservesAll();
+      // AU.setPreservesAll();
       AU.addRequiredTransitive<DependenceAnalysis>();
     }
 

@@ -75,8 +75,10 @@ namespace {
             ReturnInst *return_inst = dyn_cast<ReturnInst>(&I);
             Value *returned_value = return_inst->getReturnValue();
             errs() << "return Value: " << returned_value << "\n";
-            if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
-              errs() << "return Instruction: " << *instruc_called_return << "\n";
+            if (returned_value != NULL && isa<Instruction>(returned_value)) {
+              if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
+                errs() << "return Instruction: " << *instruc_called_return << "\n";
+              }
             }
             if (auto *call_inst = dyn_cast<CallInst>(&I)) {
               Function *function_callled = call_inst->getCalledFunction();

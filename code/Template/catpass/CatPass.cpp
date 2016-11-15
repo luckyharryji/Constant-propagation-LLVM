@@ -23,7 +23,7 @@ using namespace llvm;
 using namespace std;
 
 namespace {
-  struct CAT : public FunctionPass {
+  struct CAT : public ModulePass {
     static char ID;
     Module *currentModule;
     const vector<string> CAT_function_list = {
@@ -32,7 +32,7 @@ namespace {
     };
     set<Function *> CAT_functions;
 
-    CAT() : FunctionPass(ID) {}
+    CAT() : ModulePass(ID) { }
 
     // This function is invoked once at the initialization phase of the compiler
     // The LLVM IR of functions isn't ready at this point
@@ -45,9 +45,25 @@ namespace {
       return false;
     }
 
+    bool runOnModule(Module &M) override {
+      map<Function *, set<Function *>> call_graph;
+      for (auto &F : M){
+        errs() << "function of module :" << F << '\n';
+        for (auto &B : F){
+          for (auto &I : B){
+            if (auto call = dyn_cast<CallInst>(&I)){
+              call_graph[call->getCalledFunction()].insert(&F);
+            }
+          }
+        }
+      }
+      return false;
+    }
+
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnFunction (Function &F) override {
+    bool runOnFunction (Function &F) {
+      errs() << F << '\n';
       DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;

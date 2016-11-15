@@ -47,8 +47,10 @@ namespace {
 
     bool runOnModule(Module &M) override {
       map<Function *, set<Function *>> call_graph;
-      for (auto &F : M){
-        errs() << "function of module :" << F << '\n';
+      for (auto &F : M) {
+        call_graph[&F] = set<Function *>();
+      }
+      for (auto &F : M) {
         for (auto &B : F){
           for (auto &I : B){
             if (auto call = dyn_cast<CallInst>(&I)){
@@ -57,13 +59,28 @@ namespace {
           }
         }
       }
+
+      for (auto &F : M) {
+        functionSummary(F);
+      }
+      return false;
+    }
+
+    bool functionSummary(Function &F) {
+      errs() << "function of module :" << F << '\n';
+      for (auto &B : F){
+        for (auto &I : B){
+          if (isa<ReturnInst>(I)) {
+            errs() << "return Instruction: " << I << "\n";
+          }
+        }
+      }
       return false;
     }
 
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnFunction (Function &F) {
-      errs() << F << '\n';
+    bool runOnIntraFunction (Function &F) {
       DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;

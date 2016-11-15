@@ -74,7 +74,10 @@ namespace {
             errs() << "return Instruction: " << I << "\n";
             ReturnInst *return_inst = dyn_cast<ReturnInst>(&I);
             Value *returned_value = return_inst->getReturnValue();
-            errs() << "return Value: " << *returned_value << "\n";
+            errs() << "return Value: " << returned_value << "\n";
+            if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
+              errs() << "return Instruction: " << *instruc_called_return << "\n";
+            }
             if (auto *call_inst = dyn_cast<CallInst>(&I)) {
               Function *function_callled = call_inst->getCalledFunction();
               if (CAT_functions.find(function_callled) != CAT_functions.end()) {

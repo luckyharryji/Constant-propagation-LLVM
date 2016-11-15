@@ -72,7 +72,7 @@ namespace {
         for (auto &I : B){
           if (isa<ReturnInst>(&I)) {
             errs() << "return Instruction: " << I << "\n";
-            auto *return_inst = cast<ReturnInst>(&I);
+            ReturnInst *return_inst = dyn_cast<ReturnInst>(&I);
             Value *returned_value = return_inst->getReturnValue();
             errs() << "return Value: " << *returned_value << "\n";
             if (auto *call_inst = dyn_cast<CallInst>(&I)) {

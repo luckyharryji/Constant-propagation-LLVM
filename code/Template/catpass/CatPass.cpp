@@ -72,6 +72,15 @@ namespace {
         for (auto &I : B){
           if (isa<ReturnInst>(I)) {
             errs() << "return Instruction: " << I << "\n";
+            // Value *returned_value = I.getReturnValue();
+            if (auto *call_inst = dyn_cast<CallInst>(&I)) {
+              Function *function_callled = call_inst->getCalledFunction();
+              if (CAT_functions.find(function_callled) != CAT_functions.end()) {
+                if (isVariableCreated(function_callled)) {
+                  errs() << "called Instruction: " << *call_inst << "\n";
+                }
+              }
+            }
           }
         }
       }

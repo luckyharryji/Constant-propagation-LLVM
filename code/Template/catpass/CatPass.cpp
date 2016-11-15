@@ -70,9 +70,11 @@ namespace {
       errs() << "function of module :" << F << '\n';
       for (auto &B : F){
         for (auto &I : B){
-          if (isa<ReturnInst>(I)) {
+          if (isa<ReturnInst>(&I)) {
             errs() << "return Instruction: " << I << "\n";
-            // Value *returned_value = I.getReturnValue();
+            auto *return_inst = cast<ReturnInst>(&I);
+            Value *returned_value = return_inst->getReturnValue();
+            errs() << "return Value: " << *returned_value << "\n";
             if (auto *call_inst = dyn_cast<CallInst>(&I)) {
               Function *function_callled = call_inst->getCalledFunction();
               if (CAT_functions.find(function_callled) != CAT_functions.end()) {

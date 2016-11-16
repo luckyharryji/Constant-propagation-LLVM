@@ -91,7 +91,7 @@ namespace {
                         constant_return[&F] = call_inst->getArgOperand(0);
                       }
                     }
-                  }  
+                  }
                 }
               }
             }
@@ -320,7 +320,9 @@ namespace {
                 dyn_cast<Instruction>(call_inst->getArgOperand(0));
               Value* argument = call_inst->getArgOperand(0);
 
-
+              if (def_instruction == NULL) {
+                continue;
+              }
               if (auto *constant_call = dyn_cast<CallInst>(def_instruction)) {
                 Function *get_argument_called = constant_call->getCalledFunction();
                 if (constant_return.find(get_argument_called) != constant_return.end()) {
@@ -353,14 +355,16 @@ namespace {
                     } else {
                       bool check = false;
                       auto new_upstream_value = phi_node->getIncomingValue(i);
-                      if (auto* left_calll_inst = dyn_cast<CallInst>(temp_upstream_value)) {
-                        // errs() << "okay to here";
-                        if (auto *right_call_inst = dyn_cast<CallInst>(new_upstream_value)) {
-                          Function *left_called_function = left_calll_inst->getCalledFunction(),
-                                   *right_called_function = right_call_inst->getCalledFunction();
-                          if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
-                            if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
-                              check = true;
+                      if (new_upstream_value != NULL) {
+                        if (auto* left_calll_inst = dyn_cast<CallInst>(temp_upstream_value)) {
+                          // errs() << "okay to here";
+                          if (auto *right_call_inst = dyn_cast<CallInst>(new_upstream_value)) {
+                            Function *left_called_function = left_calll_inst->getCalledFunction(),
+                                     *right_called_function = right_call_inst->getCalledFunction();
+                            if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
+                              if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
+                                check = true;
+                              }
                             }
                           }
                         }

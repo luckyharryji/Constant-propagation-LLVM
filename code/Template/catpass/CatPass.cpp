@@ -64,9 +64,17 @@ namespace {
       for (auto &F : M) {
         functionSummary(F);
       }
-      for (auto &F : M) {
-        runOnIntraFunction(F);
-      }
+
+      bool value_propagate;
+      do {
+        value_propagate = false;
+        for (auto &F : M) {
+          if (runOnIntraFunction(F)) {
+            value_propagate = true;
+          }
+        }
+      } while (value_propagate);
+
       return false;
     }
 
@@ -107,6 +115,8 @@ namespace {
       if (F.isDeclaration()) {
           return false;
       }
+      bool modified = false;
+
       DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>(F);
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;
@@ -424,6 +434,7 @@ namespace {
           ii,
           instruction_constant.second
         );
+        modified = true;
       }
 
       // delete the fake add instruction added to the function at the beginning
@@ -443,7 +454,7 @@ namespace {
       add_instruction_to_argument.clear();
       argument_to_add_instruction.clear();
 
-      return false;
+      return modified;
     }
 
     // We don't modify the program, so we preserve all analyses.

@@ -55,7 +55,7 @@ namespace {
         for (auto &B : F){
           for (auto &I : B){
             if (auto call = dyn_cast<CallInst>(&I)){
-              call_graph[call->getCalledFunction()].insert(&F);
+              call_graph[&F].insert(call->getCalledFunction());
             }
           }
         }

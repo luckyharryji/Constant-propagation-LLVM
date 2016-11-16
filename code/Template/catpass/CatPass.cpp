@@ -102,7 +102,10 @@ namespace {
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
     bool runOnIntraFunction (Function &F) {
-      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
+      if (F.isDeclaration()) {
+          return false;
+      }
+      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>(F);
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;
       map<Instruction *, set<Instruction *>> variable_used;

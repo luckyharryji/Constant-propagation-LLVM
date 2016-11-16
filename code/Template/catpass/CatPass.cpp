@@ -82,14 +82,16 @@ namespace {
             if (returned_value != NULL && isa<Instruction>(returned_value)) {
               if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
                 errs() << "return Instruction: " << *instruc_called_return << "\n";
-                if (auto *call_inst = dyn_cast<CallInst>(instruc_called_return)) {
-                  Function *function_callled = call_inst->getCalledFunction();
-                  if (CAT_functions.find(function_callled) != CAT_functions.end()) {
-                    if (isVariableCreated(function_callled)) {
-                      errs() << "called create Instruction: " << *call_inst << "\n";
-                      constant_return[&F] = call_inst->getArgOperand(0);
+                if (instruc_called_return != NULL && isa<CallInst>(instruc_called_return)) {
+                  if (auto *call_inst = dyn_cast<CallInst>(instruc_called_return)) {
+                    Function *function_callled = call_inst->getCalledFunction();
+                    if (CAT_functions.find(function_callled) != CAT_functions.end()) {
+                      if (isVariableCreated(function_callled)) {
+                        errs() << "called create Instruction: " << *call_inst << "\n";
+                        constant_return[&F] = call_inst->getArgOperand(0);
+                      }
                     }
-                  }
+                  }  
                 }
               }
             }

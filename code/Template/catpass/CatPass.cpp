@@ -31,7 +31,7 @@ namespace {
       "CAT_get_signed_value",
     };
     set<Function *> CAT_functions;
-    map<Function *, Instruction *> constant_return;
+    map<Function *, Value *> constant_return;
 
     CAT() : ModulePass(ID) { }
 
@@ -64,6 +64,9 @@ namespace {
       for (auto &F : M) {
         functionSummary(F);
       }
+      for (auto &F : M) {
+        runOnIntraFunction(F);
+      }
       return false;
     }
 
@@ -84,12 +87,12 @@ namespace {
                   if (CAT_functions.find(function_callled) != CAT_functions.end()) {
                     if (isVariableCreated(function_callled)) {
                       errs() << "called create Instruction: " << *call_inst << "\n";
+                      constant_return[&F] = call_inst->getArgOperand(0);
                     }
                   }
                 }
               }
             }
-
           }
         }
       }
@@ -301,92 +304,101 @@ namespace {
       map<Instruction*, ConstantInt*> replace_pair;
       for (auto &B : F) {
         for (auto &I : B) {
-          if (!in_set_map[&I].empty()) {
-            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-              Function *function_callled;
-              function_callled = call_inst->getCalledFunction();
-              if (
-                currentModule
-                  ->getFunction("CAT_get_signed_value") == function_callled
-              ) {
-                Instruction* def_instruction =
-                  dyn_cast<Instruction>(call_inst->getArgOperand(0));
-                Value* argument = call_inst->getArgOperand(0);
-                Instruction *potentialCreateInstruction = NULL;
+          if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+            Function *function_callled;
+            function_callled = call_inst->getCalledFunction();
+            if (
+              currentModule
+                ->getFunction("CAT_get_signed_value") == function_callled
+            ) {
+              Instruction* def_instruction =
+                dyn_cast<Instruction>(call_inst->getArgOperand(0));
+              Value* argument = call_inst->getArgOperand(0);
 
-                for (
-                  auto inst = in_set_map[&I].begin();
-                  inst != in_set_map[&I].end();
-                  ++inst
-                ) {
-                  if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
-                    if (add_instruction_to_argument[*inst] == argument) {
-                      potentialCreateInstruction = NULL;
-                      break;
-                    }
-                  } else if (isa<PHINode>(*inst)) {
-                    auto phi_node = dyn_cast<PHINode>(*inst);
-                    int num_phi_node = phi_node->getNumIncomingValues();
-                    Value* temp_upstream_value = NULL;
-                    bool valid = true;
-                    for (int i = 0; i < num_phi_node; i++) {
-                      if (temp_upstream_value == NULL) {
-                        temp_upstream_value = phi_node->getIncomingValue(i);
-                      } else {
-                        bool check = false;
-                        auto new_upstream_value = phi_node->getIncomingValue(i);
-                        if (auto* left_calll_inst = dyn_cast<CallInst>(temp_upstream_value)) {
-                          // errs() << "okay to here";
-                          if (auto *right_call_inst = dyn_cast<CallInst>(new_upstream_value)) {
-                            Function *left_called_function = left_calll_inst->getCalledFunction(),
-                                     *right_called_function = right_call_inst->getCalledFunction();
-                            if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
-                              if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
-                                check = true;
-                              }
+
+              if (auto *constant_call = dyn_cast<CallInst>(def_instruction)) {
+                Function *get_argument_called = constant_call->getCalledFunction();
+                if (constant_return.find(get_argument_called) != constant_return.end()) {
+                  if (isa<ConstantInt>(constant_return[get_argument_called])) {
+                    replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
+                    continue;
+                  }
+                }
+              }
+
+              Instruction *potentialCreateInstruction = NULL;
+              for (
+                auto inst = in_set_map[&I].begin();
+                inst != in_set_map[&I].end();
+                ++inst
+              ) {
+                if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
+                  if (add_instruction_to_argument[*inst] == argument) {
+                    potentialCreateInstruction = NULL;
+                    break;
+                  }
+                } else if (isa<PHINode>(*inst)) {
+                  auto phi_node = dyn_cast<PHINode>(*inst);
+                  int num_phi_node = phi_node->getNumIncomingValues();
+                  Value* temp_upstream_value = NULL;
+                  bool valid = true;
+                  for (int i = 0; i < num_phi_node; i++) {
+                    if (temp_upstream_value == NULL) {
+                      temp_upstream_value = phi_node->getIncomingValue(i);
+                    } else {
+                      bool check = false;
+                      auto new_upstream_value = phi_node->getIncomingValue(i);
+                      if (auto* left_calll_inst = dyn_cast<CallInst>(temp_upstream_value)) {
+                        // errs() << "okay to here";
+                        if (auto *right_call_inst = dyn_cast<CallInst>(new_upstream_value)) {
+                          Function *left_called_function = left_calll_inst->getCalledFunction(),
+                                   *right_called_function = right_call_inst->getCalledFunction();
+                          if (isVariableCreated(left_called_function) && isVariableCreated(right_called_function)) {
+                            if (left_calll_inst->getArgOperand(0) == right_call_inst->getArgOperand(0)) {
+                              check = true;
                             }
                           }
                         }
-                        valid = valid && check;
                       }
+                      valid = valid && check;
                     }
-                    if (valid == true) {
-                      potentialCreateInstruction = dyn_cast<Instruction>(temp_upstream_value);
+                  }
+                  if (valid == true) {
+                    potentialCreateInstruction = dyn_cast<Instruction>(temp_upstream_value);
+                  }
+                } else if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
+                  Function *inset_function = inside_call_inst->getCalledFunction();
+                  if (
+                    isVariableCreated(inset_function)
+                  ) {
+                    if (def_instruction == *inst) {
+                      potentialCreateInstruction = *inst;
                     }
-                  } else if (auto *inside_call_inst = dyn_cast<CallInst>(*inst)) {
-                    Function *inset_function = inside_call_inst->getCalledFunction();
-                    if (
-                      isVariableCreated(inset_function)
-                    ) {
-                      if (def_instruction == *inst) {
-                        potentialCreateInstruction = *inst;
-                      }
-                    } else if (isVariableChanged(inset_function)) {
-                      Value *inset_function_variable = inside_call_inst->getArgOperand(0);
-                      if (argument == inset_function_variable) {
-                        potentialCreateInstruction = NULL;
-                        break;
-                      } else if (auto *in_set_variable_create = dyn_cast<Instruction>(inset_function_variable)) {
-                        if (candidate_list.find(def_instruction) != candidate_list.end()) {
-                          // errs() << "can compile to here" << "\n";
-                          if (deps.depends(def_instruction, in_set_variable_create, false) != NULL) {
-                            potentialCreateInstruction = NULL;
-                            break;
-                          }
+                  } else if (isVariableChanged(inset_function)) {
+                    Value *inset_function_variable = inside_call_inst->getArgOperand(0);
+                    if (argument == inset_function_variable) {
+                      potentialCreateInstruction = NULL;
+                      break;
+                    } else if (auto *in_set_variable_create = dyn_cast<Instruction>(inset_function_variable)) {
+                      if (candidate_list.find(def_instruction) != candidate_list.end()) {
+                        // errs() << "can compile to here" << "\n";
+                        if (deps.depends(def_instruction, in_set_variable_create, false) != NULL) {
+                          potentialCreateInstruction = NULL;
+                          break;
                         }
                       }
                     }
                   }
                 }
-                if (potentialCreateInstruction != NULL) {
-                  CallInst* create_inst =
-                    dyn_cast<CallInst>(potentialCreateInstruction);
-                  Value* const_value = create_inst->getArgOperand(0);
-                  if (isa<ConstantInt>(const_value)) {
-                    // add all the constant value inside CAT_get function call
-                    // replace the Instruction later at once
-                    replace_pair[&I] = dyn_cast<ConstantInt>(const_value);
-                  }
+              }
+              if (potentialCreateInstruction != NULL) {
+                CallInst* create_inst =
+                  dyn_cast<CallInst>(potentialCreateInstruction);
+                Value* const_value = create_inst->getArgOperand(0);
+                if (isa<ConstantInt>(const_value)) {
+                  // add all the constant value inside CAT_get function call
+                  // replace the Instruction later at once
+                  replace_pair[&I] = dyn_cast<ConstantInt>(const_value);
                 }
               }
             }

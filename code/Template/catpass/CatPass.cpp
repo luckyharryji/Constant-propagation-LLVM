@@ -116,16 +116,7 @@ namespace {
                             Value *condition = branch_inst->getCondition();
                             errs() << "Condition is : " << *condition << "\n";
                             if (auto *compare_inst = dyn_cast<CmpInst>(condition)) {
-                              errs() << "compare instruction is: " << *compare_inst << "\n";
-                              if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SGT) {
-                                errs() << "great opreand: " << *compare_inst << "\n";
-                                errs() << "great value0: " << compare_inst->getOperand(0) << "\n";
-                                errs() << "great value1: " << compare_inst->getOperand(1) << "\n";
-                              } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
-                                errs() << "less opreand: " << *compare_inst << "\n";
-                                errs() << "great value0: " << compare_inst->getOperand(0) << "\n";
-                                errs() << "less value1: " << *(compare_inst->getOperand(1)) << "\n";
-                              }
+                              handleCompare(compare_inst);
                             }
                           }
                         }
@@ -498,6 +489,43 @@ namespace {
     }
 
   private:
+
+    void handleCompare(CmpInst* compare_inst) {
+      errs() << "compare instruction is: " << *compare_inst << "\n";
+      if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SGT) {
+        errs() << "great opreand: " << *compare_inst << "\n";
+        errs() << "great value0: " << *(compare_inst->getOperand(0)) << "\n";
+        errs() << "great value1: " << *(compare_inst->getOperand(1)) << "\n";
+      } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
+        errs() << "less opreand: " << *compare_inst << "\n";
+        errs() << "great value0: " << *(compare_inst->getOperand(0)) << "\n";
+        errs() << "less value1: " << *(compare_inst->getOperand(1)) << "\n";
+        if (auto* first_cmp_call = dyn_cast<CallInst>((compare_inst->getOperand(0)))) {
+          if (isVariableGet(first_cmp_call)) {
+            Value* first_argument = first_cmp_call->getArgOperand(0);
+            if (isa<Argument>(first_argument)) {
+              errs() << "Argument is a get instruction with function arg: " << first_argument << "\n";
+            }
+          }
+        }
+      }
+    }
+
+    bool isVariableGet(CallInst* call_inst) {
+      Function *function_callled = call_inst->getCalledFunction();
+      if (CAT_functions.find(function_callled) != CAT_functions.end()) {
+        if (isVariableGet(function_callled)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    bool isVariableGet(Function* function) {
+      return
+        currentModule->getFunction("CAT_get_signed_value") == function;
+    }
+
     bool isVariableCreated(Function* function) {
       return
         currentModule->getFunction("CAT_create_signed_value") == function;

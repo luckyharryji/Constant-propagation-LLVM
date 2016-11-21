@@ -24,9 +24,16 @@ using namespace llvm;
 using namespace std;
 
 namespace {
+
+  struct condition_result {
+    Value* first_condition;
+    Value* second_condition;
+  };
+
   struct cmp_inst_status {
     llvm::CmpInst::Predicate cmp_operand;
     int64_t value;
+    condition_result condition_result;
   };
 
   struct CAT : public ModulePass {
@@ -38,7 +45,7 @@ namespace {
     };
     set<Function *> CAT_functions;
     map<Function *, Value *> constant_return;
-    map<Function *, tuple<llvm::CmpInst::Predicate, int64_t, tuple<Value *, Value *>>> function_arg_info;
+    map<Function *, cmp_inst_status> function_arg_info;
 
     CAT() : ModulePass(ID) { }
 
@@ -145,6 +152,7 @@ namespace {
                   }
                   cmp_inst_status cmp_status;
                   handleCompare(&F, temp_compare_source, cmp_status);
+                  condition_result inside_condition_result;
                   errs() << "compare instruction: " << cmp_status.cmp_operand << " " << cmp_status.value << "\n";
                   for (int i = 0; i < num_phi_node; i++) {
                     if (auto* phi_calll_inst = dyn_cast<CallInst>(phi_node->getIncomingValue(i))) {
@@ -156,19 +164,19 @@ namespace {
                           if (auto *branch_inst = dyn_cast<BranchInst>((branch_block->getTerminator()))) {
                             Value *condition = branch_inst->getCondition();
                             errs() << "Condition is : " << *condition << "\n";
-                            if (branch_block == branch_inst->getSuccessor(0)) {
+                            if (phi_calll_inst->getParent() == branch_inst->getSuccessor(0)) {
                               errs() << "true condition" << "\n";
+                              inside_condition_result.first_condition = phi_calll_inst->getArgOperand(0);
                             } else {
                               errs() << "false condition" << "\n";
-                            }
-                            if (auto *compare_inst = dyn_cast<CmpInst>(condition)) {
-                              // handleCompare(&F, compare_inst);
+                              inside_condition_result.second_condition = phi_calll_inst->getArgOperand(0);
                             }
                           }
                         }
                       }
                     }
                   }
+                  cmp_status.condition_result = inside_condition_result;
                 }
               }
             }

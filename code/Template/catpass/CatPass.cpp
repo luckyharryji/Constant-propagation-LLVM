@@ -107,8 +107,11 @@ namespace {
                   for (int i = 0; i < num_phi_node; i++) {
                     if (auto* phi_calll_inst = dyn_cast<CallInst>(phi_node->getIncomingValue(i))) {
                       errs() << "phi node that call other function" << *phi_calll_inst << "\n";
-                      if (isVariableChanged(phi_calll_inst->getCalledFunction())) {
+                      if (isVariableCreated(phi_calll_inst->getCalledFunction())) {
                         errs() << "phi node that call create CAT function" << *phi_calll_inst << "\n";
+                        if (auto *branch_block = (phi_calll_inst->getParent())->getSinglePredecessor()) {
+                          errs() << "branching_instruction is: " << branch_block->getTerminator() << '\n';
+                        }
                       }
                     }
                   }

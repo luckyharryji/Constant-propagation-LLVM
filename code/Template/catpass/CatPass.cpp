@@ -177,6 +177,7 @@ namespace {
                     }
                   }
                   cmp_status.condition_result = inside_condition_result;
+                  function_arg_info[&F] = cmp_status;
                 }
               }
             }
@@ -418,7 +419,7 @@ namespace {
                     continue;
                   }
                 } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
-                  replaceConditionFunction(replace_pair, def_instruction);
+                  replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
                   continue;
                 }
               }
@@ -594,8 +595,21 @@ namespace {
       return false;
     }
 
-    void replaceConditionFunction(map<Instruction*, ConstantInt*> &replace_pair, Instruction* I) {
-
+    void replaceConditionFunction(map<Instruction*, ConstantInt*> &replace_pair,
+                                  Function* called_function, Instruction* I, Value* get_argument) {
+      if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
+        Function *function_callled;
+        function_callled = call_inst->getCalledFunction();
+        if (
+          currentModule
+            ->getFunction("CAT_create_signed_value") == function_callled
+        ) {
+          Value* create_argument = call_inst->getArgOperand(0);
+          if (isa<ConstantInt>(create_argument)) {
+            errs() << "operand is ConstantInt: " << create_argument <<'\n';
+          }
+        }
+      }
     }
 
     bool isVariableGet(CallInst* call_inst) {

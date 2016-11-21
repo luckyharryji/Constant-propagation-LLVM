@@ -496,18 +496,25 @@ namespace {
         errs() << "great opreand: " << *compare_inst << "\n";
         errs() << "great value0: " << *(compare_inst->getOperand(0)) << "\n";
         errs() << "great value1: " << *(compare_inst->getOperand(1)) << "\n";
+        needRecord(compare_inst->getOperand(0));
       } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
         errs() << "less opreand: " << *compare_inst << "\n";
         errs() << "great value0: " << *(compare_inst->getOperand(0)) << "\n";
         errs() << "less value1: " << *(compare_inst->getOperand(1)) << "\n";
-        if (auto* first_cmp_call = dyn_cast<CallInst>((compare_inst->getOperand(0)))) {
-          if (isVariableGet(first_cmp_call)) {
-            Value* first_argument = first_cmp_call->getArgOperand(0);
-            if (isa<Argument>(first_argument)) {
-              errs() << "Argument is a get instruction with function arg: " << first_argument << "\n";
-            }
+        needRecord(compare_inst->getOperand(0));
+      }
+    }
+
+    void needRecord(Value* value_operand) {
+      if (auto* first_cmp_call = dyn_cast<CallInst>((value_operand))) {
+        if (isVariableGet(first_cmp_call)) {
+          Value* first_argument = first_cmp_call->getArgOperand(0);
+          if (isa<Argument>(first_argument)) {
+            errs() << "Argument is a get instruction with function arg: " << *first_argument << "\n";
           }
         }
+      } else if (isa<Argument>(value_operand)) {
+        errs() << "Argument is the function argument: " << *value_operand << "\n";
       }
     }
 

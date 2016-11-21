@@ -121,7 +121,7 @@ namespace {
                                 errs() << "great value: " << compare_inst->getOperand(0) << "\n";
                               } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
                                 errs() << "less opreand: " << *compare_inst << "\n";
-                                errs() << "less value: " << compare_inst->getOperand(0) << "\n";
+                                errs() << "less value: " << *(compare_inst->getOperand(0)) << "\n";
                               }
                             }
                           }

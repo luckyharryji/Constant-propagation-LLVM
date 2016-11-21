@@ -496,26 +496,39 @@ namespace {
         errs() << "great opreand: " << *compare_inst << "\n";
         errs() << "great value0: " << *(compare_inst->getOperand(0)) << "\n";
         errs() << "great value1: " << *(compare_inst->getOperand(1)) << "\n";
-        needRecord(compare_inst->getOperand(0));
+        if (needRecord(compare_inst->getOperand(0))) {
+          if (auto* constant_value = dyn_cast<ConstantInt>(compare_inst->getOperand(1))) {
+            errs() << "is constant int: " << *constant_value << "\n";
+            errs() << "value is : " << constant_value->getSExtValue() << "\n";
+          }
+        }
       } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
         errs() << "less opreand: " << *compare_inst << "\n";
         errs() << "great value0: " << *(compare_inst->getOperand(0)) << "\n";
         errs() << "less value1: " << *(compare_inst->getOperand(1)) << "\n";
-        needRecord(compare_inst->getOperand(0));
+        if (needRecord(compare_inst->getOperand(0))) {
+          if (auto* constant_value = dyn_cast<ConstantInt>(compare_inst->getOperand(1))) {
+            errs() << "is constant int: " << *constant_value << "\n";
+            errs() << "value is : " << constant_value->getSExtValue() << "\n";
+          }
+        }
       }
     }
 
-    void needRecord(Value* value_operand) {
+    bool needRecord(Value* value_operand) {
       if (auto* first_cmp_call = dyn_cast<CallInst>((value_operand))) {
         if (isVariableGet(first_cmp_call)) {
           Value* first_argument = first_cmp_call->getArgOperand(0);
           if (isa<Argument>(first_argument)) {
             errs() << "Argument is a get instruction with function arg: " << *first_argument << "\n";
+            return true;
           }
         }
       } else if (isa<Argument>(value_operand)) {
         errs() << "Argument is the function argument: " << *value_operand << "\n";
+        return true;
       }
+      return false;
     }
 
     bool isVariableGet(CallInst* call_inst) {

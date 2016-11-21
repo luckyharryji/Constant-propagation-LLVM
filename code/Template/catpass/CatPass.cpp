@@ -79,7 +79,6 @@ namespace {
     }
 
     bool functionSummary(Function &F) {
-      errs() << "function of module :" << F << '\n';
       for (auto &B : F){
         for (auto &I : B){
           if (isa<ReturnInst>(&I)) {
@@ -100,6 +99,8 @@ namespace {
                       }
                     }
                   }
+                } else if (isa<PHINode>(instruc_called_return)) {
+                  errs() << "Phi node is : " << *instruc_called_return << "\n";
                 }
               }
             }

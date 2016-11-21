@@ -611,10 +611,16 @@ namespace {
               errs() << "operand is ConstantInt: " << *constant_create_arg <<'\n';
               int index = argumentRange(function_arg_info[called_function], constant_create_arg);
               condition_result replace_result = (function_arg_info[called_function]).result_info;
+              Value* replace_value = NULL;
               if (index == 0) {
                 errs() << "replace with : " << replace_result.first_condition << '\n';
+                replace_value = replace_result.first_condition;
               } else {
                 errs() << "replace with : " << replace_result.second_condition << '\n';
+                replace_value = replace_result.second_condition;
+              }
+              if (isa<ConstantInt>(replace_value)) {
+                replace_pair[I] = dyn_cast<ConstantInt>(replace_value);
               }
             }
           }

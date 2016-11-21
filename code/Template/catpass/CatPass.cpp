@@ -101,6 +101,17 @@ namespace {
                   }
                 } else if (isa<PHINode>(instruc_called_return)) {
                   errs() << "Phi node is : " << *instruc_called_return << "\n";
+                  auto phi_node = dyn_cast<PHINode>(instruc_called_return);
+                  int num_phi_node = phi_node->getNumIncomingValues();
+                  Value* temp_upstream_value = NULL;
+                  for (int i = 0; i < num_phi_node; i++) {
+                    if (auto* phi_calll_inst = dyn_cast<CallInst>(phi_node->getIncomingValue(i))) {
+                      errs() << "phi node that call other function" << *phi_calll_inst << "\n";
+                      if (isVariableChanged(phi_calll_inst->getCalledFunction())) {
+                        errs() << "phi node that call create CAT function" << *phi_calll_inst << "\n";
+                      }
+                    }
+                  }
                 }
               }
             }

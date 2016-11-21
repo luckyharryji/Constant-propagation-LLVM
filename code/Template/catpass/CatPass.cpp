@@ -110,7 +110,11 @@ namespace {
                       if (isVariableCreated(phi_calll_inst->getCalledFunction())) {
                         errs() << "phi node that call create CAT function" << *phi_calll_inst << "\n";
                         if (auto *branch_block = (phi_calll_inst->getParent())->getSinglePredecessor()) {
-                          errs() << "branching_instruction is: " << branch_block->getTerminator() << '\n';
+                          errs() << "branching_instruction is: " << *(branch_block->getTerminator()) << '\n';
+                          if (auto *branch_inst = dyn_cast<BranchInst>((branch_block->getTerminator()))) {
+                            Value *condition = branch_inst->getCondition();
+                            errs() << "Condition is : " << *condition << "\n";
+                          }
                         }
                       }
                     }

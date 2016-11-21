@@ -407,7 +407,6 @@ namespace {
               Instruction* def_instruction =
                 dyn_cast<Instruction>(call_inst->getArgOperand(0));
               Value* argument = call_inst->getArgOperand(0);
-
               if (def_instruction == NULL) {
                 continue;
               }
@@ -597,16 +596,20 @@ namespace {
 
     void replaceConditionFunction(map<Instruction*, ConstantInt*> &replace_pair,
                                   Function* called_function, Instruction* I, Value* get_argument) {
+      errs() << "in replace function: " << *get_argument <<"\n";
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
-        Function *function_callled;
-        function_callled = call_inst->getCalledFunction();
-        if (
-          currentModule
-            ->getFunction("CAT_create_signed_value") == function_callled
-        ) {
-          Value* create_argument = call_inst->getArgOperand(0);
-          if (isa<ConstantInt>(create_argument)) {
-            errs() << "operand is ConstantInt: " << create_argument <<'\n';
+        Value* create_argument_inst = call_inst->getArgOperand(0);
+        if (auto* create_call_inst = dyn_cast<CallInst>(call_inst->getArgOperand(0))) {
+          Function *function_callled;
+          function_callled = create_call_inst->getCalledFunction();
+          if (
+            currentModule
+              ->getFunction("CAT_create_signed_value") == function_callled
+          ) {
+            Value* create_argument = create_call_inst->getArgOperand(0);
+            if (isa<ConstantInt>(create_argument)) {
+              errs() << "operand is ConstantInt: " << create_argument <<'\n';
+            }
           }
         }
       }

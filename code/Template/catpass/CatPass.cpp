@@ -607,12 +607,36 @@ namespace {
               ->getFunction("CAT_create_signed_value") == function_callled
           ) {
             Value* create_argument = create_call_inst->getArgOperand(0);
-            if (isa<ConstantInt>(create_argument)) {
-              errs() << "operand is ConstantInt: " << create_argument <<'\n';
+            if (auto* constant_create_arg = dyn_cast<ConstantInt>(create_argument)) {
+              errs() << "operand is ConstantInt: " << *constant_create_arg <<'\n';
+              int index = argumentRange(function_arg_info[called_function], constant_create_arg);
+              condition_result replace_result = (function_arg_info[called_function]).result_info;
+              if (index == 0) {
+                errs() << "replace with : " << replace_result.first_condition << '\n';
+              } else {
+                errs() << "replace with : " << replace_result.second_condition << '\n';
+              }
             }
           }
         }
       }
+    }
+
+    int argumentRange(cmp_inst_status function_info, ConstantInt* caller_argument) {
+      if (function_info.cmp_operand == llvm::CmpInst::Predicate::ICMP_SLT) {
+        if (caller_argument->getSExtValue() < function_info.value) {
+          return 0;
+        } else {
+          return 1;
+        }
+      } else if (function_info.cmp_operand == llvm::CmpInst::Predicate::ICMP_SGT) {
+        if (caller_argument->getSExtValue() > function_info.value) {
+          return 0;
+        } else {
+          return 1;
+        }
+      }
+      return 0;
     }
 
     bool isVariableGet(CallInst* call_inst) {

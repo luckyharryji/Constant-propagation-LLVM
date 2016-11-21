@@ -17,12 +17,18 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <tuple>
 #include "llvm/Analysis/DependenceAnalysis.h"
 
 using namespace llvm;
 using namespace std;
 
 namespace {
+  struct cmp_inst_status {
+    llvm::CmpInst::Predicate cmp_operand;
+    int64_t value;
+  };
+
   struct CAT : public ModulePass {
     static char ID;
     Module *currentModule;
@@ -103,6 +109,43 @@ namespace {
                 } else if (isa<PHINode>(instruc_called_return)) {
                   auto phi_node = dyn_cast<PHINode>(instruc_called_return);
                   int num_phi_node = phi_node->getNumIncomingValues();
+                  BranchInst* temp_branch_source = NULL;
+                  CmpInst* temp_compare_source = NULL;
+                  bool same_branch = true;
+                  for (int i = 0; i < num_phi_node; i++) {
+                    if (auto* phi_calll_inst = dyn_cast<CallInst>(phi_node->getIncomingValue(i))) {
+                      if (isVariableCreated(phi_calll_inst->getCalledFunction())) {
+                        if (auto *branch_block = (phi_calll_inst->getParent())->getSinglePredecessor()) {
+                          if (auto *branch_inst = dyn_cast<BranchInst>((branch_block->getTerminator()))) {
+                            if (temp_branch_source == NULL) {
+                              temp_branch_source = branch_inst;
+                            } else {
+                              if (temp_branch_source != branch_inst) {
+                                same_branch = false;
+                              }
+                            }
+                            Value *condition = branch_inst->getCondition();
+                            if (auto *compare_inst = dyn_cast<CmpInst>(condition)) {
+                              if (temp_compare_source == NULL) {
+                                temp_compare_source = compare_inst;
+                              } else {
+                                if (temp_compare_source != compare_inst) {
+                                  same_branch = false;
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  if (same_branch == false || temp_compare_source == NULL
+                      || temp_branch_source == NULL) {
+                    continue;
+                  }
+                  cmp_inst_status cmp_status;
+                  handleCompare(&F, temp_compare_source, cmp_status);
+                  errs() << "compare instruction: " << cmp_status.cmp_operand << " " << cmp_status.value << "\n";
                   for (int i = 0; i < num_phi_node; i++) {
                     if (auto* phi_calll_inst = dyn_cast<CallInst>(phi_node->getIncomingValue(i))) {
                       errs() << "phi node that call other function" << *phi_calll_inst << "\n";
@@ -116,10 +159,10 @@ namespace {
                             if (branch_block == branch_inst->getSuccessor(0)) {
                               errs() << "true condition" << "\n";
                             } else {
-                              errs() << "true condition" << "\n";
+                              errs() << "false condition" << "\n";
                             }
                             if (auto *compare_inst = dyn_cast<CmpInst>(condition)) {
-                              handleCompare(&F, compare_inst);
+                              // handleCompare(&F, compare_inst);
                             }
                           }
                         }
@@ -496,7 +539,7 @@ namespace {
 
   private:
 
-    void handleCompare(Function* F, CmpInst* compare_inst) {
+    void handleCompare(Function* F, CmpInst* compare_inst, cmp_inst_status& required_info) {
       errs() << "compare instruction is: " << *compare_inst << "\n";
       if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SGT) {
         errs() << "great opreand: " << *compare_inst << "\n";
@@ -506,6 +549,8 @@ namespace {
           if (auto* constant_value = dyn_cast<ConstantInt>(compare_inst->getOperand(1))) {
             errs() << "is constant int: " << *constant_value << "\n";
             errs() << "value is : " << constant_value->getSExtValue() << "\n";
+            required_info.cmp_operand = llvm::CmpInst::Predicate::ICMP_SGT;
+            required_info.value = constant_value->getSExtValue();
             // function_arg_info[F] = (constant_value->getSExtValue(), llvm::CmpInst::Predicate::ICMP_SGT);
           }
         }
@@ -517,6 +562,8 @@ namespace {
           if (auto* constant_value = dyn_cast<ConstantInt>(compare_inst->getOperand(1))) {
             errs() << "is constant int: " << *constant_value << "\n";
             errs() << "value is : " << constant_value->getSExtValue() << "\n";
+            required_info.cmp_operand = llvm::CmpInst::Predicate::ICMP_SLT;
+            required_info.value = constant_value->getSExtValue();
             // function_arg_info[F] = (constant_value->getSExtValue(), llvm::CmpInst::Predicate::ICMP_SLT);
           }
         }

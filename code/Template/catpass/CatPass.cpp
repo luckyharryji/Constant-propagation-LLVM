@@ -32,6 +32,7 @@ namespace {
     };
     set<Function *> CAT_functions;
     map<Function *, Value *> constant_return;
+    map<Function *, tuple<int, llvm::CmpInst::Predicate>> function_arg_info;
 
     CAT() : ModulePass(ID) { }
 
@@ -85,7 +86,7 @@ namespace {
             errs() << "return Instruction: " << I << "\n";
             ReturnInst *return_inst = dyn_cast<ReturnInst>(&I);
             Value *returned_value = return_inst->getReturnValue();
-            errs() << "return Value: " << returned_value << "\n";
+            // errs() << "return Value: " << returned_value << "\n";
             if (returned_value != NULL && isa<Instruction>(returned_value)) {
               if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
                 errs() << "return Instruction: " << *instruc_called_return << "\n";
@@ -118,10 +119,12 @@ namespace {
                               errs() << "compare instruction is: " << *compare_inst << "\n";
                               if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SGT) {
                                 errs() << "great opreand: " << *compare_inst << "\n";
-                                errs() << "great value: " << compare_inst->getOperand(0) << "\n";
+                                errs() << "great value0: " << compare_inst->getOperand(0) << "\n";
+                                errs() << "great value1: " << compare_inst->getOperand(1) << "\n";
                               } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
                                 errs() << "less opreand: " << *compare_inst << "\n";
-                                errs() << "less value: " << *(compare_inst->getOperand(0)) << "\n";
+                                errs() << "great value0: " << compare_inst->getOperand(0) << "\n";
+                                errs() << "less value1: " << *(compare_inst->getOperand(1)) << "\n";
                               }
                             }
                           }

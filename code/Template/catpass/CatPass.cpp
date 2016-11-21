@@ -114,6 +114,16 @@ namespace {
                           if (auto *branch_inst = dyn_cast<BranchInst>((branch_block->getTerminator()))) {
                             Value *condition = branch_inst->getCondition();
                             errs() << "Condition is : " << *condition << "\n";
+                            if (auto *compare_inst = dyn_cast<CmpInst>(condition)) {
+                              errs() << "compare instruction is: " << *compare_inst << "\n";
+                              if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SGT) {
+                                errs() << "great opreand: " << *compare_inst << "\n";
+                                errs() << "great value: " << compare_inst->getOperand(0) << "\n";
+                              } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
+                                errs() << "less opreand: " << *compare_inst << "\n";
+                                errs() << "less value: " << compare_inst->getOperand(0) << "\n";
+                              }
+                            }
                           }
                         }
                       }

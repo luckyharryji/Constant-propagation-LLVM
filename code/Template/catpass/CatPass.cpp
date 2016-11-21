@@ -32,7 +32,7 @@ namespace {
     };
     set<Function *> CAT_functions;
     map<Function *, Value *> constant_return;
-    map<Function *, tuple<int, llvm::CmpInst::Predicate>> function_arg_info;
+    map<Function *, tuple<llvm::CmpInst::Predicate, int64_t, tuple<Value *, Value *>>> function_arg_info;
 
     CAT() : ModulePass(ID) { }
 
@@ -101,10 +101,8 @@ namespace {
                     }
                   }
                 } else if (isa<PHINode>(instruc_called_return)) {
-                  errs() << "Phi node is : " << *instruc_called_return << "\n";
                   auto phi_node = dyn_cast<PHINode>(instruc_called_return);
                   int num_phi_node = phi_node->getNumIncomingValues();
-                  Value* temp_upstream_value = NULL;
                   for (int i = 0; i < num_phi_node; i++) {
                     if (auto* phi_calll_inst = dyn_cast<CallInst>(phi_node->getIncomingValue(i))) {
                       errs() << "phi node that call other function" << *phi_calll_inst << "\n";
@@ -115,8 +113,13 @@ namespace {
                           if (auto *branch_inst = dyn_cast<BranchInst>((branch_block->getTerminator()))) {
                             Value *condition = branch_inst->getCondition();
                             errs() << "Condition is : " << *condition << "\n";
+                            if (branch_block == branch_inst->getSuccessor(0)) {
+                              errs() << "true condition" << "\n";
+                            } else {
+                              errs() << "true condition" << "\n";
+                            }
                             if (auto *compare_inst = dyn_cast<CmpInst>(condition)) {
-                              handleCompare(compare_inst);
+                              handleCompare(&F, compare_inst);
                             }
                           }
                         }
@@ -363,6 +366,9 @@ namespace {
                     replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
                     continue;
                   }
+                } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
+                  replaceConditionFunction(replace_pair, def_instruction);
+                  continue;
                 }
               }
 
@@ -490,7 +496,7 @@ namespace {
 
   private:
 
-    void handleCompare(CmpInst* compare_inst) {
+    void handleCompare(Function* F, CmpInst* compare_inst) {
       errs() << "compare instruction is: " << *compare_inst << "\n";
       if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SGT) {
         errs() << "great opreand: " << *compare_inst << "\n";
@@ -500,6 +506,7 @@ namespace {
           if (auto* constant_value = dyn_cast<ConstantInt>(compare_inst->getOperand(1))) {
             errs() << "is constant int: " << *constant_value << "\n";
             errs() << "value is : " << constant_value->getSExtValue() << "\n";
+            // function_arg_info[F] = (constant_value->getSExtValue(), llvm::CmpInst::Predicate::ICMP_SGT);
           }
         }
       } else if (compare_inst->getPredicate() == llvm::CmpInst::Predicate::ICMP_SLT) {
@@ -510,6 +517,7 @@ namespace {
           if (auto* constant_value = dyn_cast<ConstantInt>(compare_inst->getOperand(1))) {
             errs() << "is constant int: " << *constant_value << "\n";
             errs() << "value is : " << constant_value->getSExtValue() << "\n";
+            // function_arg_info[F] = (constant_value->getSExtValue(), llvm::CmpInst::Predicate::ICMP_SLT);
           }
         }
       }
@@ -529,6 +537,10 @@ namespace {
         return true;
       }
       return false;
+    }
+
+    void replaceConditionFunction(map<Instruction*, ConstantInt*> &replace_pair, Instruction* I) {
+
     }
 
     bool isVariableGet(CallInst* call_inst) {

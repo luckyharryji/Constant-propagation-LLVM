@@ -33,7 +33,7 @@ namespace {
   struct cmp_inst_status {
     llvm::CmpInst::Predicate cmp_operand;
     int64_t value;
-    condition_result condition_result;
+    condition_result result_info;
   };
 
   struct CAT : public ModulePass {
@@ -176,7 +176,7 @@ namespace {
                       }
                     }
                   }
-                  cmp_status.condition_result = inside_condition_result;
+                  cmp_status.result_info = inside_condition_result;
                   function_arg_info[&F] = cmp_status;
                 }
               }

@@ -138,14 +138,16 @@ namespace {
         BasicBlock &entry_block = F->front();
         if (auto* branch_inst = (&entry_block)->getTerminator()) {
           BranchInst* new_branch;
+          BasicBlock* delete_block;
           if (condition == true) {
             new_branch = BranchInst::Create(branch_inst->getSuccessor(0));
-            (branch_inst->getSuccessor(1))->eraseFromParent();
+            delete_block = branch_inst->getSuccessor(1);
           } else {
             new_branch = BranchInst::Create(branch_inst->getSuccessor(1));
-            (branch_inst->getSuccessor(0))->eraseFromParent();
+            delete_block = branch_inst->getSuccessor(0);
           }
           ReplaceInstWithInst(branch_inst, new_branch);
+          DeleteDeadBlock(delete_block);
         }
       }
     }

@@ -12,6 +12,7 @@
 #include "llvm/ADT/BitVector.h"
 #include "llvm/ADT/SparseBitVector.h"
 #include "llvm/IR/Constants.h"
+#include "llvm/Transforms/Utils/Cloning.h"
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -36,6 +37,11 @@ namespace {
     condition_result result_info;
   };
 
+  struct cloned_function_copy {
+    Function* true_condition;
+    Function* false_condition;
+  };
+
   struct CAT : public ModulePass {
     static char ID;
     Module *currentModule;
@@ -46,6 +52,7 @@ namespace {
     set<Function *> CAT_functions;
     map<Function *, Value *> constant_return;
     map<Function *, cmp_inst_status> function_arg_info;
+    map<Function *, cloned_function_copy> function_copy;
 
     CAT() : ModulePass(ID) { }
 
@@ -79,6 +86,10 @@ namespace {
         functionSummary(F);
       }
 
+      for (auto &F : M) {
+        cloneFunctionCopy(F);
+      }
+
       bool value_propagate;
       do {
         value_propagate = false;
@@ -90,6 +101,11 @@ namespace {
       } while (value_propagate);
 
       return false;
+    }
+
+    void cloneFunctionCopy(Function &F) {
+      BasicBlock &entry_block = F.front();
+      errs() << "first block: " << entry_block << "\n";
     }
 
     bool functionSummary(Function &F) {
@@ -596,7 +612,6 @@ namespace {
 
     void replaceConditionFunction(map<Instruction*, ConstantInt*> &replace_pair,
                                   Function* called_function, Instruction* I, Value* get_argument) {
-      errs() << "in replace function: " << *get_argument <<"\n";
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
         Value* create_argument_inst = call_inst->getArgOperand(0);
         if (auto* create_call_inst = dyn_cast<CallInst>(call_inst->getArgOperand(0))) {
@@ -626,6 +641,27 @@ namespace {
           }
         }
       }
+    }
+
+    int replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
+                                  Function* called_function, Instruction* I, Value* get_argument) {
+      if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
+        Value* create_argument_inst = call_inst->getArgOperand(0);
+        if (auto* create_call_inst = dyn_cast<CallInst>(call_inst->getArgOperand(0))) {
+          Function *function_callled;
+          function_callled = create_call_inst->getCalledFunction();
+          if (
+            currentModule
+              ->getFunction("CAT_create_signed_value") == function_callled
+          ) {
+            Value* create_argument = create_call_inst->getArgOperand(0);
+            if (auto* constant_create_arg = dyn_cast<ConstantInt>(create_argument)) {
+              return argumentRange(function_arg_info[called_function], constant_create_arg);
+            }
+          }
+        }
+      }
+      return -1;
     }
 
     int argumentRange(cmp_inst_status function_info, ConstantInt* caller_argument) {

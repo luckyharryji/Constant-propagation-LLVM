@@ -82,21 +82,27 @@ namespace {
         }
       }
 
-      for (auto &F : M) {
-        functionSummary(F);
-      }
-
-      for (auto &F : M) {
-        if (function_arg_info.find(&F) != function_arg_info.end()) {
-          cloneFunctionCopy(F);
-        }
-      }
+      // for (auto &F : M) {
+      //   functionSummary(F);
+      // }
+      //
+      // for (auto &F : M) {
+      //   if (function_arg_info.find(&F) != function_arg_info.end()) {
+      //     cloneFunctionCopy(F);
+      //   }
+      // }
 
       bool value_propagate;
       do {
         value_propagate = false;
         for (auto &F : M) {
-          if (runOnIntraFunction(F)) {
+          functionSummary(F);
+          if (function_arg_info.find(&F) != function_arg_info.end()) {
+            cloneFunctionCopy(F);
+          }
+        }
+        for (auto &F : M) {
+          if (runOnIntraFunction(F, M)) {
             value_propagate = true;
           }
         }
@@ -253,7 +259,7 @@ namespace {
 
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnIntraFunction (Function &F) {
+    bool runOnIntraFunction (Function &F, Module &M) {
       if (F.isDeclaration()) {
           return false;
       }
@@ -482,7 +488,8 @@ namespace {
                     continue;
                   }
                 } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
-                  replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
+                  // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
+                  replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M);
                   continue;
                 }
               }
@@ -692,19 +699,29 @@ namespace {
     }
 
     int replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
-                                  Function* called_function, Instruction* I, Value* get_argument) {
+                                  Function* called_function, Instruction* I, Value* get_argument, Module &M) {
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
         Value* create_argument_inst = call_inst->getArgOperand(0);
+        Function* to_replace_func = call_inst->getCalledFunction();
         if (auto* create_call_inst = dyn_cast<CallInst>(call_inst->getArgOperand(0))) {
-          Function *function_callled;
-          function_callled = create_call_inst->getCalledFunction();
+          Function *function_callled = create_call_inst->getCalledFunction();
           if (
             currentModule
               ->getFunction("CAT_create_signed_value") == function_callled
           ) {
             Value* create_argument = create_call_inst->getArgOperand(0);
             if (auto* constant_create_arg = dyn_cast<ConstantInt>(create_argument)) {
-              return argumentRange(function_arg_info[called_function], constant_create_arg);
+              int index = argumentRange(function_arg_info[called_function], constant_create_arg);
+              if (function_copy.find(to_replace_func) != function_copy.end()) {
+                Function* clone_target;
+                if (index == 0) {
+                  clone_target = (function_copy[to_replace_func]).true_condition;
+                } else {
+                  clone_target = (function_copy[to_replace_func]).false_condition;
+                }
+                call_inst->replaceUsesOfWith(to_replace_func, clone_target);
+                M.getFunctionList().push_back(clone_target);
+              }
             }
           }
         }

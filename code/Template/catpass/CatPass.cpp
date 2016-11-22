@@ -108,7 +108,43 @@ namespace {
     void cloneFunctionCopy(Function &F) {
       if (!F.empty()) {
         BasicBlock &entry_block = F.front();
-        errs() << "first block: " << entry_block << "\n";
+        if (auto* branch_inst = (&entry_block)->getTerminator()) {
+          errs() << "first block: " << entry_block << "\n";
+          Function* true_cloned = clonedNewFunction(&F, true);
+          Function* false_cloned = clonedNewFunction(&F, false);
+        }
+      }
+    }
+
+    Function* clonedNewFunction(Function* callee, bool condition) {
+      errs() << "Cloning " << callee->getName() << "\n";
+      ValueToValueMapTy VMap;
+      auto *clonedCallee = CloneFunction(callee, VMap, true, nullptr);
+      clonedCallee->setLinkage(callee->getLinkage());
+      removeUnuseCondition(clonedCallee, condition);
+      if (condition == true) {
+        clonedCallee->setName(callee->getName() + "_true_cloned");
+      } else {
+        clonedCallee->setName(callee->getName() + "_false_cloned");
+      }
+      errs() << "after clone, result function is : " << condition << *clonedCallee << '\n';
+      return clonedCallee;
+      // call->replaceUsesOfWith(callee, clonedCallee);
+      // M.getFunctionList().push_back(clonedCallee);
+    }
+
+    void removeUnuseCondition(Function* F, bool condition) {
+      if (!F->empty()) {
+        BasicBlock &entry_block = F->front();
+        if (auto* branch_inst = (&entry_block)->getTerminator()) {
+          BranchInst* new_branch;
+          if (condition == true) {
+            new_branch = BranchInst::Create(branch_inst->getSuccessor(0));
+          } else {
+            new_branch = BranchInst::Create(branch_inst->getSuccessor(1));
+          }
+          ReplaceInstWithInst(branch_inst, new_branch);
+        }
       }
     }
 

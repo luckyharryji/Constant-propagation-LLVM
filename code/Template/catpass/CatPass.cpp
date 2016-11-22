@@ -87,7 +87,9 @@ namespace {
       }
 
       for (auto &F : M) {
-        cloneFunctionCopy(F);
+        if (function_arg_info.find(&F) != function_arg_info.end()) {
+          cloneFunctionCopy(F);
+        }
       }
 
       bool value_propagate;
@@ -104,8 +106,10 @@ namespace {
     }
 
     void cloneFunctionCopy(Function &F) {
-      BasicBlock &entry_block = F.front();
-      errs() << "first block: " << entry_block << "\n";
+      if (!F.empty()) {
+        BasicBlock &entry_block = F.front();
+        errs() << "first block: " << entry_block << "\n";
+      }
     }
 
     bool functionSummary(Function &F) {

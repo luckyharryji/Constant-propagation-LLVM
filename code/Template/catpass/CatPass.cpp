@@ -140,8 +140,10 @@ namespace {
           BranchInst* new_branch;
           if (condition == true) {
             new_branch = BranchInst::Create(branch_inst->getSuccessor(0));
+            (branch_inst->getSuccessor(1))->eraseFromParent();
           } else {
             new_branch = BranchInst::Create(branch_inst->getSuccessor(1));
+            (branch_inst->getSuccessor(0))->eraseFromParent();
           }
           ReplaceInstWithInst(branch_inst, new_branch);
         }

@@ -112,6 +112,10 @@ namespace {
           errs() << "first block: " << entry_block << "\n";
           Function* true_cloned = clonedNewFunction(&F, true);
           Function* false_cloned = clonedNewFunction(&F, false);
+          cloned_function_copy function_clone_result;
+          function_clone_result.true_condition = true_cloned;
+          function_clone_result.false_condition = false_cloned;
+          function_copy[&F] = function_clone_result;
         }
       }
     }

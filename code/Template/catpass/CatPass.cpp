@@ -96,8 +96,16 @@ namespace {
       do {
         value_propagate = false;
         for (auto &F : M) {
-          functionSummary(F);
-          if (function_arg_info.find(&F) != function_arg_info.end()) {
+          if (
+            function_arg_info.find(&F) == function_arg_info.end()
+            && constant_return.find(&F) == constant_return.end()
+          ) {
+            functionSummary(F);
+          }
+          if (
+            function_arg_info.find(&F) != function_arg_info.end()
+            && function_copy.find(&F) == function_copy.end()
+          ) {
             cloneFunctionCopy(F);
           }
         }
@@ -106,6 +114,11 @@ namespace {
             value_propagate = true;
           }
         }
+        errs() << "==================================== After one iteration" << '\n';
+        for (auto &F : M) {
+          errs() << F << "\n";
+        }
+        errs() << "====================================" << '\n';
       } while (value_propagate);
 
       return false;

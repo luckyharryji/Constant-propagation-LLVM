@@ -704,6 +704,7 @@ namespace {
     void replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
                                   Function* called_function, Instruction* I, Value* get_argument, Module &M) {
       errs() << "Check: into clone function with : " << *I << "\n";
+      errs() << "Constant? : " << isa<ConstantInt>(get_argument) << "\n";
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
         Value* create_argument_inst = call_inst->getArgOperand(0);
         Function* to_replace_func = call_inst->getCalledFunction();
@@ -728,7 +729,9 @@ namespace {
               }
             }
           }
-        } else if (auto* constant_arg = dyn_cast<ConstantInt>(get_argument)) {
+        } else if (isa<ConstantInt>(get_argument)) {
+          ConstantInt* constant_arg = dyn_cast<ConstantInt>(get_argument);
+          errs() << "processing constant : " << *constant_arg << "\n";
           int index = argumentRange(function_arg_info[called_function], constant_arg);
           if (function_copy.find(to_replace_func) != function_copy.end()) {
             Function* clone_target;

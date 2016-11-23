@@ -470,7 +470,9 @@ namespace {
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled;
             function_callled = call_inst->getCalledFunction();
-
+            if (call_inst->getNumArgOperands() < 1) {
+              continue;
+            }
             Instruction* def_instruction =
               dyn_cast<Instruction>(call_inst->getArgOperand(0));
             Value* argument = call_inst->getArgOperand(0);

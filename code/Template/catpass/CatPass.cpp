@@ -729,7 +729,11 @@ namespace {
               }
             }
           }
-        } else if (isa<ConstantInt>(get_argument)) {
+        }
+      } else if (auto* call_inst = dyn_cast<CallInst>(I)) {
+        if (isa<ConstantInt>(get_argument)) {
+          Value* create_argument_inst = call_inst->getArgOperand(0);
+          Function* to_replace_func = call_inst->getCalledFunction();
           ConstantInt* constant_arg = dyn_cast<ConstantInt>(get_argument);
           errs() << "processing constant : " << *constant_arg << "\n";
           int index = argumentRange(function_arg_info[called_function], constant_arg);

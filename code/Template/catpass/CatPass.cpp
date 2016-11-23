@@ -471,13 +471,10 @@ namespace {
             if (call_inst->getNumArgOperands() < 1) {
               continue;
             }
+
             errs() << "Call Instruction: " << *call_inst << "\n";
-            Instruction* def_instruction =
-              dyn_cast<Instruction>(call_inst->getArgOperand(0));
             Value* argument = call_inst->getArgOperand(0);
-            if (def_instruction == NULL) {
-              continue;
-            }
+
             Function *get_argument_called = call_inst->getCalledFunction();
             if (constant_return.find(get_argument_called) != constant_return.end()) {
               if (isa<ConstantInt>(constant_return[get_argument_called])) {
@@ -495,7 +492,11 @@ namespace {
               currentModule
                 ->getFunction("CAT_get_signed_value") == function_callled
             ) {
-
+              Instruction* def_instruction =
+                dyn_cast<Instruction>(call_inst->getArgOperand(0));
+              if (def_instruction == NULL) {
+                continue;
+              }
               Instruction *potentialCreateInstruction = NULL;
               for (
                 auto inst = in_set_map[&I].begin();
@@ -727,7 +728,7 @@ namespace {
               }
             }
           }
-        } else if (auto* constant_arg = dyn_cast<ConstantInt>(call_inst->getArgOperand(0))) {
+        } else if (auto* constant_arg = dyn_cast<ConstantInt>(get_argument)) {
           int index = argumentRange(function_arg_info[called_function], constant_arg);
           if (function_copy.find(to_replace_func) != function_copy.end()) {
             Function* clone_target;

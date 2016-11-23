@@ -166,10 +166,8 @@ namespace {
       for (auto &B : F){
         for (auto &I : B){
           if (isa<ReturnInst>(&I)) {
-            errs() << "return Instruction: " << I << "\n";
             ReturnInst *return_inst = dyn_cast<ReturnInst>(&I);
             Value *returned_value = return_inst->getReturnValue();
-            // errs() << "return Value: " << returned_value << "\n";
             if (returned_value != NULL && isa<Instruction>(returned_value)) {
               if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
                 errs() << "return Instruction: " << *instruc_called_return << "\n";
@@ -473,24 +471,24 @@ namespace {
             if (call_inst->getNumArgOperands() < 1) {
               continue;
             }
+            errs() << "Call Instruction: " << *call_inst << "\n";
             Instruction* def_instruction =
               dyn_cast<Instruction>(call_inst->getArgOperand(0));
             Value* argument = call_inst->getArgOperand(0);
             if (def_instruction == NULL) {
               continue;
             }
-            if (auto *constant_call = dyn_cast<CallInst>(def_instruction)) {
-              Function *get_argument_called = constant_call->getCalledFunction();
-              if (constant_return.find(get_argument_called) != constant_return.end()) {
-                if (isa<ConstantInt>(constant_return[get_argument_called])) {
-                  replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
-                  continue;
-                }
-              } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
-                // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
-                replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M);
+            Function *get_argument_called = call_inst->getCalledFunction();
+            if (constant_return.find(get_argument_called) != constant_return.end()) {
+              if (isa<ConstantInt>(constant_return[get_argument_called])) {
+                replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
                 continue;
               }
+            } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
+              // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
+              errs() << "Analysing for: " << I << '\n';
+              replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M);
+              continue;
             }
 
             if (
@@ -704,6 +702,7 @@ namespace {
 
     void replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
                                   Function* called_function, Instruction* I, Value* get_argument, Module &M) {
+      errs() << "Check: into clone function with : " << *I << "\n";
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
         Value* create_argument_inst = call_inst->getArgOperand(0);
         Function* to_replace_func = call_inst->getCalledFunction();

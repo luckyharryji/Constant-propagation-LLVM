@@ -96,16 +96,8 @@ namespace {
       do {
         value_propagate = false;
         for (auto &F : M) {
-          if (
-            function_arg_info.find(&F) == function_arg_info.end()
-            && constant_return.find(&F) == constant_return.end()
-          ) {
-            functionSummary(F);
-          }
-          if (
-            function_arg_info.find(&F) != function_arg_info.end()
-            && function_copy.find(&F) == function_copy.end()
-          ) {
+          functionSummary(F);
+          if (function_arg_info.find(&F) != function_arg_info.end()) {
             cloneFunctionCopy(F);
           }
         }
@@ -114,11 +106,6 @@ namespace {
             value_propagate = true;
           }
         }
-        errs() << "==================================== After one iteration" << '\n';
-        for (auto &F : M) {
-          errs() << F << "\n";
-        }
-        errs() << "====================================" << '\n';
       } while (value_propagate);
 
       return false;
@@ -179,8 +166,10 @@ namespace {
       for (auto &B : F){
         for (auto &I : B){
           if (isa<ReturnInst>(&I)) {
+            errs() << "return Instruction: " << I << "\n";
             ReturnInst *return_inst = dyn_cast<ReturnInst>(&I);
             Value *returned_value = return_inst->getReturnValue();
+            // errs() << "return Value: " << returned_value << "\n";
             if (returned_value != NULL && isa<Instruction>(returned_value)) {
               if (auto *instruc_called_return = dyn_cast<Instruction>(returned_value)){
                 errs() << "return Instruction: " << *instruc_called_return << "\n";
@@ -481,35 +470,30 @@ namespace {
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled;
             function_callled = call_inst->getCalledFunction();
-            if (call_inst->getNumArgOperands() < 1) {
-              continue;
-            }
-
-            errs() << "Call Instruction: " << *call_inst << "\n";
-            Value* argument = call_inst->getArgOperand(0);
-
-            Function *get_argument_called = call_inst->getCalledFunction();
-            if (constant_return.find(get_argument_called) != constant_return.end()) {
-              if (isa<ConstantInt>(constant_return[get_argument_called])) {
-                replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
-                continue;
-              }
-            } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
-              // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
-              errs() << "Analysing for: " << I << '\n';
-              replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M, modified);
-              continue;
-            }
-
             if (
               currentModule
                 ->getFunction("CAT_get_signed_value") == function_callled
             ) {
               Instruction* def_instruction =
                 dyn_cast<Instruction>(call_inst->getArgOperand(0));
+              Value* argument = call_inst->getArgOperand(0);
               if (def_instruction == NULL) {
                 continue;
               }
+              if (auto *constant_call = dyn_cast<CallInst>(def_instruction)) {
+                Function *get_argument_called = constant_call->getCalledFunction();
+                if (constant_return.find(get_argument_called) != constant_return.end()) {
+                  if (isa<ConstantInt>(constant_return[get_argument_called])) {
+                    replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
+                    continue;
+                  }
+                } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
+                  // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
+                  replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M);
+                  continue;
+                }
+              }
+
               Instruction *potentialCreateInstruction = NULL;
               for (
                 auto inst = in_set_map[&I].begin();
@@ -715,9 +699,7 @@ namespace {
     }
 
     void replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
-                                  Function* called_function, Instruction* I, Value* get_argument, Module &M, bool &modified) {
-      errs() << "Check: into clone function with : " << *I << "\n";
-      errs() << "Constant? : " << isa<ConstantInt>(get_argument) << "\n";
+                                  Function* called_function, Instruction* I, Value* get_argument, Module &M) {
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
         Value* create_argument_inst = call_inst->getArgOperand(0);
         Function* to_replace_func = call_inst->getCalledFunction();
@@ -738,30 +720,9 @@ namespace {
                   clone_target = (function_copy[to_replace_func]).false_condition;
                 }
                 call_inst->replaceUsesOfWith(to_replace_func, clone_target);
-                modified = true;
                 M.getFunctionList().push_back(clone_target);
               }
             }
-          }
-        }
-      } else if (auto* call_inst = dyn_cast<CallInst>(I)) {
-        if (isa<ConstantInt>(get_argument)) {
-          Value* create_argument_inst = call_inst->getArgOperand(0);
-          Function* to_replace_func = call_inst->getCalledFunction();
-          ConstantInt* constant_arg = dyn_cast<ConstantInt>(get_argument);
-          errs() << "processing constant : " << *constant_arg << "\n";
-          int index = argumentRange(function_arg_info[called_function], constant_arg);
-          if (function_copy.find(to_replace_func) != function_copy.end()) {
-            Function* clone_target;
-            if (index == 0) {
-              clone_target = (function_copy[to_replace_func]).true_condition;
-            } else {
-              clone_target = (function_copy[to_replace_func]).false_condition;
-            }
-            call_inst->replaceUsesOfWith(to_replace_func, clone_target);
-            modified = true;
-            M.getFunctionList().push_back(clone_target);
-            errs() << "clone for constant value argument: " << *clone_target << '\n';
           }
         }
       }

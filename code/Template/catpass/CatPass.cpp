@@ -465,11 +465,33 @@ namespace {
       // store the instruction that can be transformed into constant value
       // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
+      map<Instruction*, Instruction*> replace_instruction_pair;
       for (auto &B : F) {
         for (auto &I : B) {
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            Function *function_callled;
-            function_callled = call_inst->getCalledFunction();
+            Function *function_callled = call_inst->getCalledFunction();
+
+            // hard coded to handle function call with constant value
+            if (
+              currentModule->getFunction("CAT_get_signed_value") != function_callled
+              && constant_return.find(function_callled) != constant_return.end()
+            ) {
+              if (isa<ConstantInt>((constant_return[function_callled])->getArgOperand(0))) {
+                errs() << "===========find constant value to be replaced with no Cat_get" << "\n";
+                // replace_instruction_pair[&I] = dyn_cast<Instruction>(constant_return[function_callled]);
+                continue;
+              }
+            } else if (function_arg_info.find(function_callled) != function_arg_info.end()) {
+              for (int i = 0; i < call_inst->getNumArgOperands(); i++) {
+                errs() << "======call inst:" << *call_inst << "\n";
+                errs() << "arg: " << call_inst->getArgOperand(i) << "\n";
+                errs() << "is constant? : " << isa<ConstantInt>(call_inst->getArgOperand(i))<< "\n";
+              }
+              // replaceConditionFunction_v2(replace_pair, function_callled, &I, argument, M);
+              continue;
+            }
+
+
             if (
               currentModule
                 ->getFunction("CAT_get_signed_value") == function_callled
@@ -727,6 +749,36 @@ namespace {
         }
       }
     }
+
+    // void replaceConditionFunction_with_value_arg(map<Instruction*, ConstantInt*> &replace_pair,
+    //                               Function* called_function, Instruction* I, Value* get_argument, Module &M) {
+    //   if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
+    //     Value* create_argument_inst = call_inst->getArgOperand(0);
+    //     Function* to_replace_func = call_inst->getCalledFunction();
+    //     if (auto* create_call_inst = dyn_cast<CallInst>(call_inst->getArgOperand(0))) {
+    //       Function *function_callled = create_call_inst->getCalledFunction();
+    //       if (
+    //         currentModule
+    //           ->getFunction("CAT_create_signed_value") == function_callled
+    //       ) {
+    //         Value* create_argument = create_call_inst->getArgOperand(0);
+    //         if (auto* constant_create_arg = dyn_cast<ConstantInt>(create_argument)) {
+    //           int index = argumentRange(function_arg_info[called_function], constant_create_arg);
+    //           if (function_copy.find(to_replace_func) != function_copy.end()) {
+    //             Function* clone_target;
+    //             if (index == 0) {
+    //               clone_target = (function_copy[to_replace_func]).true_condition;
+    //             } else {
+    //               clone_target = (function_copy[to_replace_func]).false_condition;
+    //             }
+    //             call_inst->replaceUsesOfWith(to_replace_func, clone_target);
+    //             M.getFunctionList().push_back(clone_target);
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     int argumentRange(cmp_inst_status function_info, ConstantInt* caller_argument) {
       if (function_info.cmp_operand == llvm::CmpInst::Predicate::ICMP_SLT) {

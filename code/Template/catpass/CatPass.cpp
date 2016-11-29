@@ -491,10 +491,14 @@ namespace {
             ) {
               if (isa<ConstantInt>((constant_return[function_callled])->getArgOperand(0))) {
                 errs() << "===========find constant value to be replaced with no Cat_get" << "\n";
+                replace_instruction_pair[&I] = dyn_cast<Instruction>(constant_return[function_callled]);
                 // replace_instruction_pair[&I] = dyn_cast<Instruction>(constant_return[function_callled]);
                 continue;
               }
-            } else if (function_arg_info.find(function_callled) != function_arg_info.end()) {
+            } else if (
+              currentModule->getFunction("CAT_get_signed_value") != function_callled
+              && function_arg_info.find(function_callled) != function_arg_info.end()
+            ) {
               for (int i = 0; i < call_inst->getNumArgOperands(); i++) {
                 errs() << "======call inst:" << *call_inst << "\n";
                 errs() << "arg: " << call_inst->getArgOperand(i) << "\n";
@@ -617,6 +621,18 @@ namespace {
         Instruction* replace_instruction = instruction_constant.first;
         BasicBlock::iterator ii(replace_instruction);
         ReplaceInstWithValue(
+          replace_instruction->getParent()->getInstList(),
+          ii,
+          instruction_constant.second
+        );
+        modified = true;
+      }
+
+      for (auto& instruction_constant : replace_instruction_pair) {
+        // replace function call with CAT_create
+        Instruction* replace_instruction = instruction_constant.first;
+        BasicBlock::iterator ii(replace_instruction);
+        ReplaceInstWithInst(
           replace_instruction->getParent()->getInstList(),
           ii,
           instruction_constant.second

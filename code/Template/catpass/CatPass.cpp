@@ -50,7 +50,7 @@ namespace {
       "CAT_get_signed_value",
     };
     set<Function *> CAT_functions;
-    map<Function *, Value *> constant_return;
+    map<Function *, CallInst *> constant_return;
     map<Function *, cmp_inst_status> function_arg_info;
     map<Function *, cloned_function_copy> function_copy;
 
@@ -179,7 +179,7 @@ namespace {
                     if (CAT_functions.find(function_callled) != CAT_functions.end()) {
                       if (isVariableCreated(function_callled)) {
                         errs() << "called create Instruction: " << *call_inst << "\n";
-                        constant_return[&F] = call_inst->getArgOperand(0);
+                        constant_return[&F] = call_inst;
                       }
                     }
                   }
@@ -483,8 +483,8 @@ namespace {
               if (auto *constant_call = dyn_cast<CallInst>(def_instruction)) {
                 Function *get_argument_called = constant_call->getCalledFunction();
                 if (constant_return.find(get_argument_called) != constant_return.end()) {
-                  if (isa<ConstantInt>(constant_return[get_argument_called])) {
-                    replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
+                  if (isa<ConstantInt>((constant_return[get_argument_called])->getArgOperand(0))) {
+                    replace_pair[&I] = dyn_cast<ConstantInt>((constant_return[get_argument_called])->getArgOperand(0));
                     continue;
                   }
                 } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {

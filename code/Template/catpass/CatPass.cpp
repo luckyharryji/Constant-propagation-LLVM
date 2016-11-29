@@ -485,6 +485,9 @@ namespace {
             Function *function_callled = call_inst->getCalledFunction();
 
             // hard coded to handle function call with constant value
+            errs() << "===out condition Instruction" << I << "\n";
+            errs() << "===out condition BasicBlock" << B<< "\n";
+            errs() << "===out condition call inst:" << *call_inst << "\n";
             if (
               currentModule->getFunction("CAT_get_signed_value") != function_callled
               && constant_return.find(function_callled) != constant_return.end()
@@ -635,7 +638,7 @@ namespace {
         ReplaceInstWithInst(
           replace_instruction->getParent()->getInstList(),
           ii,
-          instruction_constant.second
+          (instruction_constant.second)->clone() 
         );
         modified = true;
       }

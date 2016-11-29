@@ -96,8 +96,16 @@ namespace {
       do {
         value_propagate = false;
         for (auto &F : M) {
-          functionSummary(F);
-          if (function_arg_info.find(&F) != function_arg_info.end()) {
+          if (
+            function_arg_info.find(&F) == function_arg_info.end()
+            && constant_return.find(&F) == constant_return.end()
+          ) {
+            functionSummary(F);
+          }
+          if (
+            function_arg_info.find(&F) != function_arg_info.end()
+            && function_copy.find(&F) == function_copy.end()
+          ) {
             cloneFunctionCopy(F);
           }
         }
@@ -106,6 +114,11 @@ namespace {
             value_propagate = true;
           }
         }
+        errs() << "==================================== After one iteration" << '\n';
+        for (auto &F : M) {
+          errs() << F << "\n";
+        }
+        errs() << "====================================" << '\n';
       } while (value_propagate);
 
       return false;
@@ -487,8 +500,8 @@ namespace {
                 errs() << "arg: " << call_inst->getArgOperand(i) << "\n";
                 errs() << "is constant? : " << isa<ConstantInt>(call_inst->getArgOperand(i))<< "\n";
               }
-              replaceConditionFunction_with_value_arg(call_inst, function_callled, call_inst->getArgOperand(0), M);
-              // replaceConditionFunction_v2(replace_pair, function_callled, &I, argument, M);
+              replaceConditionFunction_with_value_arg(call_inst, function_callled, call_inst->getArgOperand(0), M, modified);
+              // replaceConditionFunction_v2(replace_pair, function_callled, &I, argument, M, modified);
               continue;
             }
 
@@ -512,7 +525,7 @@ namespace {
                   }
                 } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
                   // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
-                  replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M);
+                  replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M, modified);
                   continue;
                 }
               }
@@ -722,7 +735,7 @@ namespace {
     }
 
     void replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
-                                  Function* called_function, Instruction* I, Value* get_argument, Module &M) {
+                                  Function* called_function, Instruction* I, Value* get_argument, Module &M, bool &modified) {
       if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
         Value* create_argument_inst = call_inst->getArgOperand(0);
         Function* to_replace_func = call_inst->getCalledFunction();
@@ -743,6 +756,7 @@ namespace {
                   clone_target = (function_copy[to_replace_func]).false_condition;
                 }
                 call_inst->replaceUsesOfWith(to_replace_func, clone_target);
+                modified = true;
                 M.getFunctionList().push_back(clone_target);
               }
             }
@@ -751,7 +765,7 @@ namespace {
       }
     }
 
-    void replaceConditionFunction_with_value_arg(CallInst* call_inst, Function* to_replace_func, Value* function_argunment, Module &M) {
+    void replaceConditionFunction_with_value_arg(CallInst* call_inst, Function* to_replace_func, Value* function_argunment, Module &M, bool &modified) {
       if (auto* constant_create_arg = dyn_cast<ConstantInt>(function_argunment)) {
         int index = argumentRange(function_arg_info[to_replace_func], constant_create_arg);
         if (function_copy.find(to_replace_func) != function_copy.end()) {
@@ -762,6 +776,7 @@ namespace {
             clone_target = (function_copy[to_replace_func]).false_condition;
           }
           call_inst->replaceUsesOfWith(to_replace_func, clone_target);
+          modified = true;
           M.getFunctionList().push_back(clone_target);
         }
       }

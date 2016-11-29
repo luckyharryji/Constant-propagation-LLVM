@@ -27,8 +27,8 @@ using namespace std;
 namespace {
 
   struct condition_result {
-    Value* first_condition;
-    Value* second_condition;
+    CallInst* first_condition;
+    CallInst* second_condition;
   };
 
   struct cmp_inst_status {
@@ -236,10 +236,10 @@ namespace {
                             errs() << "Condition is : " << *condition << "\n";
                             if (phi_calll_inst->getParent() == branch_inst->getSuccessor(0)) {
                               errs() << "true condition" << "\n";
-                              inside_condition_result.first_condition = phi_calll_inst->getArgOperand(0);
+                              inside_condition_result.first_condition = phi_calll_inst;
                             } else {
                               errs() << "false condition" << "\n";
-                              inside_condition_result.second_condition = phi_calll_inst->getArgOperand(0);
+                              inside_condition_result.second_condition = phi_calll_inst;
                             }
                           }
                         }
@@ -684,10 +684,10 @@ namespace {
               Value* replace_value = NULL;
               if (index == 0) {
                 errs() << "replace with : " << replace_result.first_condition << '\n';
-                replace_value = replace_result.first_condition;
+                replace_value = dyn_cast<Value>((replace_result.first_condition)->getArgOperand(0));
               } else {
                 errs() << "replace with : " << replace_result.second_condition << '\n';
-                replace_value = replace_result.second_condition;
+                replace_value = dyn_cast<Value>((replace_result.second_condition)->getArgOperand(0));
               }
               if (isa<ConstantInt>(replace_value)) {
                 replace_pair[I] = dyn_cast<ConstantInt>(replace_value);

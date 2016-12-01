@@ -111,7 +111,7 @@ namespace {
           }
         }
         for (auto &F : M) {
-          if （CAT_functions.find(&F) != CAT_functions.end()) {
+          if (CAT_functions.find(&F) != CAT_functions.end()) {
             continue;
           }
           if (runOnIntraFunction(F, M)) {

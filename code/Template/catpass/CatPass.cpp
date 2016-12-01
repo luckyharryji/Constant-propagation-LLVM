@@ -19,6 +19,7 @@
 #include <vector>
 #include <set>
 #include <tuple>
+#include <string>
 #include "llvm/Analysis/DependenceAnalysis.h"
 
 using namespace llvm;
@@ -291,6 +292,9 @@ namespace {
       map<Value *, Instruction *> argument_to_add_instruction;
       set<Instruction*> candidate_list;
 
+      // use this variable flag to avoid to cloned function has same name
+      int clone_name_index = 0;
+
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
 
@@ -507,9 +511,23 @@ namespace {
                 errs() << "arg: " << call_inst->getArgOperand(i) << "\n";
                 errs() << "is constant? : " << isa<ConstantInt>(call_inst->getArgOperand(i))<< "\n";
               }
-              replaceConditionFunction_with_value_arg(call_inst, function_callled, call_inst->getArgOperand(0), M, modified);
+              if (isa<ConstantInt>(call_inst->getArgOperand(0))) {
+                replaceConditionFunction_with_value_arg(call_inst, function_callled, call_inst->getArgOperand(0), M, modified);
+              }
               // replaceConditionFunction_v2(replace_pair, function_callled, &I, argument, M, modified);
               continue;
+            } else if(
+              currentModule->getFunction("CAT_get_signed_value") != function_callled
+              && isa<ConstantInt>(call_inst->getArgOperand(0))
+            ) {
+              Function* constant_copy = cloneFunctionWithConstantArg(function_callled,
+                                                                     dyn_cast<ConstantInt>(call_inst->getArgOperand(0)),
+                                                                     clone_name_index);
+              errs() << "Find a call with constant vlue: " << *call_inst;
+              errs() << "cloned function: " << *constant_copy << "\n";
+              call_inst->replaceUsesOfWith(function_callled, constant_copy);
+              modified = true;
+              M.getFunctionList().push_back(constant_copy);
             }
 
 
@@ -638,7 +656,7 @@ namespace {
         ReplaceInstWithInst(
           replace_instruction->getParent()->getInstList(),
           ii,
-          (instruction_constant.second)->clone() 
+          (instruction_constant.second)->clone()
         );
         modified = true;
       }
@@ -799,6 +817,19 @@ namespace {
           M.getFunctionList().push_back(clone_target);
         }
       }
+    }
+
+    Function* cloneFunctionWithConstantArg(Function* callee, ConstantInt* constant_arg, int& name_index) {
+      errs() << "Cloning " << callee->getName() << "\n";
+      ValueToValueMapTy VMap;
+      auto *clonedCallee = CloneFunction(callee, VMap, true, nullptr);
+      clonedCallee->setLinkage(callee->getLinkage());
+      clonedCallee->setName(callee->getName() + to_string(name_index));
+      Value* first_argument = dyn_cast<Value>(clonedCallee->arg_begin());
+      first_argument->replaceAllUsesWith(constant_arg);
+      errs() << "after clone, function with constant arg is : " << *clonedCallee << '\n';
+      name_index += 1;
+      return clonedCallee;
     }
 
     int argumentRange(cmp_inst_status function_info, ConstantInt* caller_argument) {

@@ -111,6 +111,9 @@ namespace {
           }
         }
         for (auto &F : M) {
+          if （CAT_functions.find(&F) != CAT_functions.end()) {
+            continue;
+          }
           if (runOnIntraFunction(F, M)) {
             value_propagate = true;
           }

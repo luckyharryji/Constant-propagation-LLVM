@@ -517,7 +517,8 @@ namespace {
               // replaceConditionFunction_v2(replace_pair, function_callled, &I, argument, M, modified);
               continue;
             } else if(
-              currentModule->getFunction("CAT_get_signed_value") != function_callled
+              CAT_functions.find(function_callled) == CAT_functions.end()
+              && call_inst->getNumArgOperands() > 0
               && isa<ConstantInt>(call_inst->getArgOperand(0))
             ) {
               Function* constant_copy = cloneFunctionWithConstantArg(function_callled,

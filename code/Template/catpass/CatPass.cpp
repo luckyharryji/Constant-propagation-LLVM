@@ -23,7 +23,7 @@ using namespace llvm;
 using namespace std;
 
 namespace {
-  struct CAT : public FunctionPass {
+  struct CAT : public ModulePass {
     static char ID;
     Module *currentModule;
     const vector<string> CAT_function_list = {
@@ -32,7 +32,7 @@ namespace {
     };
     set<Function *> CAT_functions;
 
-    CAT() : FunctionPass(ID) {}
+    CAT() :  ModulePass(ID) {}
 
     // This function is invoked once at the initialization phase of the compiler
     // The LLVM IR of functions isn't ready at this point
@@ -43,6 +43,10 @@ namespace {
         CAT_functions.insert(M.getFunction(function_name));
       }
 
+      return false;
+    }
+
+    bool runOnModule(Module &M) override {
       set<BasicBlock*> block_with_no_CAT;
       for (auto &F: M) {
         for (auto &B : F) {
@@ -61,15 +65,26 @@ namespace {
           }
         }
       }
-      for(auto block_pointer : block_with_no_CAT) {
+      bool modified = false;
+      for (auto block_pointer : block_with_no_CAT) {
         block_pointer->removeFromParent();
+        modified = true;
       }
-      return false;
+      for (auto &F : M) {
+        if (runOnFunction(F)) {
+          modified = true;
+        }
+      }
+      return modified;
     }
 
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnFunction (Function &F) override {
+    bool runOnFunction (Function &F) {
+      if (F.isDeclaration()) {
+          return false;
+      }
+
       // set<BasicBlock*> block_with_no_CAT;
       // for (auto &B : F) {
       //   bool invokeCAT = false;
@@ -87,7 +102,7 @@ namespace {
       //   }
       // }
 
-      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
+      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>(F);
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;
       map<Instruction *, set<Instruction *>> variable_used;
@@ -393,9 +408,11 @@ namespace {
         );
       }
 
+      bool modified = false;
       // delete the fake add instruction added to the function at the beginning
       for (auto& add_instruction_pair : add_instruction_to_argument) {
         (add_instruction_pair.first)->eraseFromParent();
+        modified = true;
       }
 
       replace_pair.clear();
@@ -410,7 +427,7 @@ namespace {
       add_instruction_to_argument.clear();
       argument_to_add_instruction.clear();
 
-      return false;
+      return modified;
     }
 
     // We don't modify the program, so we preserve all analyses.

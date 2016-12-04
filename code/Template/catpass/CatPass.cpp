@@ -42,28 +42,46 @@ namespace {
         // Initialize the list of function shown in the input module
         CAT_functions.insert(M.getFunction(function_name));
       }
+
+      for (auto &F: M) {
+        for (auto &B : F) {
+          bool invokeCAT = false;
+          for (auto &I : B) {
+            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+              Function *function_callled = call_inst->getCalledFunction();
+              if (CAT_functions.find(function_callled) != CAT_functions.end()) {
+                invokeCAT = true;
+              }
+            }
+          }
+          if (!invokeCAT) {
+            // block_with_no_CAT.insert(&B);
+            B.removeFromParent();
+          }
+        }
+      }
       return false;
     }
 
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
     bool runOnFunction (Function &F) override {
-      set<BasicBlock*> block_with_no_CAT;
-      for (auto &B : F) {
-        bool invokeCAT = false;
-        for (auto &I : B) {
-          if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            Function *function_callled = call_inst->getCalledFunction();
-            if (CAT_functions.find(function_callled) != CAT_functions.end()) {
-              invokeCAT = true;
-            }
-          }
-        }
-        if (!invokeCAT) {
-          // block_with_no_CAT.insert(&B);
-          B.removeFromParent();
-        }
-      }
+      // set<BasicBlock*> block_with_no_CAT;
+      // for (auto &B : F) {
+      //   bool invokeCAT = false;
+      //   for (auto &I : B) {
+      //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+      //       Function *function_callled = call_inst->getCalledFunction();
+      //       if (CAT_functions.find(function_callled) != CAT_functions.end()) {
+      //         invokeCAT = true;
+      //       }
+      //     }
+      //   }
+      //   if (!invokeCAT) {
+      //     // block_with_no_CAT.insert(&B);
+      //     B.removeFromParent();
+      //   }
+      // }
 
       DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
       map<Instruction *, set<Instruction *>> gen_set_map;

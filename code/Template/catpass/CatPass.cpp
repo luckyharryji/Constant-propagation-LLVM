@@ -43,6 +43,7 @@ namespace {
         CAT_functions.insert(M.getFunction(function_name));
       }
 
+      set<BasicBlock*> block_with_no_CAT;
       for (auto &F: M) {
         for (auto &B : F) {
           bool invokeCAT = false;
@@ -55,10 +56,13 @@ namespace {
             }
           }
           if (!invokeCAT) {
-            // block_with_no_CAT.insert(&B);
-            B.removeFromParent();
+            block_with_no_CAT.insert(&B);
+            // B.removeFromParent();
           }
         }
+      }
+      for(auto block_pointer : block_with_no_CAT) {
+        block_pointer->removeFromParent();
       }
       return false;
     }

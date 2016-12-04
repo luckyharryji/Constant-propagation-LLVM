@@ -12,14 +12,12 @@
 #include "llvm/ADT/BitVector.h"
 #include "llvm/ADT/SparseBitVector.h"
 #include "llvm/IR/Constants.h"
-#include "llvm/Transforms/Utils/Cloning.h"
 #include <iostream>
 #include <fstream>
 #include <map>
 #include <vector>
 #include <set>
 #include <tuple>
-#include <string>
 #include "llvm/Analysis/DependenceAnalysis.h"
 
 using namespace llvm;
@@ -28,19 +26,14 @@ using namespace std;
 namespace {
 
   struct condition_result {
-    CallInst* first_condition;
-    CallInst* second_condition;
+    Value* first_condition;
+    Value* second_condition;
   };
 
   struct cmp_inst_status {
     llvm::CmpInst::Predicate cmp_operand;
     int64_t value;
     condition_result result_info;
-  };
-
-  struct cloned_function_copy {
-    Function* true_condition;
-    Function* false_condition;
   };
 
   struct CAT : public ModulePass {
@@ -51,9 +44,8 @@ namespace {
       "CAT_get_signed_value",
     };
     set<Function *> CAT_functions;
-    map<Function *, CallInst *> constant_return;
+    map<Function *, Value *> constant_return;
     map<Function *, cmp_inst_status> function_arg_info;
-    map<Function *, cloned_function_copy> function_copy;
 
     CAT() : ModulePass(ID) { }
 
@@ -83,100 +75,25 @@ namespace {
         }
       }
 
-      // for (auto &F : M) {
-      //   functionSummary(F);
-      // }
-      //
-      // for (auto &F : M) {
-      //   if (function_arg_info.find(&F) != function_arg_info.end()) {
-      //     cloneFunctionCopy(F);
-      //   }
-      // }
+      for (auto &F : M) {
+        functionSummary(F);
+      }
 
       bool value_propagate;
-      do {
-        value_propagate = false;
-        for (auto &F : M) {
-          if (
-            function_arg_info.find(&F) == function_arg_info.end()
-            && constant_return.find(&F) == constant_return.end()
-          ) {
-            functionSummary(F);
-          }
-          if (
-            function_arg_info.find(&F) != function_arg_info.end()
-            && function_copy.find(&F) == function_copy.end()
-          ) {
-            cloneFunctionCopy(F);
-          }
-        }
-        for (auto &F : M) {
-          if (CAT_functions.find(&F) != CAT_functions.end()) {
-            continue;
-          }
-          if (runOnIntraFunction(F, M)) {
-            value_propagate = true;
-          }
-        }
-        errs() << "==================================== After one iteration" << '\n';
-        for (auto &F : M) {
-          errs() << F << "\n";
-        }
-        errs() << "====================================" << '\n';
-      } while (value_propagate);
+
+      for (auto &F : M) {
+        printBasicBlock(F);
+      }
+      // do {
+      //   value_propagate = false;
+      //   for (auto &F : M) {
+      //     if (runOnIntraFunction(F)) {
+      //       value_propagate = true;
+      //     }
+      //   }
+      // } while (value_propagate);
 
       return false;
-    }
-
-    void cloneFunctionCopy(Function &F) {
-      if (!F.empty()) {
-        BasicBlock &entry_block = F.front();
-        if (auto* branch_inst = (&entry_block)->getTerminator()) {
-          errs() << "first block: " << entry_block << "\n";
-          Function* true_cloned = clonedNewFunction(&F, true);
-          Function* false_cloned = clonedNewFunction(&F, false);
-          cloned_function_copy function_clone_result;
-          function_clone_result.true_condition = true_cloned;
-          function_clone_result.false_condition = false_cloned;
-          function_copy[&F] = function_clone_result;
-        }
-      }
-    }
-
-    Function* clonedNewFunction(Function* callee, bool condition) {
-      errs() << "Cloning " << callee->getName() << "\n";
-      ValueToValueMapTy VMap;
-      auto *clonedCallee = CloneFunction(callee, VMap, true, nullptr);
-      clonedCallee->setLinkage(callee->getLinkage());
-      removeUnuseCondition(clonedCallee, condition);
-      if (condition == true) {
-        clonedCallee->setName(callee->getName() + "_true_cloned");
-      } else {
-        clonedCallee->setName(callee->getName() + "_false_cloned");
-      }
-      errs() << "after clone, result function is : " << condition << *clonedCallee << '\n';
-      return clonedCallee;
-      // call->replaceUsesOfWith(callee, clonedCallee);
-      // M.getFunctionList().push_back(clonedCallee);
-    }
-
-    void removeUnuseCondition(Function* F, bool condition) {
-      if (!F->empty()) {
-        BasicBlock &entry_block = F->front();
-        if (auto* branch_inst = (&entry_block)->getTerminator()) {
-          BranchInst* new_branch;
-          BasicBlock* delete_block;
-          if (condition == true) {
-            new_branch = BranchInst::Create(branch_inst->getSuccessor(0));
-            delete_block = branch_inst->getSuccessor(1);
-          } else {
-            new_branch = BranchInst::Create(branch_inst->getSuccessor(1));
-            delete_block = branch_inst->getSuccessor(0);
-          }
-          ReplaceInstWithInst(branch_inst, new_branch);
-          DeleteDeadBlock(delete_block);
-        }
-      }
     }
 
     bool functionSummary(Function &F) {
@@ -196,7 +113,7 @@ namespace {
                     if (CAT_functions.find(function_callled) != CAT_functions.end()) {
                       if (isVariableCreated(function_callled)) {
                         errs() << "called create Instruction: " << *call_inst << "\n";
-                        constant_return[&F] = call_inst;
+                        constant_return[&F] = call_inst->getArgOperand(0);
                       }
                     }
                   }
@@ -253,10 +170,10 @@ namespace {
                             errs() << "Condition is : " << *condition << "\n";
                             if (phi_calll_inst->getParent() == branch_inst->getSuccessor(0)) {
                               errs() << "true condition" << "\n";
-                              inside_condition_result.first_condition = phi_calll_inst;
+                              inside_condition_result.first_condition = phi_calll_inst->getArgOperand(0);
                             } else {
                               errs() << "false condition" << "\n";
-                              inside_condition_result.second_condition = phi_calll_inst;
+                              inside_condition_result.second_condition = phi_calll_inst->getArgOperand(0);
                             }
                           }
                         }
@@ -274,9 +191,18 @@ namespace {
       return false;
     }
 
+    void printBasicBlock(Function &F) {
+      int index = 1;
+      for (auto &B : F) {
+        errs() << "BasicBlock " << index << ": " << "\n";
+        errs() << B << "\n";
+        index += 1;
+      }
+    }
+
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnIntraFunction (Function &F, Module &M) {
+    bool runOnIntraFunction (Function &F) {
       if (F.isDeclaration()) {
           return false;
       }
@@ -294,9 +220,6 @@ namespace {
       map<Instruction *, Value *> add_instruction_to_argument;
       map<Value *, Instruction *> argument_to_add_instruction;
       set<Instruction*> candidate_list;
-
-      // use this variable flag to avoid to cloned function has same name
-      int clone_name_index = 0;
 
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
@@ -485,56 +408,11 @@ namespace {
       // store the instruction that can be transformed into constant value
       // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
-      map<Instruction*, Instruction*> replace_instruction_pair;
       for (auto &B : F) {
         for (auto &I : B) {
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            Function *function_callled = call_inst->getCalledFunction();
-
-            // hard coded to handle function call with constant value
-            errs() << "===out condition Instruction" << I << "\n";
-            errs() << "===out condition BasicBlock" << B<< "\n";
-            errs() << "===out condition call inst:" << *call_inst << "\n";
-            if (
-              currentModule->getFunction("CAT_get_signed_value") != function_callled
-              && constant_return.find(function_callled) != constant_return.end()
-            ) {
-              if (isa<ConstantInt>((constant_return[function_callled])->getArgOperand(0))) {
-                errs() << "===========find constant value to be replaced with no Cat_get" << "\n";
-                replace_instruction_pair[&I] = dyn_cast<Instruction>(constant_return[function_callled]);
-                // replace_instruction_pair[&I] = dyn_cast<Instruction>(constant_return[function_callled]);
-                continue;
-              }
-            } else if (
-              currentModule->getFunction("CAT_get_signed_value") != function_callled
-              && function_arg_info.find(function_callled) != function_arg_info.end()
-            ) {
-              for (int i = 0; i < call_inst->getNumArgOperands(); i++) {
-                errs() << "======call inst:" << *call_inst << "\n";
-                errs() << "arg: " << call_inst->getArgOperand(i) << "\n";
-                errs() << "is constant? : " << isa<ConstantInt>(call_inst->getArgOperand(i))<< "\n";
-              }
-              if (isa<ConstantInt>(call_inst->getArgOperand(0))) {
-                replaceConditionFunction_with_value_arg(call_inst, function_callled, call_inst->getArgOperand(0), M, modified);
-              }
-              // replaceConditionFunction_v2(replace_pair, function_callled, &I, argument, M, modified);
-              continue;
-            } else if(
-              CAT_functions.find(function_callled) == CAT_functions.end()
-              && call_inst->getNumArgOperands() > 0
-              && isa<ConstantInt>(call_inst->getArgOperand(0))
-            ) {
-              Function* constant_copy = cloneFunctionWithConstantArg(function_callled,
-                                                                     dyn_cast<ConstantInt>(call_inst->getArgOperand(0)),
-                                                                     clone_name_index);
-              errs() << "Find a call with constant vlue: " << *call_inst;
-              errs() << "cloned function: " << *constant_copy << "\n";
-              call_inst->replaceUsesOfWith(function_callled, constant_copy);
-              modified = true;
-              M.getFunctionList().push_back(constant_copy);
-            }
-
-
+            Function *function_callled;
+            function_callled = call_inst->getCalledFunction();
             if (
               currentModule
                 ->getFunction("CAT_get_signed_value") == function_callled
@@ -548,13 +426,12 @@ namespace {
               if (auto *constant_call = dyn_cast<CallInst>(def_instruction)) {
                 Function *get_argument_called = constant_call->getCalledFunction();
                 if (constant_return.find(get_argument_called) != constant_return.end()) {
-                  if (isa<ConstantInt>((constant_return[get_argument_called])->getArgOperand(0))) {
-                    replace_pair[&I] = dyn_cast<ConstantInt>((constant_return[get_argument_called])->getArgOperand(0));
+                  if (isa<ConstantInt>(constant_return[get_argument_called])) {
+                    replace_pair[&I] = dyn_cast<ConstantInt>(constant_return[get_argument_called]);
                     continue;
                   }
                 } else if (function_arg_info.find(get_argument_called) != function_arg_info.end()) {
-                  // replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
-                  replaceConditionFunction_v2(replace_pair, get_argument_called, &I, argument, M, modified);
+                  replaceConditionFunction(replace_pair, get_argument_called, &I, argument);
                   continue;
                 }
               }
@@ -649,18 +526,6 @@ namespace {
           replace_instruction->getParent()->getInstList(),
           ii,
           instruction_constant.second
-        );
-        modified = true;
-      }
-
-      for (auto& instruction_constant : replace_instruction_pair) {
-        // replace function call with CAT_create
-        Instruction* replace_instruction = instruction_constant.first;
-        BasicBlock::iterator ii(replace_instruction);
-        ReplaceInstWithInst(
-          replace_instruction->getParent()->getInstList(),
-          ii,
-          (instruction_constant.second)->clone()
         );
         modified = true;
       }
@@ -761,10 +626,10 @@ namespace {
               Value* replace_value = NULL;
               if (index == 0) {
                 errs() << "replace with : " << replace_result.first_condition << '\n';
-                replace_value = dyn_cast<Value>((replace_result.first_condition)->getArgOperand(0));
+                replace_value = replace_result.first_condition;
               } else {
                 errs() << "replace with : " << replace_result.second_condition << '\n';
-                replace_value = dyn_cast<Value>((replace_result.second_condition)->getArgOperand(0));
+                replace_value = replace_result.second_condition;
               }
               if (isa<ConstantInt>(replace_value)) {
                 replace_pair[I] = dyn_cast<ConstantInt>(replace_value);
@@ -773,67 +638,6 @@ namespace {
           }
         }
       }
-    }
-
-    void replaceConditionFunction_v2(map<Instruction*, ConstantInt*> &replace_pair,
-                                  Function* called_function, Instruction* I, Value* get_argument, Module &M, bool &modified) {
-      if (auto* call_inst = dyn_cast<CallInst>(get_argument)) {
-        Value* create_argument_inst = call_inst->getArgOperand(0);
-        Function* to_replace_func = call_inst->getCalledFunction();
-        if (auto* create_call_inst = dyn_cast<CallInst>(call_inst->getArgOperand(0))) {
-          Function *function_callled = create_call_inst->getCalledFunction();
-          if (
-            currentModule
-              ->getFunction("CAT_create_signed_value") == function_callled
-          ) {
-            Value* create_argument = create_call_inst->getArgOperand(0);
-            if (auto* constant_create_arg = dyn_cast<ConstantInt>(create_argument)) {
-              int index = argumentRange(function_arg_info[called_function], constant_create_arg);
-              if (function_copy.find(to_replace_func) != function_copy.end()) {
-                Function* clone_target;
-                if (index == 0) {
-                  clone_target = (function_copy[to_replace_func]).true_condition;
-                } else {
-                  clone_target = (function_copy[to_replace_func]).false_condition;
-                }
-                call_inst->replaceUsesOfWith(to_replace_func, clone_target);
-                modified = true;
-                M.getFunctionList().push_back(clone_target);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    void replaceConditionFunction_with_value_arg(CallInst* call_inst, Function* to_replace_func, Value* function_argunment, Module &M, bool &modified) {
-      if (auto* constant_create_arg = dyn_cast<ConstantInt>(function_argunment)) {
-        int index = argumentRange(function_arg_info[to_replace_func], constant_create_arg);
-        if (function_copy.find(to_replace_func) != function_copy.end()) {
-          Function* clone_target;
-          if (index == 0) {
-            clone_target = (function_copy[to_replace_func]).true_condition;
-          } else {
-            clone_target = (function_copy[to_replace_func]).false_condition;
-          }
-          call_inst->replaceUsesOfWith(to_replace_func, clone_target);
-          modified = true;
-          M.getFunctionList().push_back(clone_target);
-        }
-      }
-    }
-
-    Function* cloneFunctionWithConstantArg(Function* callee, ConstantInt* constant_arg, int& name_index) {
-      errs() << "Cloning " << callee->getName() << "\n";
-      ValueToValueMapTy VMap;
-      auto *clonedCallee = CloneFunction(callee, VMap, true, nullptr);
-      clonedCallee->setLinkage(callee->getLinkage());
-      clonedCallee->setName(callee->getName() + to_string(name_index));
-      Value* first_argument = dyn_cast<Value>(clonedCallee->arg_begin());
-      first_argument->replaceAllUsesWith(constant_arg);
-      errs() << "after clone, function with constant arg is : " << *clonedCallee << '\n';
-      name_index += 1;
-      return clonedCallee;
     }
 
     int argumentRange(cmp_inst_status function_info, ConstantInt* caller_argument) {

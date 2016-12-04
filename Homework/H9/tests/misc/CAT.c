@@ -49,6 +49,8 @@ void CAT_binary_sub (CATData result, CATData v1, CATData v2){
 	internal_data_t		*dresult;
   invocations++;
 
+  if (v1 == NULL || v2 == NULL) return;
+
 	d1				= internal_check_data(v1);
 	d2				= internal_check_data(v2);
 	dresult			= internal_check_data(result);
@@ -64,6 +66,7 @@ void CAT_binary_add (CATData result, CATData v1, CATData v2){
 	internal_data_t		*dresult;
   invocations++;
 
+  if (v1 == NULL || v2 == NULL) return;
 	d1				= internal_check_data(v1);
 	d2				= internal_check_data(v2);
 	dresult			= internal_check_data(result);

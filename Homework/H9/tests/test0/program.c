@@ -26,7 +26,7 @@ int main (int argc, char *argv[]){
   counter1 = 0;
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -40,7 +40,7 @@ int main (int argc, char *argv[]){
 
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
     if (counter1 == 0){
@@ -54,22 +54,7 @@ int main (int argc, char *argv[]){
 
   do {
     int x_value;
-    CATData y,z;
-    x_value = CAT_get_signed_value(x);
-    x_value++;
-
-    if (counter1 == 0){
-      if (x_value > 10){
-        y = CAT_create_signed_value(CAT_get_signed_value(x));
-      } else {
-       y = myF(CAT_create_signed_value(5)); printf("%lld\n", CAT_get_signed_value(y));
-      }
-    }
-    CAT_binary_add(*ref1, x, y);
-
-  do {
-    int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -84,7 +69,22 @@ int main (int argc, char *argv[]){
 
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
+    x_value = CAT_get_signed_value(x);
+    x_value++;
+
+    if (counter1 == 0){
+      if (x_value > 10){
+        y = CAT_create_signed_value(CAT_get_signed_value(x));
+      } else {
+       y = myF(CAT_create_signed_value(5)); printf("%lld\n", CAT_get_signed_value(y));
+      }
+    }
+    CAT_binary_add(*ref1, x, y);
+
+  do {
+    int x_value;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -98,7 +98,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -112,7 +112,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -126,7 +126,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -140,7 +140,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -154,7 +154,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -168,7 +168,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -182,7 +182,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -196,7 +196,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -210,7 +210,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -224,7 +224,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -238,7 +238,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -252,7 +252,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -266,7 +266,7 @@ int main (int argc, char *argv[]){
     CAT_binary_add(*ref1, x, y);
   do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -3358,7 +3358,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -4401,7 +4401,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -4416,7 +4416,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
    if (x_value > 10000000){
@@ -6486,7 +6486,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6501,7 +6501,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6516,7 +6516,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6531,7 +6531,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6546,7 +6546,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6561,7 +6561,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6576,7 +6576,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6591,7 +6591,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6606,7 +6606,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6621,7 +6621,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6636,7 +6636,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6651,7 +6651,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6666,7 +6666,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6681,7 +6681,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6696,7 +6696,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6711,7 +6711,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6726,7 +6726,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6741,7 +6741,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6756,7 +6756,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6771,7 +6771,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6786,7 +6786,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6801,7 +6801,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6816,7 +6816,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6831,7 +6831,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6846,7 +6846,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6861,7 +6861,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6876,7 +6876,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6891,7 +6891,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6906,7 +6906,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6921,7 +6921,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6936,7 +6936,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6951,7 +6951,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6966,7 +6966,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6981,7 +6981,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -6996,7 +6996,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -8039,7 +8039,7 @@ int main (int argc, char *argv[]){
     result = CAT_get_signed_value(w);
  do {
     int x_value;
-    CATData y,z;
+    CATData y,z; y = NULL; z = NULL;
     x_value = CAT_get_signed_value(x);
     x_value++;
 
@@ -29272,7 +29272,7 @@ int main (int argc, char *argv[]){
   free(ref2);
 
   printf("Result = %d\n\n\n\n", result);
-  printf("CAT invocations = %lld\n", CAT_invocations);
+  printf("CAT invocations = %lld\n", CAT_invocations());
 
   return 0;
 }

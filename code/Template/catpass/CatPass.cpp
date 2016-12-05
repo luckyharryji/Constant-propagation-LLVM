@@ -23,7 +23,7 @@ using namespace llvm;
 using namespace std;
 
 namespace {
-  struct CAT : public ModulePass {
+  struct CAT : public FunctionPass {
     static char ID;
     Module *currentModule;
     const vector<string> CAT_function_list = {
@@ -31,9 +31,8 @@ namespace {
       "CAT_get_signed_value",
     };
     set<Function *> CAT_functions;
-    set<BasicBlock*> block_with_no_CAT;
 
-    CAT() :  ModulePass(ID) {}
+    CAT() : FunctionPass(ID) {}
 
     // This function is invoked once at the initialization phase of the compiler
     // The LLVM IR of functions isn't ready at this point
@@ -43,66 +42,13 @@ namespace {
         // Initialize the list of function shown in the input module
         CAT_functions.insert(M.getFunction(function_name));
       }
-
       return false;
-    }
-
-    bool runOnModule(Module &M) override {
-      for (auto &F: M) {
-        for (auto &B : F) {
-          bool invokeCAT = false;
-          for (auto &I : B) {
-            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-              Function *function_callled = call_inst->getCalledFunction();
-              if (CAT_functions.find(function_callled) != CAT_functions.end()) {
-                invokeCAT = true;
-                break;
-              }
-            }
-          }
-          if (!invokeCAT) {
-            block_with_no_CAT.insert(&B);
-          }
-        }
-      }
-      bool modified = false;
-      // for (auto block_pointer : block_with_no_CAT) {
-      //   block_pointer->removeFromParent();
-      //   modified = true;
-      // }
-      for (auto &F : M) {
-        if (runOnFunction(F)) {
-          modified = true;
-        }
-      }
-      return modified;
     }
 
     // This function is invoked once per function compiled
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnFunction (Function &F) {
-      if (F.isDeclaration()) {
-          return false;
-      }
-
-      // set<BasicBlock*> block_with_no_CAT;
-      // for (auto &B : F) {
-      //   bool invokeCAT = false;
-      //   for (auto &I : B) {
-      //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-      //       Function *function_callled = call_inst->getCalledFunction();
-      //       if (CAT_functions.find(function_callled) != CAT_functions.end()) {
-      //         invokeCAT = true;
-      //       }
-      //     }
-      //   }
-      //   if (!invokeCAT) {
-      //     // block_with_no_CAT.insert(&B);
-      //     B.removeFromParent();
-      //   }
-      // }
-
-      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>(F);
+    bool runOnFunction (Function &F) override {
+      DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>();
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;
       map<Instruction *, set<Instruction *>> variable_used;
@@ -131,9 +77,6 @@ namespace {
         add_instruction_to_argument[add_inst] = dyn_cast<Value>(iter);
       }
       for (auto &B : F) {
-        if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-          continue;
-        }
         for (auto &I : B) {
 
           instruction_index[&I] = instruction_list.size();
@@ -166,9 +109,6 @@ namespace {
       }
 
       for (auto &B : F) {
-        if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-          continue;
-        }
         for (auto &I : B) {
           gen_set_map[&I] = set<Instruction *>();
           kill_set_map[&I] = set<Instruction *>();
@@ -243,16 +183,10 @@ namespace {
       }
 
       for (auto &B : F) {
-        if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-          continue;
-        }
         // predecessor of the first instruction of a basic block is the
         // last instruction of the block predecessor
         for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
         {
-          if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-            continue;
-          }
           predecessor[&(B.front())].insert((*it)->getTerminator());
         }
         // not doing first instruction of block, since it is dealt with
@@ -269,9 +203,6 @@ namespace {
       while (changed) {
         changed = false;
         for (auto &B : F) {
-          if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-            continue;
-          }
           for (auto &I : B) {
             set<Instruction *> new_in;
             if (!predecessor[&I].empty()) {
@@ -318,9 +249,6 @@ namespace {
       // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
       for (auto &B : F) {
-        if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-          continue;
-        }
         for (auto &I : B) {
           if (!in_set_map[&I].empty()) {
             if (auto* call_inst = dyn_cast<CallInst>(&I)) {
@@ -426,11 +354,9 @@ namespace {
         );
       }
 
-      bool modified = false;
       // delete the fake add instruction added to the function at the beginning
       for (auto& add_instruction_pair : add_instruction_to_argument) {
         (add_instruction_pair.first)->eraseFromParent();
-        modified = true;
       }
 
       replace_pair.clear();
@@ -445,7 +371,7 @@ namespace {
       add_instruction_to_argument.clear();
       argument_to_add_instruction.clear();
 
-      return modified;
+      return false;
     }
 
     // We don't modify the program, so we preserve all analyses.

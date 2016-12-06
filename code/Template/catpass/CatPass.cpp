@@ -338,6 +338,22 @@ namespace {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
           continue;
         }
+
+        // for debug:
+        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
+        {
+          if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+            errs() << "Basic Block of successive: " << B << "\n";
+            // for debug: print
+            errs() << "first Instruction of successive: " << B.front() << "\n";
+            for (auto inst = in_set_map[&(B.front())].begin(); inst != in_set_map[&(B.front())].end(); ++inst) {
+              errs() << "   " << **inst << "\n";
+            }
+            break;
+          }
+        }
+        ///
+
         for (auto &I : B) {
           if (!in_set_map[&I].empty()) {
             if (auto* call_inst = dyn_cast<CallInst>(&I)) {

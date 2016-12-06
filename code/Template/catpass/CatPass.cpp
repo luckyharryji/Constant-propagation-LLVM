@@ -322,6 +322,15 @@ namespace {
         }
       }
 
+      errs() << "Basic Block: " << F.front() << "\n";
+      // for debug: print
+      Instruction* first_print_inst = (F.front()).getTerminator();
+      errs() << "Instruction: " << *first_print_inst << "\n";
+      for (auto inst = out_set_map[first_print_inst].begin(); inst != out_set_map[first_print_inst].end(); ++inst) {
+        errs() << "   " << **inst << "\n";
+      }
+      //
+
       // store the instruction that can be transformed into constant value
       // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
@@ -329,15 +338,6 @@ namespace {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
           continue;
         }
-        errs() << "Basic Block: " << B << "\n";
-        // for debug: print
-        Instruction* first_print_inst = B.getFirstNonPHI();
-        errs() << "Instruction: " << *first_print_inst << "\n";
-        for (auto inst = in_set_map[first_print_inst].begin(); inst != in_set_map[first_print_inst].end(); ++inst) {
-          errs() << "   " << **inst << "\n";
-        }
-        //
-
         for (auto &I : B) {
           if (!in_set_map[&I].empty()) {
             if (auto* call_inst = dyn_cast<CallInst>(&I)) {

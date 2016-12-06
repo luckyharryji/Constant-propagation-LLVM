@@ -326,17 +326,20 @@ namespace {
       // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
       for (auto &B : F) {
-        errs() << "Basic Block: " << B << "\n";
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-          errs() << "Block has no Cat function, skip" << "\n";
           continue;
         }
+        errs() << "Basic Block: " << B << "\n";
+        // for debug: print
+        Instruction* first_print_inst = B.getFirstNonPHI();
+        errs() << "Instruction: " << *first_print_inst << "\n";
+        for (auto inst = in_set_map[first_print_inst].begin(); inst != in_set_map[first_print_inst].end(); ++inst) {
+          errs() << "   " << **inst << "\n";
+        }
+        //
+
         for (auto &I : B) {
-          errs() << "Instruction: " << I << "\n";
           if (!in_set_map[&I].empty()) {
-            for (auto inst = in_set_map[&I].begin(); inst != in_set_map[&I].end(); ++inst) {
-              errs() << "   " << **inst << "\n";
-            }
             if (auto* call_inst = dyn_cast<CallInst>(&I)) {
               Function *function_callled;
               function_callled = call_inst->getCalledFunction();

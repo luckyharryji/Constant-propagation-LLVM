@@ -61,7 +61,10 @@ namespace {
             }
           }
           if (!invokeCAT) {
-            block_with_no_CAT.insert(&B);
+            Instruction* last_inst_of_block = B.getTerminator();
+            if (!isa<BranchInst>(last_inst_of_block)) {
+              block_with_no_CAT.insert(&B);
+            }
           }
         }
       }
@@ -343,6 +346,8 @@ namespace {
         for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
         {
           if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+            // auto no_cat_block = dyn_cast<BasicBlock>(it);
+            errs() << "No Cat Block: " << **it << "\n";
             errs() << "Basic Block of successive: " << B << "\n";
             // for debug: print
             errs() << "first Instruction of successive: " << B.front() << "\n";

@@ -105,6 +105,8 @@ namespace {
       //   }
       // }
 
+      Instruction* target_instruction = NULL;
+
       DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>(F);
       map<Instruction *, set<Instruction *>> gen_set_map;
       map<Instruction *, set<Instruction *>> kill_set_map;
@@ -154,6 +156,13 @@ namespace {
               if (isVariableCreated(function_callled)) {
                 variable_used[&I] = set<Instruction *>();
                 variable_used[&I].insert(&I);
+                if (auto* constant_arg = dyn_cast<ConstantInt>(call_inst->getArgOperand(0))) {
+                  if (constant_arg->getSExtValue() == 42) {
+                    target_instruction = &I;
+                    errs() << "bug instruction: " << *target_instruction << "\n";
+                  }
+                }
+
               } else if (isVariableChanged(function_callled)) {
                 Value* first_argument = call_inst->getArgOperand(0);
                 variable_used[dyn_cast<Instruction>(first_argument)].insert(&I);
@@ -325,13 +334,13 @@ namespace {
         }
       }
 
-      errs() << "Basic Block: " << F.front() << "\n";
-      // for debug: print
-      Instruction* first_print_inst = (F.front()).getTerminator();
-      errs() << "Instruction: " << *first_print_inst << "\n";
-      for (auto inst = out_set_map[first_print_inst].begin(); inst != out_set_map[first_print_inst].end(); ++inst) {
-        errs() << "   " << **inst << "\n";
-      }
+      // errs() << "Basic Block: " << F.front() << "\n";
+      // // for debug: print
+      // Instruction* first_print_inst = (F.front()).getTerminator();
+      // errs() << "Instruction: " << *first_print_inst << "\n";
+      // for (auto inst = out_set_map[first_print_inst].begin(); inst != out_set_map[first_print_inst].end(); ++inst) {
+      //   errs() << "   " << **inst << "\n";
+      // }
       //
 
       // store the instruction that can be transformed into constant value
@@ -343,20 +352,20 @@ namespace {
         }
 
         // for debug:
-        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
-        {
-          if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-            // auto no_cat_block = dyn_cast<BasicBlock>(it);
-            errs() << "No Cat Block: " << **it << "\n";
-            errs() << "Basic Block of successive: " << B << "\n";
-            // for debug: print
-            errs() << "first Instruction of successive: " << B.front() << "\n";
-            for (auto inst = in_set_map[&(B.front())].begin(); inst != in_set_map[&(B.front())].end(); ++inst) {
-              errs() << "   " << **inst << "\n";
-            }
-            break;
-          }
-        }
+        // for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
+        // {
+        //   if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+        //     // auto no_cat_block = dyn_cast<BasicBlock>(it);
+        //     errs() << "No Cat Block: " << **it << "\n";
+        //     errs() << "Basic Block of successive: " << B << "\n";
+        //     // for debug: print
+        //     errs() << "first Instruction of successive: " << B.front() << "\n";
+        //     for (auto inst = in_set_map[&(B.front())].begin(); inst != in_set_map[&(B.front())].end(); ++inst) {
+        //       errs() << "   " << **inst << "\n";
+        //     }
+        //     break;
+        //   }
+        // }
         ///
 
         for (auto &I : B) {

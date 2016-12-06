@@ -326,10 +326,11 @@ namespace {
       // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
       for (auto &B : F) {
+        errs() << "Basic Block: " << B << "\n";
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
+          errs() << "Block has no Cat function, skip" << "\n";
           continue;
         }
-        errs() << "Basic Block: " << B << "\n";
         for (auto &I : B) {
           errs() << "Instruction: " << I << "\n";
           if (!in_set_map[&I].empty()) {

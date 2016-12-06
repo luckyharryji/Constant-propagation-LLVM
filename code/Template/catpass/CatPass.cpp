@@ -251,9 +251,17 @@ namespace {
         for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
         {
           if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+            for (
+              auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
+              pred_remove_block != end_remove_block;
+              ++pred_remove_block
+            ) {
+              predecessor[&(B.front())].insert((*pred_remove_block)->getTerminator());
+            }
             continue;
+          } else {
+            predecessor[&(B.front())].insert((*it)->getTerminator());
           }
-          predecessor[&(B.front())].insert((*it)->getTerminator());
         }
         // not doing first instruction of block, since it is dealt with
         for (auto iter = ++B.begin(); iter != B.end(); ++iter) {

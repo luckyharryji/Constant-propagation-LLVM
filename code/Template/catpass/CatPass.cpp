@@ -61,10 +61,10 @@ namespace {
             }
           }
           if (!invokeCAT) {
-            Instruction* last_inst_of_block = B.getTerminator();
-            if (!isa<BranchInst>(last_inst_of_block)) {
+//            Instruction* last_inst_of_block = B.getTerminator();
+//            if (!isa<BranchInst>(last_inst_of_block)) {
               block_with_no_CAT.insert(&B);
-            }
+//            }
           }
         }
       }
@@ -387,6 +387,10 @@ namespace {
                   inst != in_set_map[&I].end();
                   ++inst
                 ) {
+                  if (*inst == target_instruction) {
+                    errs() << "   target in the in set of: " <<  "\n";
+                    errs() << I << "\n" << "\n";
+                  }
                   if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
                     if (add_instruction_to_argument[*inst] == argument) {
                       potentialCreateInstruction = NULL;

@@ -287,41 +287,47 @@ namespace {
 
 
       //Debug: before in/out, find target
-      for (auto &B : F) {
-        if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-          continue;
-        }
-        for (auto &I : B) {
-          if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            Function *function_callled;
-            function_callled = call_inst->getCalledFunction();
-            if (
-              currentModule
-                ->getFunction("CAT_get_signed_value") == function_callled
-            ) {
-              Instruction* def_instruction =
-                dyn_cast<Instruction>(call_inst->getArgOperand(0));
-
-              if (def_instruction == target_instruction) {
-                errs() << "calling inst: " << I << "\n";
-                errs() << "With in set:"<< "\n";
-                for (
-                  auto inst = in_set_map[&I].begin();
-                  inst != in_set_map[&I].end();
-                  ++inst
-                ) {
-                  errs() << "  " << **inst << "\n";
-                }
-              }
-            }
-          }
-        }
-      }
+      // for (auto &B : F) {
+      //   if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
+      //     continue;
+      //   }
+      //   for (auto &I : B) {
+      //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+      //       Function *function_callled;
+      //       function_callled = call_inst->getCalledFunction();
+      //       if (
+      //         currentModule
+      //           ->getFunction("CAT_get_signed_value") == function_callled
+      //       ) {
+      //         Instruction* def_instruction =
+      //           dyn_cast<Instruction>(call_inst->getArgOperand(0));
+      //
+      //         if (def_instruction == target_instruction) {
+      //           errs() << "calling inst: " << I << "\n";
+      //           errs() << "With in set:"<< "\n";
+      //           if (in_set_map[&I].empty()) {
+      //             errs() << "  with empty in set" << "\n";
+      //           } else {
+      //             for (
+      //               auto inst = in_set_map[&I].begin();
+      //               inst != in_set_map[&I].end();
+      //               ++inst
+      //             ) {
+      //               errs() << "  " << **inst << "\n";
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
       //Debug end
 
 
       bool changed = true;
+      int ite_index = 0;
       while (changed) {
+        errs() << "iteration : " << ite_index << " ===============" << "\n";
         changed = false;
         for (auto &B : F) {
           if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
@@ -367,6 +373,42 @@ namespace {
             temp_in.clear();
           }
         }
+        for (auto &B : F) {
+          if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
+            continue;
+          }
+          for (auto &I : B) {
+            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+              Function *function_callled;
+              function_callled = call_inst->getCalledFunction();
+              if (
+                currentModule
+                  ->getFunction("CAT_get_signed_value") == function_callled
+              ) {
+                Instruction* def_instruction =
+                  dyn_cast<Instruction>(call_inst->getArgOperand(0));
+
+                if (def_instruction == target_instruction) {
+                  errs() << "calling inst: " << I << "\n";
+                  errs() << "With in set:"<< "\n";
+                  if (in_set_map[&I].empty()) {
+                    errs() << "  with empty in set" << "\n";
+                  } else {
+                    for (
+                      auto inst = in_set_map[&I].begin();
+                      inst != in_set_map[&I].end();
+                      ++inst
+                    ) {
+                      errs() << "  " << **inst << "\n";
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        errs() << "=============" << "\n" << "\n";
+        ite_index += 1;
       }
 
       // errs() << "Basic Block: " << F.front() << "\n";

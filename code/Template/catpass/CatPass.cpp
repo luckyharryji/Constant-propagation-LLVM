@@ -358,13 +358,29 @@ namespace {
 
                 if (def_instruction == target_instruction) {
                   errs() << "calling inst: " << I << "\n";
+                  for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
+                  {
+                    if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+                      errs() << " is following a ignore block" << "\n";
+                      break;
+                    }
+                  }
+                  errs() << "predecessor: " << "\n";
+                  for (
+                    auto inst = predecessor[&I].begin();
+                    inst != predecessor[&I].end();
+                    ++inst
+                  ) {
+                    errs() << "  " << **inst << "\n";
+                  }
+
                   errs() << "With in set:"<< "\n";
-                  if (in_set_map[&I].empty()) {
+                  if (new_in.empty()) {
                     errs() << "  with empty in set" << "\n";
                   } else {
                     for (
-                      auto inst = in_set_map[&I].begin();
-                      inst != in_set_map[&I].end();
+                      auto inst = new_in.begin();
+                      inst != new_in.end();
                       ++inst
                     ) {
                       if (*inst == target_instruction) {

@@ -120,6 +120,8 @@ namespace {
       map<Value *, Instruction *> argument_to_add_instruction;
       set<Instruction*> candidate_list;
 
+      map<BasicBlock *, set<BasicBlock *>> real_block_pred;
+
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
 
@@ -263,6 +265,26 @@ namespace {
       }
 
       for (auto &B : F) {
+        real_block_pred[&B] = set<BasicBlock *>();
+        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it) {
+          if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+            for (
+              auto pred_block = real_block_pred[*it].begin();
+              pred_block != real_block_pred[*it].end();
+              ++pred_block
+            ) {
+              if (block_with_no_CAT.find(*pred_block) != block_with_no_CAT.end()) {
+                errs() << "Algorithm may error" << "\n";
+              }
+              real_block_pred[&B].insert(*pred_block);
+            }
+          } else {
+            real_block_pred[&B].insert(*it);
+          }
+        }
+      }
+
+      for (auto &B : F) {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
           continue;
         }
@@ -278,7 +300,6 @@ namespace {
             ) {
               predecessor[&(B.front())].insert((*pred_remove_block)->getTerminator());
             }
-            continue;
           } else {
             predecessor[&(B.front())].insert((*it)->getTerminator());
           }

@@ -344,6 +344,40 @@ namespace {
                 new_in.insert(out_set_map[*inst].begin(), out_set_map[*inst].end());
               }
             }
+
+// Debug info:
+            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+              Function *function_callled;
+              function_callled = call_inst->getCalledFunction();
+              if (
+                currentModule
+                  ->getFunction("CAT_get_signed_value") == function_callled
+              ) {
+                Instruction* def_instruction =
+                  dyn_cast<Instruction>(call_inst->getArgOperand(0));
+
+                if (def_instruction == target_instruction) {
+                  errs() << "calling inst: " << I << "\n";
+                  errs() << "With in set:"<< "\n";
+                  if (in_set_map[&I].empty()) {
+                    errs() << "  with empty in set" << "\n";
+                  } else {
+                    for (
+                      auto inst = in_set_map[&I].begin();
+                      inst != in_set_map[&I].end();
+                      ++inst
+                    ) {
+                      if (*inst == target_instruction) {
+                        errs() << "     target in the in set" << "\n";
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+// Debug end
             set<Instruction *> new_out;
             set<Instruction *> temp_in;
             temp_in.insert(new_in.begin(), new_in.end());
@@ -373,40 +407,40 @@ namespace {
             temp_in.clear();
           }
         }
-        for (auto &B : F) {
-          if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-            continue;
-          }
-          for (auto &I : B) {
-            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-              Function *function_callled;
-              function_callled = call_inst->getCalledFunction();
-              if (
-                currentModule
-                  ->getFunction("CAT_get_signed_value") == function_callled
-              ) {
-                Instruction* def_instruction =
-                  dyn_cast<Instruction>(call_inst->getArgOperand(0));
-
-                if (def_instruction == target_instruction) {
-                  errs() << "calling inst: " << I << "\n";
-                  errs() << "With in set:"<< "\n";
-                  if (in_set_map[&I].empty()) {
-                    errs() << "  with empty in set" << "\n";
-                  } else {
-                    for (
-                      auto inst = in_set_map[&I].begin();
-                      inst != in_set_map[&I].end();
-                      ++inst
-                    ) {
-                      errs() << "  " << **inst << "\n";
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        // for (auto &B : F) {
+        //   for (auto &I : B) {
+        //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+        //       Function *function_callled;
+        //       function_callled = call_inst->getCalledFunction();
+        //       if (
+        //         currentModule
+        //           ->getFunction("CAT_get_signed_value") == function_callled
+        //       ) {
+        //         Instruction* def_instruction =
+        //           dyn_cast<Instruction>(call_inst->getArgOperand(0));
+        //
+        //         if (def_instruction == target_instruction) {
+        //           errs() << "calling inst: " << I << "\n";
+        //           errs() << "With in set:"<< "\n";
+        //           if (in_set_map[&I].empty()) {
+        //             errs() << "  with empty in set" << "\n";
+        //           } else {
+        //             for (
+        //               auto inst = in_set_map[&I].begin();
+        //               inst != in_set_map[&I].end();
+        //               ++inst
+        //             ) {
+        //               if (*inst == target_instruction) {
+        //                 errs() << "     target in the in set" << "\n";
+        //                 break;
+        //               }
+        //             }
+        //           }
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
         errs() << "=============" << "\n" << "\n";
         ite_index += 1;
       }

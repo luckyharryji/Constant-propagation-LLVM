@@ -52,11 +52,13 @@ namespace {
       if (F.isDeclaration()) {
         return;
       }
-      Instruction* last_inst = (F.back()).getTerminator();
-      if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
-        Value* return_value = return_inst->getReturnValue();
-        if (isa<Argument>(return_value)) {
-          arg_return_function.insert(&F);
+      if (F.getName() == "myF") {
+        Instruction* last_inst = (F.back()).getTerminator();
+        if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
+          Value* return_value = return_inst->getReturnValue();
+          if (isa<Argument>(return_value)) {
+            arg_return_function.insert(&F);
+          }
         }
       }
     }
@@ -156,12 +158,16 @@ namespace {
 
       map<Instruction*, Instruction*> replace_instruction_pair;
       for (auto &B : F) {
+        if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
+          continue;
+        }
         for (auto &I : B) {
           if (auto* call_inst = dyn_cast<CallInst>(&I)) {
             Function *function_callled = call_inst->getCalledFunction();
             if (arg_return_function.find(function_callled) != arg_return_function.end()) {
               if (auto* def_instruction = dyn_cast<Instruction>(call_inst->getArgOperand(0))) {
                 replace_instruction_pair[&I] = def_instruction;
+                modified = true;
               }
             }
           }
@@ -175,7 +181,7 @@ namespace {
         ReplaceInstWithInst(
           replace_instruction->getParent()->getInstList(),
           ii,
-          (instruction_constant.second)->clone()
+          instruction_constant.second
         );
         modified = true;
       }

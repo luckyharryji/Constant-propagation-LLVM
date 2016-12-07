@@ -329,13 +329,13 @@ namespace {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
           continue;
         }
-        errs() << "Basic Block: " << B << "\n";
+        // errs() << "Basic Block: " << B << "\n";
         for (auto &I : B) {
-          errs() << "Instruction: " << I << "\n";
+          // errs() << "Instruction: " << I << "\n";
           if (!in_set_map[&I].empty()) {
-            for (auto inst = in_set_map[&I].begin(); inst != in_set_map[&I].end(); ++inst) {
-              errs() << "   " << **inst << "\n";
-            }
+            // for (auto inst = in_set_map[&I].begin(); inst != in_set_map[&I].end(); ++inst) {
+            //   errs() << "   " << **inst << "\n";
+            // }
             if (auto* call_inst = dyn_cast<CallInst>(&I)) {
               Function *function_callled;
               function_callled = call_inst->getCalledFunction();

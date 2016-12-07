@@ -161,7 +161,7 @@ namespace {
                 if (auto* constant_arg = dyn_cast<ConstantInt>(call_inst->getArgOperand(0))) {
                   if (constant_arg->getSExtValue() == 42) {
                     target_instruction = &I;
-                    errs() << "bug instruction: " << *target_instruction << "\n";
+                    // errs() << "bug instruction: " << *target_instruction << "\n";
                   }
                 }
 
@@ -215,10 +215,10 @@ namespace {
               ) {
                 if (*inst != &I) {
                   kill_set_map[&I].insert(*inst);
-                  if (*inst == target_instruction) {
-                    errs() << "target_killed by : " << I << "\n";
-                    errs() << "in : " << B << "\n";
-                  }
+                  // if (*inst == target_instruction) {
+                  //   errs() << "target_killed by : " << I << "\n";
+                  //   errs() << "in : " << B << "\n";
+                  // }
                 }
               }
             } else if (isVariableChanged(function_callled)) {
@@ -232,10 +232,10 @@ namespace {
               ) {
                 if (*inst != &I) {
                   kill_set_map[&I].insert(*inst);
-                  if (*inst == target_instruction) {
-                    errs() << "target_killed by : " << I << "\n";
-                    errs() << "in : " << B << "\n";
-                  }
+                  // if (*inst == target_instruction) {
+                  //   errs() << "target_killed by : " << I << "\n";
+                  //   errs() << "in : " << B << "\n";
+                  // }
                 }
               }
             } else if (CAT_functions.find(function_callled) == CAT_functions.end()){
@@ -274,7 +274,7 @@ namespace {
               ++pred_block
             ) {
               if (block_with_no_CAT.find(*pred_block) != block_with_no_CAT.end()) {
-                errs() << "Algorithm may error" << "\n";
+    //            errs() << "Algorithm may error" << "\n";
               }
               real_block_pred[&B].insert(*pred_block);
             }
@@ -359,11 +359,13 @@ namespace {
       // }
       //Debug end
 
-      errs() << " ====================== ===============" << "\n";
+//      errs() << " ====================== ===============" << "\n";
       bool changed = true;
       int ite_index = 0;
       while (changed) {
-        errs() << "iteration : " << ite_index << " ===============" << "\n";
+
+//        errs() << "iteration : " << ite_index << " ===============" << "\n";
+
         changed = false;
         for (auto &B : F) {
           if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
@@ -382,45 +384,45 @@ namespace {
             }
 
 // Debug info:
-            if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-              Function *function_callled;
-              function_callled = call_inst->getCalledFunction();
-              if (
-                currentModule
-                  ->getFunction("CAT_get_signed_value") == function_callled
-              ) {
-                Instruction* def_instruction =
-                  dyn_cast<Instruction>(call_inst->getArgOperand(0));
-
-                if (def_instruction == target_instruction) {
-                  errs() << "calling inst: " << I << "\n";
-                  for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
-                  {
-                    if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-                      errs() << " is following a ignore block" << "\n";
-                      for (
-                        auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
-                        pred_remove_block != end_remove_block;
-                        ++pred_remove_block
-                      ) {
-                        Instruction* last_of_pred = (*pred_remove_block)->getTerminator();
-                        for (
-                          auto inst = out_set_map[last_of_pred].begin();
-                          inst != out_set_map[last_of_pred].end();
-                          ++inst
-                        ) {
-                          if (*inst == target_instruction) {
-                            errs() << " *********** Found target in the out of pred's last inst" << "\n";
-                            break;
-                          }
-                        }
-                      }
-                      break;
-                    }
-                  }
-                }
-              }
-            }
+            // if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+            //   Function *function_callled;
+            //   function_callled = call_inst->getCalledFunction();
+            //   if (
+            //     currentModule
+            //       ->getFunction("CAT_get_signed_value") == function_callled
+            //   ) {
+            //     Instruction* def_instruction =
+            //       dyn_cast<Instruction>(call_inst->getArgOperand(0));
+            //
+            //     if (def_instruction == target_instruction) {
+            //       errs() << "calling inst: " << I << "\n";
+            //       for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
+            //       {
+            //         if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+            //           errs() << " is following a ignore block" << "\n";
+            //           for (
+            //             auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
+            //             pred_remove_block != end_remove_block;
+            //             ++pred_remove_block
+            //           ) {
+            //             Instruction* last_of_pred = (*pred_remove_block)->getTerminator();
+            //             for (
+            //               auto inst = out_set_map[last_of_pred].begin();
+            //               inst != out_set_map[last_of_pred].end();
+            //               ++inst
+            //             ) {
+            //               if (*inst == target_instruction) {
+            //                 errs() << " *********** Found target in the out of pred's last inst" << "\n";
+            //                 break;
+            //               }
+            //             }
+            //           }
+            //           break;
+            //         }
+            //       }
+            //     }
+            //   }
+            // }
 
 // Debug end
             set<Instruction *> new_out;
@@ -486,7 +488,7 @@ namespace {
         //     }
         //   }
         // }
-        errs() << "=============" << "\n" << "\n";
+//        errs() << "=============" << "\n" << "\n";
         ite_index += 1;
       }
 
@@ -543,10 +545,10 @@ namespace {
                   inst != in_set_map[&I].end();
                   ++inst
                 ) {
-                  if (*inst == target_instruction) {
-                    errs() << "   target in the in set of: " <<  "\n";
-                    errs() << I << "\n" << "\n";
-                  }
+                  // if (*inst == target_instruction) {
+                  //   errs() << "   target in the in set of: " <<  "\n";
+                  //   errs() << I << "\n" << "\n";
+                  // }
                   if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
                     if (add_instruction_to_argument[*inst] == argument) {
                       potentialCreateInstruction = NULL;

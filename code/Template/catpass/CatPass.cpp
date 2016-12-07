@@ -370,31 +370,24 @@ namespace {
                   {
                     if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
                       errs() << " is following a ignore block" << "\n";
-                      break;
-                    }
-                  }
-                  errs() << "predecessor: " << "\n";
-                  for (
-                    auto inst = predecessor[&I].begin();
-                    inst != predecessor[&I].end();
-                    ++inst
-                  ) {
-                    errs() << "  " << **inst << "\n";
-                  }
-
-                  errs() << "With in set:"<< "\n";
-                  if (new_in.empty()) {
-                    errs() << "  with empty in set" << "\n";
-                  } else {
-                    for (
-                      auto inst = new_in.begin();
-                      inst != new_in.end();
-                      ++inst
-                    ) {
-                      if (*inst == target_instruction) {
-                        errs() << "     target in the in set" << "\n";
-                        break;
+                      for (
+                        auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
+                        pred_remove_block != end_remove_block;
+                        ++pred_remove_block
+                      ) {
+                        Instruction* last_of_pred = (*pred_remove_block)->getTerminator();
+                        for (
+                          auto inst = out_set_map[last_of_pred].begin();
+                          inst != out_set_map[last_of_pred].end();
+                          ++inst
+                        ) {
+                          if (*inst == target_instruction) {
+                            errs() << " *********** Found target in the out of pred's last inst" << "\n";
+                            break;
+                          }
+                        }
                       }
+                      break;
                     }
                   }
                 }

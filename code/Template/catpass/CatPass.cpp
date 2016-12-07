@@ -348,6 +348,7 @@ namespace {
                 Value* argument = call_inst->getArgOperand(0);
                 Instruction *potentialCreateInstruction = NULL;
 
+                bool extra_decide = true;
                 for (
                   auto inst = in_set_map[&I].begin();
                   inst != in_set_map[&I].end();
@@ -356,6 +357,7 @@ namespace {
                   if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
                     if (add_instruction_to_argument[*inst] == argument) {
                       potentialCreateInstruction = NULL;
+                      extra_decide = false;
                       break;
                     }
                   } else if (isa<PHINode>(*inst)) {
@@ -399,17 +401,24 @@ namespace {
                       Value *inset_function_variable = inside_call_inst->getArgOperand(0);
                       if (argument == inset_function_variable) {
                         potentialCreateInstruction = NULL;
+                        extra_decide = false;
                         break;
                       } else if (auto *in_set_variable_create = dyn_cast<Instruction>(inset_function_variable)) {
                         if (candidate_list.find(def_instruction) != candidate_list.end()) {
                           // errs() << "can compile to here" << "\n";
                           if (deps.depends(def_instruction, in_set_variable_create, false) != NULL) {
                             potentialCreateInstruction = NULL;
+                            extra_decide = false;
                             break;
                           }
                         }
                       }
                     }
+                  }
+                }
+                if (potentialCreateInstruction == NULL && extra_decide) {
+                  if ((variable_used[def_instruction].size() == 1)) {
+                    potentialCreateInstruction = def_instruction;
                   }
                 }
                 if (potentialCreateInstruction != NULL) {

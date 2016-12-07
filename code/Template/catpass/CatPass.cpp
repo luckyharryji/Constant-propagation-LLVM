@@ -52,11 +52,13 @@ namespace {
       if (F.isDeclaration() || F.getName() == "main") {
         return;
       }
-      Instruction* last_inst = (F.back()).getTerminator();
-      if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
-        Value* return_value = return_inst->getReturnValue();
-        if (isa<Argument>(return_value)) {
-          arg_return_function.insert(&F);
+      if (F.getName() == "myF") {
+        Instruction* last_inst = (F.back()).getTerminator();
+        if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
+          Value* return_value = return_inst->getReturnValue();
+          if (isa<Argument>(return_value)) {
+            arg_return_function.insert(&F);
+          }
         }
       }
     }
@@ -82,16 +84,11 @@ namespace {
       }
       bool modified = false;
 
-      bool continue_ite = false;
-      do {
-        continue_ite = false;
-        for (auto &F : M) {
-          if (runOnFunction(F)) {
-            modified = true;
-            continue_ite = true;
-          }
+      for (auto &F : M) {
+        if (runOnFunction(F)) {
+          modified = true;
         }
-      } while(continue_ite);
+      }
       return modified;
     }
 
@@ -101,25 +98,6 @@ namespace {
       if (F.isDeclaration()) {
           return false;
       }
-
-      // set<BasicBlock*> block_with_no_CAT;
-      // for (auto &B : F) {
-      //   bool invokeCAT = false;
-      //   for (auto &I : B) {
-      //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-      //       Function *function_callled = call_inst->getCalledFunction();
-      //       if (CAT_functions.find(function_callled) != CAT_functions.end()) {
-      //         invokeCAT = true;
-      //       }
-      //     }
-      //   }
-      //   if (!invokeCAT) {
-      //     // block_with_no_CAT.insert(&B);
-      //     B.removeFromParent();
-      //   }
-      // }
-
-      Instruction* target_instruction = NULL;
 
       DependenceAnalysis &deps = getAnalysis<DependenceAnalysis>(F);
       map<Instruction *, set<Instruction *>> gen_set_map;
@@ -255,10 +233,6 @@ namespace {
               ) {
                 if (*inst != &I) {
                   kill_set_map[&I].insert(*inst);
-                  // if (*inst == target_instruction) {
-                  //   errs() << "target_killed by : " << I << "\n";
-                  //   errs() << "in : " << B << "\n";
-                  // }
                 }
               }
             } else if (isVariableChanged(function_callled)) {
@@ -272,10 +246,6 @@ namespace {
               ) {
                 if (*inst != &I) {
                   kill_set_map[&I].insert(*inst);
-                  // if (*inst == target_instruction) {
-                  //   errs() << "target_killed by : " << I << "\n";
-                  //   errs() << "in : " << B << "\n";
-                  // }
                 }
               }
             } else if (CAT_functions.find(function_callled) == CAT_functions.end()){
@@ -333,20 +303,10 @@ namespace {
         // last instruction of the block predecessor
         for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
         {
-          // if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-          //   for (
-          //     auto pred_block = real_block_pred[*it].begin();
-          //     pred_block != real_block_pred[*it].end();
-          //     ++pred_block
-          //   ) {
-          //     predecessor[&(B.front())].insert((*pred_block)->getTerminator());
-          //   }
-          // }
-          // else {
-            predecessor[&(B.front())].insert((*it)->getTerminator());
-          // }
+          predecessor[&(B.front())].insert((*it)->getTerminator());
         }
         if (temp_block != NULL) {
+          // pass information of unuseful basic block
           for (
             auto pred_block_begin = pred_begin(temp_block), pred_end_block = pred_end(temp_block);
             pred_block_begin != pred_end_block;

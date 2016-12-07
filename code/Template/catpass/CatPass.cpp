@@ -49,16 +49,14 @@ namespace {
     }
 
     void functionSummary(Function &F) {
-      if (F.isDeclaration()) {
+      if (F.isDeclaration() || F.getName() == "main") {
         return;
       }
-      if (F.getName() == "myF") {
-        Instruction* last_inst = (F.back()).getTerminator();
-        if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
-          Value* return_value = return_inst->getReturnValue();
-          if (isa<Argument>(return_value)) {
-            arg_return_function.insert(&F);
-          }
+      Instruction* last_inst = (F.back()).getTerminator();
+      if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
+        Value* return_value = return_inst->getReturnValue();
+        if (isa<Argument>(return_value)) {
+          arg_return_function.insert(&F);
         }
       }
     }
@@ -528,12 +526,12 @@ namespace {
           ii,
           instruction_constant.second
         );
+        modified = true;
       }
 
       // delete the fake add instruction added to the function at the beginning
       for (auto& add_instruction_pair : add_instruction_to_argument) {
         (add_instruction_pair.first)->eraseFromParent();
-        modified = true;
       }
 
       replace_pair.clear();

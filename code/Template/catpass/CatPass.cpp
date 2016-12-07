@@ -251,42 +251,57 @@ namespace {
         }
       }
 
-      for (auto &B : F) {
-        real_block_pred[&B] = set<BasicBlock *>();
-        for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it) {
-          if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-            for (
-              auto pred_block = real_block_pred[*it].begin();
-              pred_block != real_block_pred[*it].end();
-              ++pred_block
-            ) {
-              real_block_pred[&B].insert(*pred_block);
-            }
-          } else {
-            real_block_pred[&B].insert(*it);
-          }
-        }
-      }
+      // for (auto &B : F) {
+      //   real_block_pred[&B] = set<BasicBlock *>();
+      //   for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it) {
+      //     if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+      //       for (
+      //         auto pred_block = real_block_pred[*it].begin();
+      //         pred_block != real_block_pred[*it].end();
+      //         ++pred_block
+      //       ) {
+      //         real_block_pred[&B].insert(*pred_block);
+      //       }
+      //     } else {
+      //       real_block_pred[&B].insert(*it);
+      //     }
+      //   }
+      // }
 
+      BasicBlock* temp_block = NULL;
       for (auto &B : F) {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
+          if (temp_block == NULL) {
+            temp_block = &B;
+          }
           continue;
         }
         // predecessor of the first instruction of a basic block is the
         // last instruction of the block predecessor
         for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
         {
-          if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-            for (
-              auto pred_block = real_block_pred[*it].begin();
-              pred_block != real_block_pred[*it].end();
-              ++pred_block
-            ) {
-              predecessor[&(B.front())].insert((*pred_block)->getTerminator());
-            }
-          } else {
+          // if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
+          //   for (
+          //     auto pred_block = real_block_pred[*it].begin();
+          //     pred_block != real_block_pred[*it].end();
+          //     ++pred_block
+          //   ) {
+          //     predecessor[&(B.front())].insert((*pred_block)->getTerminator());
+          //   }
+          // }
+          // else {
             predecessor[&(B.front())].insert((*it)->getTerminator());
+          // }
+        }
+        if (temp_block != NULL) {
+          for (
+            auto pred_block_begin = pred_begin(temp_block), pred_end_block = pred_end(temp_block);
+            pred_block_begin != pred_end_block;
+            ++pred_block_begin
+          ) {
+            predecessor[&(B.front())].insert((*pred_block_begin)->getTerminator());
           }
+          temp_block = NULL;
         }
         // not doing first instruction of block, since it is dealt with
         for (auto iter = ++B.begin(); iter != B.end(); ++iter) {

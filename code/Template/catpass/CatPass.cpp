@@ -294,12 +294,19 @@ namespace {
         {
           if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
             for (
-              auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
-              pred_remove_block != end_remove_block;
-              ++pred_remove_block
+              auto pred_block = real_block_pred[*it].begin();
+              pred_block != real_block_pred[*it].end();
+              ++pred_block
             ) {
-              predecessor[&(B.front())].insert((*pred_remove_block)->getTerminator());
+              predecessor[&(B.front())].insert((*pred_block)->getTerminator());
             }
+            // for (
+            //   auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
+            //   pred_remove_block != end_remove_block;
+            //   ++pred_remove_block
+            // ) {
+            //   predecessor[&(B.front())].insert((*pred_remove_block)->getTerminator());
+            // }
           } else {
             predecessor[&(B.front())].insert((*it)->getTerminator());
           }

@@ -47,8 +47,19 @@ namespace {
       return false;
     }
 
+    void functionSummary(Function &F) {
+      Instruction* last_inst = (F.back()).getTerminator();
+      if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
+        Value* return_value = return_inst->getReturnValue();
+        if (isa<Argument>(return_value)) {
+          errs() << "function return a Argument" << "\n";
+        }
+      }
+    }
+
     bool runOnModule(Module &M) override {
       for (auto &F: M) {
+        functionSummary(F);
         for (auto &B : F) {
           bool invokeCAT = false;
           for (auto &I : B) {

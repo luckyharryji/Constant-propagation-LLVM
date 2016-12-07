@@ -32,6 +32,7 @@ namespace {
     };
     set<Function *> CAT_functions;
     set<BasicBlock*> block_with_no_CAT;
+    set<Function *> arg_return_function;
 
     CAT() :  ModulePass(ID) {}
 
@@ -48,11 +49,14 @@ namespace {
     }
 
     void functionSummary(Function &F) {
+      if (F.isDeclaration()) {
+        return;
+      }
       Instruction* last_inst = (F.back()).getTerminator();
       if (auto* return_inst = dyn_cast<ReturnInst>(last_inst)) {
         Value* return_value = return_inst->getReturnValue();
         if (isa<Argument>(return_value)) {
-          errs() << "function return a Argument" << "\n";
+          arg_return_function.insert(&F);
         }
       }
     }
@@ -78,11 +82,16 @@ namespace {
       }
       bool modified = false;
 
-      for (auto &F : M) {
-        if (runOnFunction(F)) {
-          modified = true;
+      bool continue_ite = false;
+      do {
+        continue_ite = false;
+        for (auto &F : M) {
+          if (runOnFunction(F)) {
+            modified = true;
+            continue_ite = true;
+          }
         }
-      }
+      } while(continue_ite);
       return modified;
     }
 
@@ -127,6 +136,8 @@ namespace {
 
       map<BasicBlock *, set<BasicBlock *>> real_block_pred;
 
+      bool modified = false;
+
       Constant *zeroConst = ConstantInt::get(IntegerType::get(currentModule->getContext(), 32), 0, true);
       Instruction *insert_point = dyn_cast<Instruction>(F.getEntryBlock().getFirstInsertionPt());
 
@@ -142,6 +153,33 @@ namespace {
         argument_to_add_instruction[dyn_cast<Value>(iter)] = add_inst;
         add_instruction_to_argument[add_inst] = dyn_cast<Value>(iter);
       }
+
+      map<Instruction*, Instruction*> replace_instruction_pair;
+      for (auto &B : F) {
+        for (auto &I : B) {
+          if (auto* call_inst = dyn_cast<CallInst>(&I)) {
+            Function *function_callled = call_inst->getCalledFunction();
+            if (arg_return_function.find(function_callled) != arg_return_function.end()) {
+              if (auto* def_instruction = dyn_cast<Instruction>(call_inst->getArgOperand(0))) {
+                replace_instruction_pair[&I] = def_instruction;
+              }
+            }
+          }
+        }
+      }
+
+      for (auto& instruction_constant : replace_instruction_pair) {
+        // replace function call with CAT_create
+        Instruction* replace_instruction = instruction_constant.first;
+        BasicBlock::iterator ii(replace_instruction);
+        ReplaceInstWithInst(
+          replace_instruction->getParent()->getInstList(),
+          ii,
+          (instruction_constant.second)->clone()
+        );
+        modified = true;
+      }
+
       for (auto &B : F) {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
           continue;
@@ -486,7 +524,6 @@ namespace {
         );
       }
 
-      bool modified = false;
       // delete the fake add instruction added to the function at the beginning
       for (auto& add_instruction_pair : add_instruction_to_argument) {
         (add_instruction_pair.first)->eraseFromParent();

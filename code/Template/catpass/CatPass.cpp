@@ -61,18 +61,12 @@ namespace {
             }
           }
           if (!invokeCAT) {
-//            Instruction* last_inst_of_block = B.getTerminator();
-//            if (!isa<BranchInst>(last_inst_of_block)) {
-              block_with_no_CAT.insert(&B);
-//            }
+            block_with_no_CAT.insert(&B);
           }
         }
       }
       bool modified = false;
-      // for (auto block_pointer : block_with_no_CAT) {
-      //   block_pointer->removeFromParent();
-      //   modified = true;
-      // }
+
       for (auto &F : M) {
         if (runOnFunction(F)) {
           modified = true;
@@ -158,13 +152,6 @@ namespace {
               if (isVariableCreated(function_callled)) {
                 variable_used[&I] = set<Instruction *>();
                 variable_used[&I].insert(&I);
-                if (auto* constant_arg = dyn_cast<ConstantInt>(call_inst->getArgOperand(0))) {
-                  if (constant_arg->getSExtValue() == 42) {
-                    target_instruction = &I;
-                    // errs() << "bug instruction: " << *target_instruction << "\n";
-                  }
-                }
-
               } else if (isVariableChanged(function_callled)) {
                 Value* first_argument = call_inst->getArgOperand(0);
                 variable_used[dyn_cast<Instruction>(first_argument)].insert(&I);
@@ -273,9 +260,6 @@ namespace {
               pred_block != real_block_pred[*it].end();
               ++pred_block
             ) {
-              if (block_with_no_CAT.find(*pred_block) != block_with_no_CAT.end()) {
-    //            errs() << "Algorithm may error" << "\n";
-              }
               real_block_pred[&B].insert(*pred_block);
             }
           } else {
@@ -300,13 +284,6 @@ namespace {
             ) {
               predecessor[&(B.front())].insert((*pred_block)->getTerminator());
             }
-            // for (
-            //   auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
-            //   pred_remove_block != end_remove_block;
-            //   ++pred_remove_block
-            // ) {
-            //   predecessor[&(B.front())].insert((*pred_remove_block)->getTerminator());
-            // }
           } else {
             predecessor[&(B.front())].insert((*it)->getTerminator());
           }
@@ -321,51 +298,9 @@ namespace {
         }
       }
 
-
-      //Debug: before in/out, find target
-      // for (auto &B : F) {
-      //   if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
-      //     continue;
-      //   }
-      //   for (auto &I : B) {
-      //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-      //       Function *function_callled;
-      //       function_callled = call_inst->getCalledFunction();
-      //       if (
-      //         currentModule
-      //           ->getFunction("CAT_get_signed_value") == function_callled
-      //       ) {
-      //         Instruction* def_instruction =
-      //           dyn_cast<Instruction>(call_inst->getArgOperand(0));
-      //
-      //         if (def_instruction == target_instruction) {
-      //           errs() << "calling inst: " << I << "\n";
-      //           errs() << "With in set:"<< "\n";
-      //           if (in_set_map[&I].empty()) {
-      //             errs() << "  with empty in set" << "\n";
-      //           } else {
-      //             for (
-      //               auto inst = in_set_map[&I].begin();
-      //               inst != in_set_map[&I].end();
-      //               ++inst
-      //             ) {
-      //               errs() << "  " << **inst << "\n";
-      //             }
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
-      //Debug end
-
-//      errs() << " ====================== ===============" << "\n";
       bool changed = true;
-      int ite_index = 0;
+
       while (changed) {
-
-//        errs() << "iteration : " << ite_index << " ===============" << "\n";
-
         changed = false;
         for (auto &B : F) {
           if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
@@ -383,48 +318,6 @@ namespace {
               }
             }
 
-// Debug info:
-            // if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-            //   Function *function_callled;
-            //   function_callled = call_inst->getCalledFunction();
-            //   if (
-            //     currentModule
-            //       ->getFunction("CAT_get_signed_value") == function_callled
-            //   ) {
-            //     Instruction* def_instruction =
-            //       dyn_cast<Instruction>(call_inst->getArgOperand(0));
-            //
-            //     if (def_instruction == target_instruction) {
-            //       errs() << "calling inst: " << I << "\n";
-            //       for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
-            //       {
-            //         if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-            //           errs() << " is following a ignore block" << "\n";
-            //           for (
-            //             auto pred_remove_block = pred_begin(*it), end_remove_block = pred_end(*it);
-            //             pred_remove_block != end_remove_block;
-            //             ++pred_remove_block
-            //           ) {
-            //             Instruction* last_of_pred = (*pred_remove_block)->getTerminator();
-            //             for (
-            //               auto inst = out_set_map[last_of_pred].begin();
-            //               inst != out_set_map[last_of_pred].end();
-            //               ++inst
-            //             ) {
-            //               if (*inst == target_instruction) {
-            //                 errs() << " *********** Found target in the out of pred's last inst" << "\n";
-            //                 break;
-            //               }
-            //             }
-            //           }
-            //           break;
-            //         }
-            //       }
-            //     }
-            //   }
-            // }
-
-// Debug end
             set<Instruction *> new_out;
             set<Instruction *> temp_in;
             temp_in.insert(new_in.begin(), new_in.end());
@@ -454,77 +347,13 @@ namespace {
             temp_in.clear();
           }
         }
-        // for (auto &B : F) {
-        //   for (auto &I : B) {
-        //     if (auto* call_inst = dyn_cast<CallInst>(&I)) {
-        //       Function *function_callled;
-        //       function_callled = call_inst->getCalledFunction();
-        //       if (
-        //         currentModule
-        //           ->getFunction("CAT_get_signed_value") == function_callled
-        //       ) {
-        //         Instruction* def_instruction =
-        //           dyn_cast<Instruction>(call_inst->getArgOperand(0));
-        //
-        //         if (def_instruction == target_instruction) {
-        //           errs() << "calling inst: " << I << "\n";
-        //           errs() << "With in set:"<< "\n";
-        //           if (in_set_map[&I].empty()) {
-        //             errs() << "  with empty in set" << "\n";
-        //           } else {
-        //             for (
-        //               auto inst = in_set_map[&I].begin();
-        //               inst != in_set_map[&I].end();
-        //               ++inst
-        //             ) {
-        //               if (*inst == target_instruction) {
-        //                 errs() << "     target in the in set" << "\n";
-        //                 break;
-        //               }
-        //             }
-        //           }
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
-//        errs() << "=============" << "\n" << "\n";
-        ite_index += 1;
       }
 
-      // errs() << "Basic Block: " << F.front() << "\n";
-      // // for debug: print
-      // Instruction* first_print_inst = (F.front()).getTerminator();
-      // errs() << "Instruction: " << *first_print_inst << "\n";
-      // for (auto inst = out_set_map[first_print_inst].begin(); inst != out_set_map[first_print_inst].end(); ++inst) {
-      //   errs() << "   " << **inst << "\n";
-      // }
-      //
-
-      // store the instruction that can be transformed into constant value
-      // save the instruction , value pair
       map<Instruction*, ConstantInt*> replace_pair;
       for (auto &B : F) {
         if (block_with_no_CAT.find(&B) != block_with_no_CAT.end()) {
           continue;
         }
-
-        // for debug:
-        // for (auto it = pred_begin(&B), et = pred_end(&B); it != et; ++it)
-        // {
-        //   if (block_with_no_CAT.find(*it) != block_with_no_CAT.end()) {
-        //     // auto no_cat_block = dyn_cast<BasicBlock>(it);
-        //     errs() << "No Cat Block: " << **it << "\n";
-        //     errs() << "Basic Block of successive: " << B << "\n";
-        //     // for debug: print
-        //     errs() << "first Instruction of successive: " << B.front() << "\n";
-        //     for (auto inst = in_set_map[&(B.front())].begin(); inst != in_set_map[&(B.front())].end(); ++inst) {
-        //       errs() << "   " << **inst << "\n";
-        //     }
-        //     break;
-        //   }
-        // }
-        ///
 
         for (auto &I : B) {
           if (!in_set_map[&I].empty()) {
@@ -545,10 +374,6 @@ namespace {
                   inst != in_set_map[&I].end();
                   ++inst
                 ) {
-                  // if (*inst == target_instruction) {
-                  //   errs() << "   target in the in set of: " <<  "\n";
-                  //   errs() << I << "\n" << "\n";
-                  // }
                   if (add_instruction_to_argument.find(*inst) != add_instruction_to_argument.end()) {
                     if (add_instruction_to_argument[*inst] == argument) {
                       potentialCreateInstruction = NULL;

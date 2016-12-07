@@ -213,6 +213,10 @@ namespace {
               ) {
                 if (*inst != &I) {
                   kill_set_map[&I].insert(*inst);
+                  if (*inst == target_instruction) {
+                    errs() << "target_killed by : " << I << "\n";
+                    errs() << "in : " << B << "\n";
+                  }
                 }
               }
             } else if (isVariableChanged(function_callled)) {
@@ -226,6 +230,10 @@ namespace {
               ) {
                 if (*inst != &I) {
                   kill_set_map[&I].insert(*inst);
+                  if (*inst == target_instruction) {
+                    errs() << "target_killed by : " << I << "\n";
+                    errs() << "in : " << B << "\n";
+                  }
                 }
               }
             } else if (CAT_functions.find(function_callled) == CAT_functions.end()){
@@ -323,7 +331,7 @@ namespace {
       // }
       //Debug end
 
-
+      errs() << " ====================== ===============" << "\n";
       bool changed = true;
       int ite_index = 0;
       while (changed) {
